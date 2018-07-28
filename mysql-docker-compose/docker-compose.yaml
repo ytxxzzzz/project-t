@@ -1,0 +1,18 @@
+version: "2"
+services:
+  mysql:
+    image: mysql:5.7
+    volumes:
+      - mysql-data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: pass
+volumes:
+  mysql-data:
+    driver_opts:
+      type: none
+      device: ~/git_reps/project-t/mysql-docker-compose/mysql_data
+      o: bind
+
+

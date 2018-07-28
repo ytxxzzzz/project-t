@@ -1,0 +1,22 @@
+version: "2"
+services:
+  mysql:
+    image: mysql:5.7
+    volumes:
+      - mysql-data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: pass
+  php-apache:
+    build: php-apache
+    volumes:
+      - ./www:/var/www/html
+    links:
+      - mysql:mysql
+    ports:
+      - "80:80"
+volumes:
+  mysql-data:
+    driver: local
+

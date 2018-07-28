@@ -3,7 +3,7 @@ info:
   description: "プロジェクトTのAPI仕様をまずはざっくりと"
   version: 1.0.0
   title: "Project-T"
-host: "petstore.swagger.io"
+host: "localhost"
 basePath: "/v2"
 tags:
   - name: "task"
