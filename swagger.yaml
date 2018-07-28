@@ -1,189 +1,188 @@
-swagger: '2.0'
+swagger: "2.0"
 info:
-  description: プロジェクトTのAPI仕様をまずはざっくりと
+  description: "プロジェクトTのAPI仕様をまずはざっくりと"
   version: 1.0.0
-  title: Project-T
-host: petstore.swagger.io
-basePath: /v2
+  title: "Project-T"
+host: "petstore.swagger.io"
+basePath: "/v2"
 tags:
-  - name: task
-    description: タスクを表す
+  - name: "task"
+    description: "タスクを表す"
 schemes:
-  - https
-  - http
+  - "https"
+  - "http"
 paths:
   /task:
     post:
       tags:
-        - task
-      summary: タスクを新規作成する
-      description: ''
-      operationId: addNewTask
+        - "task"
+      summary: "タスクを新規作成する"
+      description: ""
+      operationId: "addNewTask"
       consumes:
-        - application/json
+        - "application/json"
       produces:
-        - application/json
+        - "application/json"
       parameters:
-        - in: body
-          name: body
-          description: タスクの初期値があればbodyに指定する。なければ空のタスクを新規作成する
+        - in: "body"
+          name: "body"
+          description: "タスクの初期値があればbodyに指定する。なければ空のタスクを新規作成する"
           required: false
           schema:
-            $ref: '#/definitions/Task'
+            $ref: "#/definitions/Task"
       responses:
-        '200':
-          description: successful operation
+        "200":
+          description: "successful operation"
           schema:
-            $ref: '#/definitions/Task'
-        '405':
-          description: Invalid input
+            $ref: "#/definitions/Task"
+        "405":
+          description: "Invalid input"
     put:
       tags:
-        - task
-      summary: タスクの情報を更新する
-      description: ''
-      operationId: updateTask
+        - "task"
+      summary: "タスクの情報を更新する"
+      description: ""
+      operationId: "updateTask"
       consumes:
-        - application/json
+        - "application/json"
       produces:
-        - application/json
+        - "application/json"
       parameters:
-        - in: body
-          name: body
-          description: 更新したい項目をパラメータのオブジェクトへ指定する
+        - in: "body"
+          name: "body"
+          description: "更新したい項目をパラメータのオブジェクトへ指定する"
           required: true
           schema:
-            $ref: '#/definitions/Task'
+            $ref: "#/definitions/Task"
       responses:
-        '200':
-          description: successful operation
+        "200":
+          description: "successful operation"
           schema:
-            $ref: '#/definitions/Task'
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: Task not found
-        '405':
-          description: Validation exception
+            $ref: "#/definitions/Task"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Task not found"
+        "405":
+          description: "Validation exception"
   /task/findAll:
     get:
       tags:
-        - task
-      summary: Find All Tasks
-      description: タスク全件取得
-      operationId: findTaskAll
+        - "task"
+      summary: "Find All Tasks"
+      description: "タスク全件取得"
+      operationId: "findTaskAll"
       produces:
-        - application/json
+        - "application/json"
       responses:
-        '200':
-          description: successful operation
+        "200":
+          description: "successful operation"
           schema:
-            type: array
+            type: "array"
             items:
-              $ref: '#/definitions/Task'
-  '/task/{taskId}':
+              $ref: "#/definitions/Task"
+  "/task/{taskId}":
     get:
       tags:
-        - task
-      summary: Find task by ID
-      description: Returns a single task
-      operationId: getTaskById
+        - "task"
+      summary: "Find task by ID"
+      description: "Returns a single task"
+      operationId: "getTaskById"
       produces:
-        - application/json
+        - "application/json"
       parameters:
-        - name: taskId
-          in: path
-          description: ID of task to return
+        - name: "taskId"
+          in: "path"
+          description: "ID of task to return"
           required: true
-          type: integer
-          format: int64
+          type: "integer"
+          format: "int64"
       responses:
-        '200':
-          description: successful operation
+        "200":
+          description: "successful operation"
           schema:
-            $ref: '#/definitions/Task'
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: Task not found
+            $ref: "#/definitions/Task"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Task not found"
     post:
       tags:
-        - task
-      summary: Updates a task with form data
-      description: ''
-      operationId: updateTaskWithForm
+        - "task"
+      summary: "Updates a task with form data"
+      description: ""
+      operationId: "updateTaskWithForm"
       consumes:
-        - application/x-www-form-urlencoded
+        - "application/x-www-form-urlencoded"
       produces:
-        - application/xml
-        - application/json
+        - "application/json"
       parameters:
-        - name: taskId
-          in: path
-          description: ID of pet that needs to be updated
+        - name: "taskId"
+          in: "path"
+          description: "ID of pet that needs to be updated"
           required: true
-          type: integer
-          format: int64
-        - name: title
-          in: formData
-          description: Updated title of the task
+          type: "integer"
+          format: "int64"
+        - name: "title"
+          in: "formData"
+          description: "Updated title of the task"
           required: false
-          type: string
-        - name: content
-          in: formData
-          description: Updated content of the task
+          type: "string"
+        - name: "content"
+          in: "formData"
+          description: "Updated content of the task"
           required: false
-          type: string
-        - name: status
-          in: formData
-          description: Updated status of the task
+          type: "string"
+        - name: "status"
+          in: "formData"
+          description: "Updated status of the task"
           required: false
-          type: string
+          type: "string"
       responses:
-        '405':
-          description: Invalid input
+        "405":
+          description: "Invalid input"
     delete:
       tags:
-        - task
-      summary: Deletes a task
-      description: ''
-      operationId: deleteTask
+        - "task"
+      summary: "Deletes a task"
+      description: ""
+      operationId: "deleteTask"
       produces:
-        - application/json
+        - "application/json"
       parameters:
-        - name: taskId
-          in: path
-          description: Task id to delete
+        - name: "taskId"
+          in: "path"
+          description: "Task id to delete"
           required: true
-          type: integer
-          format: int64
+          type: "integer"
+          format: "int64"
       responses:
-        '200':
-          description: successful operation
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: Task not found
+        "200":
+          description: "successful operation"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Task not found"
 definitions:
   Task:
-    type: object
+    type: "object"
     properties:
       taskId:
-        type: integer
-        format: int64
+        type: "integer"
+        format: "int64"
       title:
-        type: string
-        example: 例の件
+        type: "string"
+        example: "例の件"
       content:
-        type: string
-        example: あの日にあーしたいこうしたい
+        type: "string"
+        example: "あの日にあーしたいこうしたい"
       status:
-        type: string
-        description: task status
+        type: "string"
+        description: "task status"
         enum:
-          - available
-          - pending
-          - sold
+          - "available"
+          - "pending"
+          - "sold"
 externalDocs:
-  description: Find out more about Swagger
-  url: 'http://swagger.io'
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"
