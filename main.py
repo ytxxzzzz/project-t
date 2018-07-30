@@ -1,11 +1,14 @@
 # -*- coding:utf-8 -*-
 
 # Flask などの必要なライブラリをインポートする
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, Blueprint, render_template, request, redirect, url_for, jsonify
+from flask_sqlalchemy import SQLAlchemy
+import json
 import numpy as np
 
-# 自身の名称を app という名前でインスタンス化する
 app = Flask(__name__)
+
+v1 = Blueprint('v1', __name__, url_prefix='/v1')
 
 # メッセージをランダムに表示するメソッド
 def picked_up():
@@ -17,30 +20,14 @@ def picked_up():
     # NumPy の random.choice で配列からランダムに取り出し
     return np.random.choice(messages)
 
-# ここからウェブアプリケーション用のルーティングを記述
-# index にアクセスしたときの処理
-@app.route('/')
-def index():
-    title = "ようこそ"
-    message = picked_up()
-    # index.html をレンダリングする
-    return render_template('index.html',
-                           message=message, title=title)
+@v1.route('/task', methods=['POST'])
+def addNewTask():
+    req_data = json.loads(request.data)
+    return jsonify(req_data), 200
 
-# /post にアクセスしたときの処理
-@app.route('/post', methods=['GET', 'POST'])
-def post():
-    title = "こんにちは"
-    if request.method == 'POST':
-        # リクエストフォームから「名前」を取得して
-        name = request.form['name']
-        # index.html をレンダリングする
-        return render_template('index.html',
-                               name=name, title=title)
-    else:
-        # エラーなどでリダイレクトしたい場合はこんな感じで
-        return redirect(url_for('index'))
 
 if __name__ == '__main__':
+    app.register_blueprint(v1)
+
     app.debug = True # デバッグモード有効化
     app.run(host='0.0.0.0') # どこからでもアクセス可能に
