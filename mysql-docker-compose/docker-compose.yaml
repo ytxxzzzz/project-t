@@ -4,6 +4,7 @@ services:
     image: mysql:5.7
     volumes:
       - mysql-data:/var/lib/mysql
+      - ./mysql_conf:/etc/mysql/conf.d
     ports:
       - "3306:3306"
     environment:
@@ -14,5 +15,3 @@ volumes:
       type: none
       device: ~/git_reps/project-t/mysql-docker-compose/mysql_data
       o: bind
-
-
