@@ -1,3 +1,4 @@
+.pyc
 bin
 include
 lib
@@ -7,3 +8,4 @@ share
 pip-selfcheck.json
 .idea/
 mysql-docker-compose/mysql_data/
+__pycache__

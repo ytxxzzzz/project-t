@@ -3,6 +3,7 @@
 # Flask などの必要なライブラリをインポートする
 from flask import Flask, Blueprint, render_template, request, redirect, url_for, jsonify
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 import json
 import numpy as np
 
@@ -11,12 +12,13 @@ v1 = Blueprint('v1', __name__, url_prefix='/v1')
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:pass@localhost/project_t?charset=utf8'
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 class Task(db.Model):
     taskId = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), unique=False)
     content = db.Column(db.Text, unique=False)
-    status = db.Column(db.String(10))
+    status = db.Column(db.String(20))
 
     def __init__(self, taskId, title, content, status):
         self.taskId = taskId
