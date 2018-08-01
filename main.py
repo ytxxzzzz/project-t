@@ -57,6 +57,11 @@ def addNewTask():
     return jsonify(req_data), 200
 
 
+@v1.route('/task/<task_id>', methods=['GET'])
+def getTaskById(task_id):
+    task = Task.query.get(task_id)
+    return jsonify(task), 200   # ※※※taskはDictじゃなくてオブジェクトなのでJsonにそのまま変換はできないのでNG
+
 if __name__ == '__main__':
     app.register_blueprint(v1)
 
