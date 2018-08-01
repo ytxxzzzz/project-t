@@ -11,6 +11,18 @@ $ docker-compose up -d
 # mysqlログイン
 $ mysql -uroot -p --port=3306 --host=127.0.0.1
 　※パスワード＝pass
+
+# DBの定義変更(Flask-migrateのざっくり使い方)
+
+1. ソース中のModelクラスのカラム定義を修正する
+　　(どうもカラムの追加と削除しかトラックされないみたい。サイズ変更とかは無視されるから自分でAlterTableするしかなさそうな雰囲気)
+
+2. migrateコマンドで1のソース修正と接続先DBの定義突合をして差分をFlask-migrate管轄のファイル(migrationsフォルダ配下)に記録
+$ FLASK_APP=main.py flask db migrate
+
+3. 差分を接続先のDBへ適用(つまり実際にAlter Tableする)
+$ FLASK_APP=main.py flask db upgrade
+
 ```
 
 ## 第１段
