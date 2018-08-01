@@ -11,23 +11,25 @@ app = Flask(__name__)
 v1 = Blueprint('v1', __name__, url_prefix='/v1')
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:pass@localhost/project_t?charset=utf8'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
 class Task(db.Model):
-    taskId = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100), unique=False)
+    task_id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(200), unique=False)
     content = db.Column(db.Text, unique=False)
-    status = db.Column(db.String(20))
+    status = db.Column(db.String(30))
 
-    def __init__(self, taskId, title, content, status):
-        self.taskId = taskId
+    def __init__(self, task_id, title, content, status):
+        self.task_id = task_id
         self.title = title
         self.content = content
         self.status = status
 
     def __repr__(self):
-        return '<Task %r, %s>' % (self.taskId, self.title)
+        return '<Task %r, %s>' % (self.task_id, self.title)
 
 
 # メッセージをランダムに表示するメソッド
