@@ -1,14 +1,10 @@
-.pyc
-bin
-include
-lib
-lib64
-pyvenv.cfg
-share
-pip-selfcheck.json
-.idea/
-mysql-docker-compose/mysql_data/
-__pycache__
+.travis.yaml
+.swagger-codegen-ignore
+README.md
+tox.ini
+git_push.sh
+test-requirements.txt
+setup.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
