@@ -9,6 +9,9 @@ def main():
     app = connexion.App(__name__, specification_dir='./swagger/')
     app.app.json_encoder = encoder.JSONEncoder
     app.add_api('swagger.yaml', arguments={'title': 'Project-T'})
+
+    app.debug = True # デバッグモード有効化
+
     app.run(port=8080)
 
 

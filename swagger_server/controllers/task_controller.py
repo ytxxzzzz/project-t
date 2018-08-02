@@ -17,7 +17,7 @@ def add_new_task(body=None):  # noqa: E501
     """
     if connexion.request.is_json:
         body = Task.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+    return 'do some magic!ああおううおううおうjd'
 
 
 def delete_task(taskId):  # noqa: E501
