@@ -71,7 +71,7 @@ paths:
         - "task"
       summary: "Find All Tasks"
       description: "タスク全件取得"
-      operationId: "findTaskAll"
+      operationId: "find_all_tasks"
       produces:
         - "application/json"
       responses:
@@ -106,47 +106,12 @@ paths:
           description: "Invalid ID supplied"
         "404":
           description: "Task not found"
-    post:
-      tags:
-        - "task"
-      summary: "Updates a task with form data"
-      description: ""
-      operationId: "updateTaskWithForm"
-      consumes:
-        - "application/x-www-form-urlencoded"
-      produces:
-        - "application/json"
-      parameters:
-        - name: "taskId"
-          in: "path"
-          description: "ID of pet that needs to be updated"
-          required: true
-          type: "integer"
-          format: "int64"
-        - name: "title"
-          in: "formData"
-          description: "Updated title of the task"
-          required: false
-          type: "string"
-        - name: "content"
-          in: "formData"
-          description: "Updated content of the task"
-          required: false
-          type: "string"
-        - name: "status"
-          in: "formData"
-          description: "Updated status of the task"
-          required: false
-          type: "string"
-      responses:
-        "405":
-          description: "Invalid input"
     delete:
       tags:
         - "task"
       summary: "Deletes a task"
       description: ""
-      operationId: "deleteTask"
+      operationId: "delete_task"
       produces:
         - "application/json"
       parameters:

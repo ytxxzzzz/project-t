@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 
 # Flask などの必要なライブラリをインポートする
-from flask import Flask, Blueprint, render_template, request, redirect, url_for, jsonify
+from flask import Flask, Blueprint, render_template, request, redirect, url_for, jsonify, abort
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from sqlalchemy.orm.attributes import InstrumentedAttribute
@@ -73,14 +73,14 @@ def update_task():
 
     # 更新なので、PK未指定は当然エラー
     if 'taskId' not in req_data:
-        return '', 400
+        abort(400, {'msg':'更新オペレーションなので、PK(taskId)の指定は必須です。'})
 
     # 指定されたIDをSELECT
     task = db.session.query(Task).filter_by(task_id=req_data['taskId']).first()
 
     # 指定されたIDのデータが見つからず
     if task is None:
-        return '', 404
+        abort(404, {'msg':'指定されたtaskIdのデータが見つかりませんでした。'})
 
     # 値の更新
     task.set_attributes_from_dict(req_data)
@@ -92,7 +92,42 @@ def update_task():
 @v1.route('/task/<task_id>', methods=['GET'])
 def get_task_by_id(task_id):
     task = Task.query.get(task_id)
-    return jsonify(task), 200   # ※※※taskはDictじゃなくてオブジェクトなのでJsonにそのまま変換はできないのでNG
+
+    # 指定されたIDのデータが見つからず
+    if task is None:
+        abort(404, {'msg':'指定されたtaskIdのデータが見つかりませんでした。'})
+
+    return jsonify(task.to_dict()), 200
+
+@v1.route('/task/<task_id>', methods=['DELETE'])
+def delete_task(task_id):
+    task = Task.query.get(task_id)
+
+    # 指定されたIDのデータが見つからず
+    if task is None:
+        abort(404, {'msg':'指定されたtaskIdのデータが見つかりませんでした。'})
+
+    # 見つかったタスクの削除
+    db.session.delete(task)
+    db.session.commit()
+
+    return jsonify(task.to_dict()), 200
+
+@v1.route('/task/findAll', methods=['GET'])
+def find_all_tasks():
+    tasks = Task.query.all()
+
+    return jsonify([x.to_dict() for x in tasks]), 200
+
+
+@app.errorhandler(400)
+@app.errorhandler(404)
+@app.errorhandler(500)
+def error_handler(error):
+    response = jsonify({'message': error.description['msg'], 'statusCode': error.code})
+    return response, error.code
+
+
 
 if __name__ == '__main__':
     app.register_blueprint(v1)
