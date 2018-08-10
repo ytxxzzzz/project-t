@@ -4,7 +4,9 @@
 from flask import Flask, Blueprint, render_template, request, redirect, url_for, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from sqlalchemy.orm.attributes import InstrumentedAttribute
 import json
+import re
 import numpy as np
 
 app = Flask(__name__)
@@ -22,43 +24,73 @@ class Task(db.Model):
     content = db.Column(db.Text, unique=False)
     status = db.Column(db.String(30))
 
-    def __init__(self, task_id, title, content, status):
-        self.task_id = task_id
-        self.title = title
-        self.content = content
-        self.status = status
+    def __init__(self, task: dict):
+        self.set_attributes_from_dict(task)
+
+    def set_attributes_from_dict(self, task: dict):
+        # JSONのキーと同名だったフィールド全てに値をセット
+        for camel_key in task.keys():
+            snake_key = self.camel_to_snake(camel_key)
+            if snake_key in self.__class__.__dict__:
+                setattr(self, snake_key, task[camel_key])
+
+    def to_dict(self):
+        ret_dict = {}
+        for snake_key in self.__class__.__dict__:
+            # クラス定義を調べて、SQLAlchemyのカラム型だったら、DictへKeyValueをコピーする(Key名はキャメル変更した上で)
+            if hasattr(self, snake_key) and \
+                    isinstance(getattr(self.__class__, snake_key), InstrumentedAttribute):
+                ret_dict[self.snake_to_camel(snake_key)] = getattr(self, snake_key)
+
+        return ret_dict
 
     def __repr__(self):
         return '<Task %r, %s>' % (self.task_id, self.title)
 
+    def camel_to_snake(self, camel):
+        return re.sub("([A-Z])",lambda x:"_" + x.group(1).lower(),camel)
 
-# メッセージをランダムに表示するメソッド
-def picked_up():
-    messages = [
-        "こんにちは、あなたの名前を入力してください",
-        "やあ！お名前は何ですか？",
-        "あなたの名前を教えてね"
-    ]
-    # NumPy の random.choice で配列からランダムに取り出し
-    return np.random.choice(messages)
+    def snake_to_camel(self, snake):
+        return re.sub("_(.)",lambda x:x.group(1).upper(),snake)
+
 
 @v1.route('/task', methods=['POST'])
-def addNewTask():
+def add_new_task():
     req_data = json.loads(request.data)
+    if 'taskId' in req_data:
+        del(req_data['taskId'])
 
-    newTask = Task(req_data['taskId'],
-                    req_data['title'],
-                    req_data['content'],
-                    req_data['status'])
+    task = Task(req_data)
 
-    db.session.add(newTask)
+    db.session.add(task)
     db.session.commit()
 
-    return jsonify(req_data), 200
+    return jsonify(task.to_dict()), 200
+
+@v1.route('/task', methods=['PUT'])
+def update_task():
+    req_data = json.loads(request.data)
+
+    # 更新なので、PK未指定は当然エラー
+    if 'taskId' not in req_data:
+        return '', 400
+
+    # 指定されたIDをSELECT
+    task = db.session.query(Task).filter_by(task_id=req_data['taskId']).first()
+
+    # 指定されたIDのデータが見つからず
+    if task is None:
+        return '', 404
+
+    # 値の更新
+    task.set_attributes_from_dict(req_data)
+    db.session.commit()
+
+    return jsonify(task.to_dict()), 200
 
 
 @v1.route('/task/<task_id>', methods=['GET'])
-def getTaskById(task_id):
+def get_task_by_id(task_id):
     task = Task.query.get(task_id)
     return jsonify(task), 200   # ※※※taskはDictじゃなくてオブジェクトなのでJsonにそのまま変換はできないのでNG
 

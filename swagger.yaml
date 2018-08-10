@@ -18,7 +18,7 @@ paths:
         - "task"
       summary: "タスクを新規作成する"
       description: ""
-      operationId: "addNewTask"
+      operationId: "add_new_task"
       consumes:
         - "application/json"
       produces:
@@ -42,7 +42,7 @@ paths:
         - "task"
       summary: "タスクの情報を更新する"
       description: ""
-      operationId: "updateTask"
+      operationId: "update_task"
       consumes:
         - "application/json"
       produces:
@@ -87,7 +87,7 @@ paths:
         - "task"
       summary: "Find task by ID"
       description: "Returns a single task"
-      operationId: "getTaskById"
+      operationId: "get_task_by_id"
       produces:
         - "application/json"
       parameters:
