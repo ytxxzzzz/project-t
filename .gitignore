@@ -9,3 +9,7 @@ pip-selfcheck.json
 .idea/
 mysql-docker-compose/mysql_data/
 __pycache__
+.vscode/
+dist/
+node_modules/
+
