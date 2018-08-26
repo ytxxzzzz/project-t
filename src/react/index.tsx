@@ -1,6 +1,7 @@
 /* reactとreact-domの読み込み */
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import { DragSource } from "react-dnd";
 
 /* アプリ本体となる「Indexコンポーネント」 */
 interface IndexProps {

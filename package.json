@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack",
+    "watch": "webpack --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -28,6 +29,7 @@
     "@types/react": "^16.4.10",
     "@types/react-dom": "^16.0.7",
     "react": "^16.4.2",
+    "react-dnd": "^5.0.0",
     "react-dom": "^16.4.2"
   }
 }
