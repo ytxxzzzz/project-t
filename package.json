@@ -26,10 +26,15 @@
     "webpack-cli": "^3.1.0"
   },
   "dependencies": {
+    "@types/lodash": "^4.14.116",
     "@types/react": "^16.4.10",
     "@types/react-dom": "^16.0.7",
+    "lodash": "^4.17.10",
     "react": "^16.4.2",
     "react-dnd": "^5.0.0",
-    "react-dom": "^16.4.2"
+    "react-dnd-html5-backend": "^5.0.1",
+    "react-dom": "^16.4.2",
+    "react-easy-state": "^5.1.0",
+    "styled-components": "^3.4.5"
   }
 }

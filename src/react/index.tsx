@@ -76,6 +76,45 @@ const Output: React.StatelessComponent<OutputProps> = (props) => {
   );
 }
 
+interface TaskListBaseProps {
+}
+interface TaskListBaseState {
+  taskGroupCount: number;
+}
+class TaskListBase extends React.Component<TaskListBaseProps, TaskListBaseState> {
+  constructor(props: TaskListBaseProps) {
+    super(props);
+    this.state = {
+      taskGroupCount: 0,
+    }
+    this.handleChange = this.handleChange.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+  }
+  handleChange(e: any): void {
+    this.setState({
+      inputValue: e.target.value,
+    });
+  }
+  handleClick(): void {
+    this.setState({
+      inputValue: '',
+      outputValue: this.state.inputValue,
+    });
+  }
+  render() {
+    return (
+      <div>
+        <Input value={this.state.inputValue} handleChange={this.handleChange} />
+        <Button handleClick={this.handleClick} />
+        <Output hello="Hello" value={this.state.outputValue} />
+      </div>
+    );
+  }
+}
+
+
+
+
 ReactDOM.render(
   <Index hello="Hello" />,
   document.querySelector('.content')
