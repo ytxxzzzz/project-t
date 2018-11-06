@@ -76,19 +76,47 @@ const Output: React.StatelessComponent<OutputProps> = (props) => {
   );
 }
 
+// action定義
+interface ADD_TODO
+{
+  type: 'ADD_TODO',
+  text: 'Build my first Redux app'
+}
+
+interface TaskGroup {
+  title: string;
+  tasks: Task[];
+}
+interface Task {
+  title: string;
+  detail: string;
+}
+
 interface TaskListBaseProps {
 }
 interface TaskListBaseState {
-  taskGroupCount: number;
+  taskGroups: TaskGroup[];
 }
 class TaskListBase extends React.Component<TaskListBaseProps, TaskListBaseState> {
   constructor(props: TaskListBaseProps) {
     super(props);
     this.state = {
-      taskGroupCount: 0,
+      taskGroups: [],
     }
+    
     this.handleChange = this.handleChange.bind(this);
     this.handleClick = this.handleClick.bind(this);
+  }
+  reloadTaskGroups() {
+    this.setState({
+      taskGroups: [{
+        title: "taskGroup_title",
+        tasks: [{
+          title: "task_title",
+          detail: "task_detail"
+        }]
+  }]})
+    this.state.taskGroups
   }
   handleChange(e: any): void {
     this.setState({
