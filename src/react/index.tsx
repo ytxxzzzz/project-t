@@ -84,14 +84,15 @@ interface ADD_TODO
 }
 
 interface TaskGroup {
+  id: number;
   title: string;
   tasks: Task[];
 }
 interface Task {
+  id: number;
   title: string;
   detail: string;
 }
-
 interface TaskListBaseProps {
 }
 interface TaskListBaseState {
@@ -110,10 +111,12 @@ class TaskListBase extends React.Component<TaskListBaseProps, TaskListBaseState>
   reloadTaskGroups() {
     this.setState({
       taskGroups: [{
+        id: 1,
         title: "taskGroup_title",
         tasks: [{
+          id: 1,
           title: "task_title",
-          detail: "task_detail"
+          detail: "task_detail",
         }]
   }]})
     this.state.taskGroups
