@@ -83,12 +83,12 @@ interface ADD_TODO
   text: 'Build my first Redux app'
 }
 
-interface TaskGroup {
+interface TaskGroupSchema {
   id: number;
   title: string;
-  tasks: Task[];
+  tasks: TaskSchema[];
 }
-interface Task {
+interface TaskSchema {
   id: number;
   title: string;
   detail: string;
@@ -96,7 +96,7 @@ interface Task {
 interface TaskListBaseProps {
 }
 interface TaskListBaseState {
-  taskGroups: TaskGroup[];
+  taskGroups: TaskGroupSchema[];
 }
 class TaskListBase extends React.Component<TaskListBaseProps, TaskListBaseState> {
   constructor(props: TaskListBaseProps) {
@@ -135,6 +135,10 @@ class TaskListBase extends React.Component<TaskListBaseProps, TaskListBaseState>
   render() {
     return (
       <div>
+        {
+          this.state.taskGroups.map((taskGroup, index)=> {
+          })
+        }
         <Input value={this.state.inputValue} handleChange={this.handleChange} />
         <Button handleClick={this.handleClick} />
         <Output hello="Hello" value={this.state.outputValue} />
@@ -143,6 +147,15 @@ class TaskListBase extends React.Component<TaskListBaseProps, TaskListBaseState>
   }
 }
 
+
+interface TaskGroupProps {
+  taskGroups: TaskGroup[];
+}
+interface TaskGroupState {
+}
+class TaskGroup extends React.Component<TaskGroupProps, TaskGroupState> {
+
+}
 
 
 
