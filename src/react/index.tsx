@@ -129,11 +129,16 @@ class TaskListBase extends React.Component<TaskListBaseProps, TaskListBaseState>
   render() {
     return (
       <div>
-        {
-          this.state.taskGroups.map(taskGroup => {
-            <TaskGroup taskGroup={taskGroup}></TaskGroup>
-          })
-        }
+        <input type="text" placeholder="Input Name" value="aaa" />
+        <div>
+          {
+            this.state.taskGroups.map(taskGroup => {
+              return (
+                <TaskGroup taskGroup={taskGroup}></TaskGroup>
+              )
+            })
+          }
+        </div>
       </div>
     )
   }
@@ -151,7 +156,9 @@ class TaskGroup extends React.Component<TaskGroupProps, TaskGroupState> {
   render() {
     return (
       this.props.taskGroup.tasks.map(task => {
-        <Task task={task}></Task>
+        return (
+          <Task task={task}></Task>
+        )
       })
     )
   }
