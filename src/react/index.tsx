@@ -2,6 +2,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { DragSource } from "react-dnd";
+import * as _ from "lodash";
 
 /* アプリ本体となる「Indexコンポーネント」 */
 interface IndexProps {
@@ -36,7 +37,7 @@ class Index extends React.Component<IndexProps, IndexState> {
     return (
       <div>
         <Input value={this.state.inputValue} handleChange={this.handleChange} />
-        <Button handleClick={this.handleClick} />
+        <Button caption="編集" handleClick={this.handleClick} />
         <Output hello="Hello" value={this.state.outputValue} />
       </div>
     )
@@ -56,11 +57,12 @@ const Input: React.StatelessComponent<InputProps> = (props) => {
 
 /* ボタンを出力する「Buttonコンポーネント」 */
 interface ButtonProps {
+  caption: string
   handleClick(): void
 }
 const Button: React.StatelessComponent<ButtonProps> = (props) => {
   return (
-    <button onClick={props.handleClick}>Send</button>
+    <button onClick={props.handleClick}>{props.caption}</button>
   )
 }
 
@@ -172,14 +174,30 @@ interface TaskProps {
   task: TaskSchema
 }
 interface TaskState {
+  title: string
+  detail: string
 }
 class Task extends React.Component<TaskProps, TaskState> {
   constructor(props: TaskProps) {
     super(props)
+    this.state = {
+      title: props.task.title,
+      detail: props.task.detail
+    }
+  }
+  handleEditClick() {
+    this.setState({
+      title: this.state.title + "_タイトル編集_",
+      detail: this.state.detail + "_詳細編集_"
+    })
   }
   render() {
     return (
-      <Output hello={this.props.task.title} value={this.props.task.detail}></Output>
+      <div>
+        <Output hello={this.state.title} value={this.state.title}></Output>
+        <Output hello={this.state.detail} value={this.state.detail}></Output>
+        <Button caption="編集" handleClick={this.handleEditClick.bind(this)}></Button>
+      </div>
     )
   }
 }
