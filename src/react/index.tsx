@@ -86,14 +86,14 @@ interface ADD_TODO
 }
 
 interface TaskGroupSchema {
-  id: number
-  title: string
+  taskGroupId?: number
+  taskGroupTitle: string
   tasks: TaskSchema[]
 }
 interface TaskSchema {
-  id: number
-  title: string
-  detail: string
+  taskId?: number
+  taskTitle: string
+  taskDetail: string
 }
 interface TaskListBaseProps {
 }
@@ -105,18 +105,18 @@ class TaskListBase extends React.Component<TaskListBaseProps, TaskListBaseState>
     super(props)
     this.state = {
       taskGroups: [{
-        id: 1,
-        title: "taskGroup_title",
+        taskGroupId: 1,
+        taskGroupTitle: "taskGroup_title",
         tasks: [
           {
-            id: 1,
-            title: "task_title",
-            detail: "task_detail",
+            taskId: 1,
+            taskTitle: "task_title",
+            taskDetail: "task_detail",
           },
           {
-            id: 2,
-            title: "task_titleその２",
-            detail: "task_detailその２",
+            taskId: 2,
+            taskTitle: "task_titleその２",
+            taskDetail: "task_detailその２",
           }
         ]
       }],
@@ -125,12 +125,12 @@ class TaskListBase extends React.Component<TaskListBaseProps, TaskListBaseState>
   reloadTaskGroups() {
     this.setState({
       taskGroups: [{
-        id: 1,
-        title: "taskGroup_title",
+        taskGroupId: 1,
+        taskGroupTitle: "taskGroup_title",
         tasks: [{
-          id: 1,
-          title: "task_title",
-          detail: "task_detail",
+          taskId: 1,
+          taskTitle: "task_title",
+          taskDetail: "task_detail",
         }]
       }]
     })
@@ -154,18 +154,42 @@ interface TaskGroupProps {
   taskGroup: TaskGroupSchema
 }
 interface TaskGroupState {
+  taskGroupTitle: string,
+  tasks: TaskSchema[],
 }
 class TaskGroup extends React.Component<TaskGroupProps, TaskGroupState> {
   constructor(props: TaskGroupProps) {
     super(props)
+    this.state = {
+      taskGroupTitle: props.taskGroup.taskGroupTitle,
+      tasks: props.taskGroup.tasks,
+    }
+  }
+  handleAddTaskClick() {
+    const tasks = this.state.tasks
+
+    tasks.push({
+      taskTitle: "新しいタスク",
+      taskDetail: "",
+    })
+
+    this.setState({
+      tasks: tasks,
+    })
   }
   render() {
     return (
-      this.props.taskGroup.tasks.map(task => {
-        return (
-          <Task task={task}></Task>
-        )
-      })
+      <div>
+        <Output hello={this.state.taskGroupTitle} value={this.state.taskGroupTitle}></Output>
+        {
+          this.props.taskGroup.tasks.map(task => {
+            return (
+              <Task task={task}></Task>
+            )
+          })
+        }
+        <Button caption="タスク追加" handleClick={this.handleAddTaskClick.bind(this)}></Button>
+      </div>
     )
   }
 }
@@ -174,29 +198,29 @@ interface TaskProps {
   task: TaskSchema
 }
 interface TaskState {
-  title: string
-  detail: string
+  taskTitle: string
+  taskDetail: string
 }
 class Task extends React.Component<TaskProps, TaskState> {
   constructor(props: TaskProps) {
     super(props)
     this.state = {
-      title: props.task.title,
-      detail: props.task.detail
+      taskTitle: props.task.taskTitle,
+      taskDetail: props.task.taskDetail
     }
   }
   handleEditClick() {
     this.setState({
-      title: this.state.title + "_タイトル編集_",
-      detail: this.state.detail + "_詳細編集_"
+      taskTitle: this.state.taskTitle + "_タイトル編集_",
+      taskDetail: this.state.taskDetail + "_詳細編集_"
     })
   }
   render() {
     return (
       <div>
-        <Output hello={this.state.title} value={this.state.title}></Output>
-        <Output hello={this.state.detail} value={this.state.detail}></Output>
-        <Button caption="編集" handleClick={this.handleEditClick.bind(this)}></Button>
+        <Output hello={this.state.taskTitle} value={this.state.taskTitle}></Output>
+        <Output hello={this.state.taskDetail} value={this.state.taskDetail}></Output>
+        <Button caption="タスクの編集" handleClick={this.handleEditClick.bind(this)}></Button>
       </div>
     )
   }
