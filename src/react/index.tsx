@@ -61,8 +61,18 @@ interface ButtonProps {
   handleClick(): void
 }
 const Button: React.StatelessComponent<ButtonProps> = (props) => {
+  const style = {
+    "min-width": "64px",
+    "line-height": "32px",
+    "border-radius": "4px",
+    "border": "none",
+    "padding": "0 16px",
+    "color": "#fff",
+    "background": "#4CAF50",
+    "cursor": "pointer",
+  };
   return (
-    <button onClick={props.handleClick}>{props.caption}</button>
+    <button style={style} onClick={props.handleClick}>{props.caption}</button>
   )
 }
 
