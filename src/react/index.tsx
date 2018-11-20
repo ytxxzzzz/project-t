@@ -145,6 +145,18 @@ class TaskListBase extends React.Component<TaskListBaseProps, TaskListBaseState>
       }]
     })
   }
+  handleAddTaskGroupClick() {
+    const taskGroups = this.state.taskGroups
+
+    taskGroups.push({
+      taskGroupTitle: "新しいタスクグループ",
+      tasks: [],
+    })
+
+    this.setState({
+      taskGroups: taskGroups,
+    })
+  }
   render() {
     return (
       <div>
@@ -155,6 +167,7 @@ class TaskListBase extends React.Component<TaskListBaseProps, TaskListBaseState>
             )
           })
         }
+        <Button caption="タスクグループ追加" handleClick={this.handleAddTaskGroupClick.bind(this)}></Button>
       </div>
     )
   }
