@@ -1,4 +1,5 @@
 module.exports = {
+  mode: 'development',
   entry: "./src/react/index.tsx",
   output: {
     filename: "bundle.js",
@@ -15,6 +16,9 @@ module.exports = {
 
   module: {
     rules: [
+      // css loader
+      {test: /\.css$/, use: ['style-loader', 'css-loader']},
+
       // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
       { test: /\.tsx?$/, loader: "awesome-typescript-loader" },
 
