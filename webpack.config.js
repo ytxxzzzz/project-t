@@ -1,6 +1,7 @@
 module.exports = {
   mode: 'development',
-  entry: "./src/react/index.tsx",
+  context: __dirname + "/src/react",
+  entry: "./index.tsx",
   output: {
     filename: "bundle.js",
     path: __dirname + "/dist"

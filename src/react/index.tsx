@@ -1,3 +1,5 @@
+import './css/base.css';
+
 /* reactとreact-domの読み込み */
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
@@ -62,9 +64,9 @@ interface ButtonProps {
 }
 const Button: React.StatelessComponent<ButtonProps> = (props) => {
   const style = {
-    "min-width": "64px",
-    "line-height": "32px",
-    "border-radius": "4px",
+    "minWidth": "64px",
+    "lineHeight": "32px",
+    "borderRadius": "4px",
     "border": "none",
     "padding": "0 16px",
     "color": "#fff",
