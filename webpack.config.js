@@ -1,10 +1,20 @@
+const path = require("path");
+
 module.exports = {
   mode: 'development',
-  context: __dirname + "/src/react",
-  entry: "./index.tsx",
+  context: path.join(__dirname, "src", "react"),
+  entry: path.join(__dirname, "src", "react", "index.tsx"),
   output: {
     filename: "bundle.js",
-    path: __dirname + "/dist"
+    path: path.join(__dirname, "dist")
+  },
+
+  devServer: {
+    open: true,
+    openPage: "index.html",
+//    contentBase: path.join(__dirname, "public"),
+    watchContentBase: true,
+    port: 8080,
   },
 
   // Enable sourcemaps for debugging webpack's output.
