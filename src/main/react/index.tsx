@@ -6,46 +6,6 @@ import * as ReactDOM from 'react-dom';
 import { DragSource } from "react-dnd";
 import * as _ from "lodash";
 
-/* アプリ本体となる「Indexコンポーネント」 */
-interface IndexProps {
-  hello: string
-}
-interface IndexState {
-  inputValue: string
-  outputValue: string
-}
-class Index extends React.Component<IndexProps, IndexState> {
-  constructor(props: IndexProps) {
-    super(props)
-    this.state = {
-      inputValue: '',
-      outputValue: '',
-    }
-    this.handleChange = this.handleChange.bind(this)
-    this.handleClick = this.handleClick.bind(this)
-  }
-  handleChange(e: any): void {
-    this.setState({
-      inputValue: e.target.value,
-    })
-  }
-  handleClick(): void {
-    this.setState({
-      inputValue: '',
-      outputValue: this.state.inputValue,
-    })
-  }
-  render() {
-    return (
-      <div>
-        <Input value={this.state.inputValue} handleChange={this.handleChange} />
-        <Button caption="編集" handleClick={this.handleClick} />
-        <Output hello="Hello" value={this.state.outputValue} />
-      </div>
-    )
-  }
-}
-
 /* 入力フォームを出力する「Inputコンポーネント」 */
 interface InputProps {
   value: string
