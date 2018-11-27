@@ -1,8 +1,20 @@
+const path = require("path");
+
 module.exports = {
-  entry: "./src/react/index.tsx",
+  mode: 'development',
+  context: path.join(__dirname, "src", "main", "react"),
+  entry: path.join(__dirname, "src", "main", "react", "index.tsx"),
   output: {
     filename: "bundle.js",
-    path: __dirname + "/dist"
+    path: path.join(__dirname, "dist")
+  },
+
+  devServer: {
+    open: true,
+    openPage: "index.html",
+//    contentBase: path.join(__dirname, "public"),
+    watchContentBase: true,
+    port: 8080,
   },
 
   // Enable sourcemaps for debugging webpack's output.
@@ -15,6 +27,9 @@ module.exports = {
 
   module: {
     rules: [
+      // css loader
+      {test: /\.css$/, use: ['style-loader', 'css-loader']},
+
       // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
       { test: /\.tsx?$/, loader: "awesome-typescript-loader" },
 
