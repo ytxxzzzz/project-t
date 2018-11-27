@@ -1,5 +1,3 @@
-import './css/base.css';
-
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import * as _ from "lodash";
@@ -10,7 +8,7 @@ interface ModalProps {
 }
 interface ModalState {
 }
-class Modal extends React.Component<ModalProps, ModalState> {
+export default class Modal extends React.Component<ModalProps, ModalState> {
   render() {
     if(!this.props.show) {
       return null;
@@ -18,7 +16,7 @@ class Modal extends React.Component<ModalProps, ModalState> {
 
     // The gray background
     const backdropStyle = {
-      position: 'fixed',
+      position: 'fixed' as 'fixed',
       top: 0,
       bottom: 0,
       left: 0,
@@ -43,7 +41,7 @@ class Modal extends React.Component<ModalProps, ModalState> {
           {this.props.children}
 
           <div className="footer">
-            <button onClick={this.props.onClose}>
+            <button onClick={this.props.onClose.bind(this)}>
               Close
             </button>
           </div>

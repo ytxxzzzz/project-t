@@ -6,6 +6,8 @@ import * as ReactDOM from 'react-dom';
 import { DragSource } from "react-dnd";
 import * as _ from "lodash";
 
+import Modal from './components/modal';
+
 /* 入力フォームを出力する「Inputコンポーネント」 */
 interface InputProps {
   value: string
@@ -185,20 +187,29 @@ interface TaskProps {
 interface TaskState {
   taskTitle: string
   taskDetail: string
+  isOpen: boolean
 }
 class Task extends React.Component<TaskProps, TaskState> {
   constructor(props: TaskProps) {
     super(props)
     this.state = {
       taskTitle: props.task.taskTitle,
-      taskDetail: props.task.taskDetail
+      taskDetail: props.task.taskDetail,
+      isOpen: false,
     }
+  }
+  toggleModal = () => {
+    this.setState({
+      isOpen: !this.state.isOpen
+    });
   }
   handleEditClick() {
     this.setState({
       taskTitle: this.state.taskTitle + "_タイトル編集_",
       taskDetail: this.state.taskDetail + "_詳細編集_"
     })
+
+    this.toggleModal()
   }
   render() {
     return (
@@ -206,6 +217,8 @@ class Task extends React.Component<TaskProps, TaskState> {
         <Output hello={this.state.taskTitle} value={this.state.taskTitle}></Output>
         <Output hello={this.state.taskDetail} value={this.state.taskDetail}></Output>
         <Button caption="タスクの編集" handleClick={this.handleEditClick.bind(this)}></Button>
+
+        <Modal show={this.state.isOpen} onClose={this.toggleModal}>モーダルだっぴょ</Modal>
       </div>
     )
   }
