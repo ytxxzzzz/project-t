@@ -8,10 +8,24 @@ body {
   margin: 0px;
 }
 
+ul li {
+  list-style: none;
+}
+label {
+  margin-right: 10px;
+  width: 80px;
+  float: left;
+}
+
+ul {
+  width: 500px;
+  margin: 0 auto;
+}
+
 div {
   background-color: rgb(228, 213, 255);
   font-size: 14px !important;
   border: solid;
+  border-width: 1px;
   border-color: red;
-  width: 500px;
 }

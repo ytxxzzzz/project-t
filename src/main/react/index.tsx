@@ -11,11 +11,12 @@ import Modal from './components/modal';
 /* 入力フォームを出力する「Inputコンポーネント」 */
 interface InputProps {
   value: string
+  name: string
   handleChange(e: any): void
 }
 const Input: React.StatelessComponent<InputProps> = (props) => {
   return (
-    <input type="text" placeholder="Input Name" value={props.value} onChange={props.handleChange} />
+    <input type="text" name={props.name} value={props.value} onChange={props.handleChange} />
   )
 }
 
@@ -42,13 +43,11 @@ const Button: React.StatelessComponent<ButtonProps> = (props) => {
 
 /* テキストを出力する「Outputコンポーネント」 */
 interface OutputProps {
-  hello: string
   value: string
 }
 const Output: React.StatelessComponent<OutputProps> = (props) => {
-  const value = (props.value !== '') ? <h1>{props.hello} {props.value} !</h1> : ''
   return (
-    <div>{value}</div>
+    <div>{props.value}</div>
   )
 }
 
@@ -157,7 +156,7 @@ class TaskGroup extends React.Component<TaskGroupProps, TaskGroupState> {
 
     tasks.push({
       taskTitle: "新しいタスク",
-      taskDetail: "",
+      taskDetail: "タスクの詳細",
     })
 
     this.setState({
@@ -167,7 +166,7 @@ class TaskGroup extends React.Component<TaskGroupProps, TaskGroupState> {
   render() {
     return (
       <div>
-        <Output hello={this.state.taskGroupTitle} value={this.state.taskGroupTitle}></Output>
+        <Output value={this.state.taskGroupTitle}></Output>
         {
           this.props.taskGroup.tasks.map(task => {
             return (
@@ -185,6 +184,7 @@ interface TaskProps {
   task: TaskSchema
 }
 interface TaskState {
+  [key: string]: any  // シグネチャを追加して、フィールドの動的アクセスを許可
   taskTitle: string
   taskDetail: string
   isOpen: boolean
@@ -204,21 +204,33 @@ class Task extends React.Component<TaskProps, TaskState> {
     });
   }
   handleEditClick() {
-    this.setState({
-      taskTitle: this.state.taskTitle + "_タイトル編集_",
-      taskDetail: this.state.taskDetail + "_詳細編集_"
-    })
-
     this.toggleModal()
+  }
+  handleModalInput(e: any) {
+    const newState: TaskState = _.cloneDeep(this.state)
+    newState[e.target.name] = e.target.value
+    var validateFunc = null
+    this.setState(newState, validateFunc)
   }
   render() {
     return (
       <div>
-        <Output hello={this.state.taskTitle} value={this.state.taskTitle}></Output>
-        <Output hello={this.state.taskDetail} value={this.state.taskDetail}></Output>
+        <Output value={this.state.taskTitle}></Output>
+        <Output value={this.state.taskDetail}></Output>
         <Button caption="タスクの編集" handleClick={this.handleEditClick.bind(this)}></Button>
 
-        <Modal show={this.state.isOpen} onClose={this.toggleModal}>モーダルだっぴょ</Modal>
+        <Modal show={this.state.isOpen} onClose={this.toggleModal}>
+          <ul>
+            <li>
+              <label htmlFor="title">タイトル</label>
+              <Input name="taskTitle" value={this.state.taskTitle} handleChange={this.handleModalInput.bind(this)}></Input>
+            </li>
+            <li>
+              <label htmlFor="detail">詳細</label>
+              <Input name="taskDetail" value={this.state.taskDetail} handleChange={this.handleModalInput.bind(this)}></Input>
+            </li>
+          </ul>
+        </Modal>
       </div>
     )
   }
