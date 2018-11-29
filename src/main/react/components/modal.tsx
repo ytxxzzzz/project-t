@@ -9,6 +9,9 @@ interface ModalProps {
 interface ModalState {
 }
 export default class Modal extends React.Component<ModalProps, ModalState> {
+  onSave() {
+    console.log(this.props.children)
+  }
   render() {
     if(!this.props.show) {
       return null;
@@ -41,8 +44,11 @@ export default class Modal extends React.Component<ModalProps, ModalState> {
           {this.props.children}
 
           <div className="footer">
+            <button onClick={this.onSave.bind(this)}>
+              Save
+            </button>
             <button onClick={this.props.onClose.bind(this)}>
-              Close
+              Cancel
             </button>
           </div>
         </div>
