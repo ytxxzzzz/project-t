@@ -1,55 +1,12 @@
 import './css/base.css';
 
-/* reactとreact-domの読み込み */
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { DragSource } from "react-dnd";
 import * as _ from "lodash";
 
-import Modal from './components/modal';
-
-/* 入力フォームを出力する「Inputコンポーネント」 */
-interface InputProps {
-  value: string
-  name: string
-  handleChange(e: any): void
-}
-const Input: React.StatelessComponent<InputProps> = (props) => {
-  return (
-    <input type="text" name={props.name} value={props.value} onChange={props.handleChange} />
-  )
-}
-
-/* ボタンを出力する「Buttonコンポーネント」 */
-interface ButtonProps {
-  caption: string
-  handleClick(): void
-}
-const Button: React.StatelessComponent<ButtonProps> = (props) => {
-  const style = {
-    "minWidth": "64px",
-    "lineHeight": "32px",
-    "borderRadius": "4px",
-    "border": "none",
-    "padding": "0 16px",
-    "color": "#fff",
-    "background": "#4CAF50",
-    "cursor": "pointer",
-  };
-  return (
-    <button style={style} onClick={props.handleClick}>{props.caption}</button>
-  )
-}
-
-/* テキストを出力する「Outputコンポーネント」 */
-interface OutputProps {
-  value: string
-}
-const Output: React.StatelessComponent<OutputProps> = (props) => {
-  return (
-    <div>{props.value}</div>
-  )
-}
+import * as Element from './elements/element'
+import {TaskDialog} from './pageparts/dialogs';
 
 // action定義
 interface ADD_TODO
@@ -58,16 +15,6 @@ interface ADD_TODO
   text: 'Build my first Redux app'
 }
 
-interface TaskGroupSchema {
-  taskGroupId?: number
-  taskGroupTitle: string
-  tasks: TaskSchema[]
-}
-interface TaskSchema {
-  taskId?: number
-  taskTitle: string
-  taskDetail: string
-}
 interface TaskListBaseProps {
 }
 interface TaskListBaseState {
@@ -130,7 +77,7 @@ class TaskListBase extends React.Component<TaskListBaseProps, TaskListBaseState>
             )
           })
         }
-        <Button caption="タスクグループ追加" handleClick={this.handleAddTaskGroupClick.bind(this)}></Button>
+        <Element.Button caption="タスクグループ追加" handleClick={this.handleAddTaskGroupClick.bind(this)}></Element.Button>
       </div>
     )
   }
@@ -166,7 +113,7 @@ class TaskGroup extends React.Component<TaskGroupProps, TaskGroupState> {
   render() {
     return (
       <div>
-        <Output value={this.state.taskGroupTitle}></Output>
+        <Element.Output value={this.state.taskGroupTitle}></Element.Output>
         {
           this.props.taskGroup.tasks.map(task => {
             return (
@@ -174,7 +121,7 @@ class TaskGroup extends React.Component<TaskGroupProps, TaskGroupState> {
             )
           })
         }
-        <Button caption="タスク追加" handleClick={this.handleAddTaskClick.bind(this)}></Button>
+        <Element.Button caption="タスク追加" handleClick={this.handleAddTaskClick.bind(this)}></Element.Button>
       </div>
     )
   }
@@ -215,22 +162,12 @@ class Task extends React.Component<TaskProps, TaskState> {
   render() {
     return (
       <div>
-        <Output value={this.state.taskTitle}></Output>
-        <Output value={this.state.taskDetail}></Output>
-        <Button caption="タスクの編集" handleClick={this.handleEditClick.bind(this)}></Button>
+        <Element.Output value={this.state.taskTitle}></Element.Output>
+        <Element.Output value={this.state.taskDetail}></Element.Output>
+        <Element.Button caption="タスクの編集" handleClick={this.handleEditClick.bind(this)}></Element.Button>
 
-        <Modal show={this.state.isOpen} onClose={this.toggleModal}>
-          <ul>
-            <li>
-              <label htmlFor="title">タイトル</label>
-              <Input name="taskTitle" value={this.state.taskTitle} handleChange={this.handleModalInput.bind(this)}></Input>
-            </li>
-            <li>
-              <label htmlFor="detail">詳細</label>
-              <Input name="taskDetail" value={this.state.taskDetail} handleChange={this.handleModalInput.bind(this)}></Input>
-            </li>
-          </ul>
-        </Modal>
+        <TaskDialog show={this.state.isOpen} onClose={this.toggleModal}>
+        </TaskDialog>
       </div>
     )
   }

@@ -2,13 +2,13 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import * as _ from "lodash";
 
-interface ModalProps {
+interface ModalDialogBaseProps {
   onClose: Function,
   show: boolean,
 }
-interface ModalState {
+interface ModalDialogBaseState {
 }
-export default class Modal extends React.Component<ModalProps, ModalState> {
+export default class ModalDialogBase extends React.Component<ModalDialogBaseProps, ModalDialogBaseState> {
   onSave() {
     console.log(this.props.children)
   }
