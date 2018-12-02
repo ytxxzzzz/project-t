@@ -7,7 +7,7 @@ import * as _ from "lodash";
 interface InputProps {
   value: string
   name: string
-  handleChange(e: any): void
+  handleChange?(e: any): void
 }
 export const Input: React.StatelessComponent<InputProps> = (props) => {
   return (

@@ -132,16 +132,17 @@ interface TaskProps {
 }
 interface TaskState {
   [key: string]: any  // シグネチャを追加して、フィールドの動的アクセスを許可
-  taskTitle: string
-  taskDetail: string
   isOpen: boolean
+  task: TaskSchema
 }
 class Task extends React.Component<TaskProps, TaskState> {
   constructor(props: TaskProps) {
     super(props)
     this.state = {
-      taskTitle: props.task.taskTitle,
-      taskDetail: props.task.taskDetail,
+      task: {
+        taskTitle: props.task.taskTitle,
+        taskDetail: props.task.taskDetail,
+      },
       isOpen: false,
     }
   }
@@ -166,7 +167,7 @@ class Task extends React.Component<TaskProps, TaskState> {
         <Element.Output value={this.state.taskDetail}></Element.Output>
         <Element.Button caption="タスクの編集" handleClick={this.handleEditClick.bind(this)}></Element.Button>
 
-        <TaskDialog show={this.state.isOpen} onClose={this.toggleModal}>
+        <TaskDialog task={this.state.ta} show={this.state.isOpen} onClose={this.toggleModal}>
         </TaskDialog>
       </div>
     )

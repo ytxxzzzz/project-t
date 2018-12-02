@@ -3,51 +3,35 @@ import * as ReactDOM from 'react-dom';
 import * as _ from "lodash";
 
 interface ModalDialogBaseProps {
-  onClose: Function,
-  show: boolean,
+  modalProps: ModalPropsSchema
+  modalStyleProps: ModalStylePropsSchema
 }
 interface ModalDialogBaseState {
 }
 export default class ModalDialogBase extends React.Component<ModalDialogBaseProps, ModalDialogBaseState> {
   onSave() {
-    console.log(this.props.children)
+    this.props.modalProps.onSave()
+    this.props.modalProps.onClose()
+  }
+  onCancel() {
+    this.props.modalProps.onCancel()
+    this.props.modalProps.onClose()
   }
   render() {
-    if(!this.props.show) {
+    if(!this.props.modalProps.show) {
       return null;
     }
 
-    // The gray background
-    const backdropStyle = {
-      position: 'fixed' as 'fixed',
-      top: 0,
-      bottom: 0,
-      left: 0,
-      right: 0,
-      backgroundColor: 'rgba(0,0,0,0.3)',
-      padding: 50
-    };
-
-    // The modal "window"
-    const modalStyle = {
-      backgroundColor: '#fff',
-      borderRadius: 5,
-      maxWidth: 500,
-      minHeight: 300,
-      margin: '0 auto',
-      padding: 30
-    };
-
     return (
-      <div className="backdrop" style={backdropStyle}>
-        <div className="modal" style={modalStyle}>
+      <div className="backdrop" style={this.props.modalStyleProps.backdropStyle}>
+        <div className="modal" style={this.props.modalStyleProps.modalStyle}>
           {this.props.children}
 
           <div className="footer">
             <button onClick={this.onSave.bind(this)}>
               Save
             </button>
-            <button onClick={this.props.onClose.bind(this)}>
+            <button onClick={this.onCancel.bind(this)}>
               Cancel
             </button>
           </div>
