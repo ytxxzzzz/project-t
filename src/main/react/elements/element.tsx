@@ -10,8 +10,9 @@ interface InputProps {
   handleChange?(e: any): void
 }
 export const Input: React.StatelessComponent<InputProps> = (props) => {
+  const handleChange = props.handleChange? props.handleChange : ()=>{}
   return (
-    <input type="text" name={props.name} value={props.value} onChange={props.handleChange} />
+    <input type="text" name={props.name} value={props.value} onChange={handleChange} />
   )
 }
 

@@ -10,6 +10,7 @@ interface TaskSchema {
 }
 
 interface TaskSchema {
+  [key: string]: any  // シグネチャを追加して、フィールドの動的アクセスを許可
   taskId?: number
   taskTitle: string
   taskDetail: string
@@ -17,9 +18,9 @@ interface TaskSchema {
 
 interface ModalPropsSchema {
   show: boolean
-  onSave?: Function
-  onCancel?: Function
-  onClose: Function
+  onSave?: ()=>void
+  onCancel?: ()=>void
+  onClose: ()=>void
 }
 
 interface ModalStylePropsSchema {

@@ -22,6 +22,11 @@ export class TaskDialog extends React.Component<TaskDialogProps, TaskDialogState
       }
     }
   }
+  handleModalInput(e: any) {
+    const newState: TaskDialogState = _.cloneDeep(this.state)
+    newState.task[e.target.name] = e.target.value
+    this.setState(newState)
+  }
   render() {
     // The gray background
     const backdropStyle = {
@@ -48,11 +53,19 @@ export class TaskDialog extends React.Component<TaskDialogProps, TaskDialogState
         <ul>
           <li>
             <label htmlFor="title">タイトル</label>
-            <Element.Input name="taskTitle" value={this.state.task.taskTitle}></Element.Input>
+            <Element.Input 
+              name="taskTitle" 
+              value={this.state.task.taskTitle}
+              handleChange={this.handleModalInput.bind(this)}
+            />
           </li>
           <li>
             <label htmlFor="detail">詳細</label>
-            <Element.Input name="taskDetail" value={this.state.task.taskDetail} ></Element.Input>
+            <Element.Input
+              name="taskDetail" 
+              value={this.state.task.taskDetail}
+              handleChange={this.handleModalInput.bind(this)}
+              />
           </li>
         </ul>
       </ModalDialogBase>

@@ -131,7 +131,6 @@ interface TaskProps {
   task: TaskSchema
 }
 interface TaskState {
-  [key: string]: any  // シグネチャを追加して、フィールドの動的アクセスを許可
   isOpen: boolean
   task: TaskSchema
 }
@@ -154,20 +153,18 @@ class Task extends React.Component<TaskProps, TaskState> {
   handleEditClick() {
     this.toggleModal()
   }
-  handleModalInput(e: any) {
-    const newState: TaskState = _.cloneDeep(this.state)
-    newState[e.target.name] = e.target.value
-    var validateFunc = null
-    this.setState(newState, validateFunc)
-  }
   render() {
+    const modalProps: ModalPropsSchema = {
+      show: this.state.isOpen,
+      onClose: this.toggleModal.bind(this),
+    }
     return (
       <div>
-        <Element.Output value={this.state.taskTitle}></Element.Output>
-        <Element.Output value={this.state.taskDetail}></Element.Output>
+        <Element.Output value={this.state.task.taskTitle}></Element.Output>
+        <Element.Output value={this.state.task.taskDetail}></Element.Output>
         <Element.Button caption="タスクの編集" handleClick={this.handleEditClick.bind(this)}></Element.Button>
 
-        <TaskDialog task={this.state.ta} show={this.state.isOpen} onClose={this.toggleModal}>
+        <TaskDialog task={this.state.task} modalProps={modalProps}>
         </TaskDialog>
       </div>
     )

@@ -9,12 +9,28 @@ interface ModalDialogBaseProps {
 interface ModalDialogBaseState {
 }
 export default class ModalDialogBase extends React.Component<ModalDialogBaseProps, ModalDialogBaseState> {
+  constructor(props: ModalDialogBaseProps) {
+    super(props)
+
+    this.onSaveFunc = props.modalProps.onSave
+    if(!this.onSaveFunc) {
+      this.onSaveFunc = ()=>{}
+    }
+
+    this.onCancelFunc = props.modalProps.onCancel
+    if(!this.onCancelFunc) {
+      this.onCancelFunc = ()=>{}
+    }
+
+  }
+  onSaveFunc: ()=>void
+  onCancelFunc: ()=>void
   onSave() {
-    this.props.modalProps.onSave()
+    this.onSaveFunc()
     this.props.modalProps.onClose()
   }
   onCancel() {
-    this.props.modalProps.onCancel()
+    this.onCancelFunc()
     this.props.modalProps.onClose()
   }
   render() {
