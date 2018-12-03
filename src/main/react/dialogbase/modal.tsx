@@ -3,7 +3,7 @@ import * as ReactDOM from 'react-dom';
 import * as _ from "lodash";
 
 interface ModalDialogBaseProps {
-  modalProps: ModalPropsSchema
+  modalFuncProps: ModalFuncPropsSchema
   modalStyleProps: ModalStylePropsSchema
 }
 interface ModalDialogBaseState {
@@ -12,29 +12,29 @@ export default class ModalDialogBase extends React.Component<ModalDialogBaseProp
   constructor(props: ModalDialogBaseProps) {
     super(props)
 
-    this.onSaveFunc = props.modalProps.onSave
+    this.onSaveFunc = props.modalFuncProps.onSave
     if(!this.onSaveFunc) {
       this.onSaveFunc = ()=>{}
     }
 
-    this.onCancelFunc = props.modalProps.onCancel
+    this.onCancelFunc = props.modalFuncProps.onCancel
     if(!this.onCancelFunc) {
       this.onCancelFunc = ()=>{}
     }
 
   }
-  onSaveFunc: ()=>void
+  onSaveFunc: (newState: any)=>void
   onCancelFunc: ()=>void
   onSave() {
-    this.onSaveFunc()
-    this.props.modalProps.onClose()
+    this.onSaveFunc({})   // このクラスにはState情報を持っていないのでダミーオブジェクトを渡す
+    this.props.modalFuncProps.onClose()
   }
   onCancel() {
     this.onCancelFunc()
-    this.props.modalProps.onClose()
+    this.props.modalFuncProps.onClose()
   }
   render() {
-    if(!this.props.modalProps.show) {
+    if(!this.props.modalFuncProps.show) {
       return null;
     }
 

@@ -5,14 +5,18 @@ import * as _ from "lodash";
 
 /* 入力フォームを出力する「Inputコンポーネント」 */
 interface InputProps {
-  value: string
+  defaultValue?: string
+  value?: string
   name: string
   handleChange?(e: any): void
 }
 export const Input: React.StatelessComponent<InputProps> = (props) => {
-  const handleChange = props.handleChange? props.handleChange : ()=>{}
   return (
-    <input type="text" name={props.name} value={props.value} onChange={handleChange} />
+    <input type="text"
+      defaultValue={props.defaultValue?props.defaultValue : undefined}
+      name={props.name} 
+      value={props.value?props.value : undefined} 
+      onChange={props.handleChange} />
   )
 }
 

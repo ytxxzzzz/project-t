@@ -7,7 +7,7 @@ import ModalDialogBase from '../dialogbase/modal'
 
 interface TaskDialogProps {
   task: TaskSchema
-  modalProps: ModalPropsSchema
+  modalFuncProps: ModalFuncPropsSchema
 }
 interface TaskDialogState {
   task: TaskSchema
@@ -48,14 +48,20 @@ export class TaskDialog extends React.Component<TaskDialogProps, TaskDialogState
       margin: '0 auto',
       padding: 30
     };
+    const modalFuncProps = _.cloneDeep(this.props.modalFuncProps)
+    modalFuncProps.onSave = () => {
+      if(this.props.modalFuncProps.onSave) {
+        this.props.modalFuncProps.onSave(this.state)
+      }
+    }
     return (
-      <ModalDialogBase modalProps={this.props.modalProps} modalStyleProps={{backdropStyle: backdropStyle, modalStyle: modalStyle}} >
+      <ModalDialogBase modalFuncProps={modalFuncProps} modalStyleProps={{backdropStyle: backdropStyle, modalStyle: modalStyle}} >
         <ul>
           <li>
             <label htmlFor="title">タイトル</label>
             <Element.Input 
               name="taskTitle" 
-              value={this.state.task.taskTitle}
+              defaultValue={this.props.task.taskTitle}
               handleChange={this.handleModalInput.bind(this)}
             />
           </li>
@@ -63,7 +69,7 @@ export class TaskDialog extends React.Component<TaskDialogProps, TaskDialogState
             <label htmlFor="detail">詳細</label>
             <Element.Input
               name="taskDetail" 
-              value={this.state.task.taskDetail}
+              defaultValue={this.props.task.taskDetail}
               handleChange={this.handleModalInput.bind(this)}
               />
           </li>

@@ -153,10 +153,14 @@ class Task extends React.Component<TaskProps, TaskState> {
   handleEditClick() {
     this.toggleModal()
   }
+  onSave(newState: any) {
+    console.log(newState)
+  }
   render() {
-    const modalProps: ModalPropsSchema = {
+    const modalFuncProps: ModalFuncPropsSchema = {
       show: this.state.isOpen,
       onClose: this.toggleModal.bind(this),
+      onSave: this.onSave.bind(this),
     }
     return (
       <div>
@@ -164,7 +168,7 @@ class Task extends React.Component<TaskProps, TaskState> {
         <Element.Output value={this.state.task.taskDetail}></Element.Output>
         <Element.Button caption="タスクの編集" handleClick={this.handleEditClick.bind(this)}></Element.Button>
 
-        <TaskDialog task={this.state.task} modalProps={modalProps}>
+        <TaskDialog task={this.state.task} modalFuncProps={modalFuncProps}>
         </TaskDialog>
       </div>
     )
