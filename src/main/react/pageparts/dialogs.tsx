@@ -7,7 +7,7 @@ import ModalDialogBase from '../dialogbase/modal'
 
 interface TaskDialogProps {
   task: TaskSchema
-  modalFuncProps: ModalFuncPropsSchema
+  modalFuncProps: ModalFuncPropsSchema<TaskSchema>
 }
 interface TaskDialogState {
   task: TaskSchema
@@ -51,7 +51,7 @@ export class TaskDialog extends React.Component<TaskDialogProps, TaskDialogState
     const modalFuncProps = _.cloneDeep(this.props.modalFuncProps)
     modalFuncProps.onSave = () => {
       if(this.props.modalFuncProps.onSave) {
-        this.props.modalFuncProps.onSave(this.state)
+        this.props.modalFuncProps.onSave(this.state.task)
       }
     }
     return (

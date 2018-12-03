@@ -16,9 +16,9 @@ interface TaskSchema {
   taskDetail: string
 }
 
-interface ModalFuncPropsSchema {
+interface ModalFuncPropsSchema<TargetScema> {
   show: boolean
-  onSave?: (newState: any)=>void
+  onSave?: (newValues: TargetScema)=>void
   onCancel?: ()=>void
   onClose: ()=>void
 }

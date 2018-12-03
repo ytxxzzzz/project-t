@@ -2,14 +2,14 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import * as _ from "lodash";
 
-interface ModalDialogBaseProps {
-  modalFuncProps: ModalFuncPropsSchema
+interface ModalDialogBaseProps<TargetScema> {
+  modalFuncProps: ModalFuncPropsSchema<TargetScema>
   modalStyleProps: ModalStylePropsSchema
 }
 interface ModalDialogBaseState {
 }
-export default class ModalDialogBase extends React.Component<ModalDialogBaseProps, ModalDialogBaseState> {
-  constructor(props: ModalDialogBaseProps) {
+export default class ModalDialogBase<TargetScema> extends React.Component<ModalDialogBaseProps<TargetScema>, ModalDialogBaseState> {
+  constructor(props: ModalDialogBaseProps<TargetScema>) {
     super(props)
 
     this.onSaveFunc = props.modalFuncProps.onSave

@@ -153,11 +153,13 @@ class Task extends React.Component<TaskProps, TaskState> {
   handleEditClick() {
     this.toggleModal()
   }
-  onSave(newState: any) {
-    console.log(newState)
+  onSave(newValues: TaskSchema) {
+    this.setState({
+      task: newValues
+    })
   }
   render() {
-    const modalFuncProps: ModalFuncPropsSchema = {
+    const modalFuncProps: ModalFuncPropsSchema<TaskSchema> = {
       show: this.state.isOpen,
       onClose: this.toggleModal.bind(this),
       onSave: this.onSave.bind(this),
