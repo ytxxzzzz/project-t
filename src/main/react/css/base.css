@@ -6,6 +6,7 @@ body {
   font-size: 13px;
   line-height: 20px;
   margin: 0px;
+  background-color: aquamarine;
 }
 
 ul li {
@@ -23,9 +24,27 @@ ul {
 }
 
 div {
-  background-color: rgb(228, 213, 255);
+
+}
+
+div.task-list-base {
+  background-color: rgb(128, 128, 128);
   font-size: 14px !important;
-  border: solid;
-  border-width: 1px;
-  border-color: red;
+  margin: 10px;
+  border-radius: 10px;
+}
+
+div.task-group-base {
+  background-color: rgb(233, 231, 238);
+  font-size: 14px !important;
+  margin: 10px;
+  border-radius: 10px;
+}
+
+div.task-base {
+  background-color: rgb(255, 255, 255);
+  font-size: 14px !important;
+  margin: 10px;
+  border-radius: 10px;
+  cursor: pointer;
 }

@@ -69,7 +69,7 @@ class TaskListBase extends React.Component<TaskListBaseProps, TaskListBaseState>
   }
   render() {
     return (
-      <div>
+      <div className="task-list-base">
         {
           this.state.taskGroups.map(taskGroup => {
             return (
@@ -112,7 +112,7 @@ class TaskGroup extends React.Component<TaskGroupProps, TaskGroupState> {
   }
   render() {
     return (
-      <div>
+      <div className="task-group-base">
         <Element.Output value={this.state.taskGroupTitle}></Element.Output>
         {
           this.props.taskGroup.tasks.map(task => {
@@ -165,10 +165,8 @@ class Task extends React.Component<TaskProps, TaskState> {
       onSave: this.onSave.bind(this),
     }
     return (
-      <div>
+      <div className="task-base" onClick={this.handleEditClick.bind(this)}>
         <Element.Output value={this.state.task.taskTitle}></Element.Output>
-        <Element.Output value={this.state.task.taskDetail}></Element.Output>
-        <Element.Button caption="タスクの編集" handleClick={this.handleEditClick.bind(this)}></Element.Button>
 
         <TaskDialog task={this.state.task} modalFuncProps={modalFuncProps}>
         </TaskDialog>

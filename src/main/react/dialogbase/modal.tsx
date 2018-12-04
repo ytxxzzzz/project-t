@@ -39,8 +39,11 @@ export default class ModalDialogBase<TargetScema> extends React.Component<ModalD
     }
 
     return (
-      <div className="backdrop" style={this.props.modalStyleProps.backdropStyle}>
-        <div className="modal" style={this.props.modalStyleProps.modalStyle}>
+      <div className="backdrop" style={this.props.modalStyleProps.backdropStyle} onClick={this.onCancel.bind(this)}>
+        <div className="modal" 
+              style={this.props.modalStyleProps.modalStyle} 
+              onClick={(e)=>{e.stopPropagation()/*親要素へのクリックイベント伝播阻止*/}}
+        >
           {this.props.children}
 
           <div className="footer">
