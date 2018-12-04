@@ -36,7 +36,8 @@ export class TaskDialog extends React.Component<TaskDialogProps, TaskDialogState
       left: 0,
       right: 0,
       backgroundColor: 'rgba(0,0,0,0.3)',
-      padding: 50
+      padding: 50,
+      cursor: 'auto',
     };
 
     // The modal "window"
@@ -46,7 +47,8 @@ export class TaskDialog extends React.Component<TaskDialogProps, TaskDialogState
       maxWidth: 500,
       minHeight: 300,
       margin: '0 auto',
-      padding: 30
+      padding: 30,
+      cursor: 'auto',
     };
     const modalFuncProps = _.cloneDeep(this.props.modalFuncProps)
     modalFuncProps.onSave = () => {
