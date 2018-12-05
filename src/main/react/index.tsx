@@ -3,17 +3,32 @@ import './css/base.css';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { DragSource } from "react-dnd";
+import { Router, Route } from "react-router";
+import createHistory from 'history/createBrowserHistory';
+
 import * as _ from "lodash";
 
 import * as Element from './elements/element'
 import {TaskDialog} from './pageparts/dialogs';
 
-// action定義
-interface ADD_TODO
-{
-  type: 'ADD_TODO',
-  text: 'Build my first Redux app'
+
+interface AppProps {
 }
+interface AppState {
+}
+class App extends React.Component<AppProps, AppState> {
+  render() {
+    return (
+      <div>
+        <h1>App</h1>
+        <ul>
+          <li><Link to="/about">About</Link></li>
+          <li><Link to="/inbox">Inbox</Link></li>
+          <li><Link to="/messages/10">Message</Link></li>
+        </ul>
+      </div>
+    )
+  }}
 
 interface TaskListBaseProps {
 }
