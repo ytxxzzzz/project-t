@@ -4,6 +4,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { DragSource } from "react-dnd";
 import { Router, Route } from "react-router";
+import { Link } from 'react-router-dom';
 import createHistory from 'history/createBrowserHistory';
 
 import * as _ from "lodash";
@@ -11,6 +12,7 @@ import * as _ from "lodash";
 import * as Element from './elements/element'
 import {TaskDialog} from './pageparts/dialogs';
 
+const history = createHistory();
 
 interface AppProps {
 }
@@ -23,7 +25,6 @@ class App extends React.Component<AppProps, AppState> {
         <h1>App</h1>
         <ul>
           <li><Link to="/about">About</Link></li>
-          <li><Link to="/inbox">Inbox</Link></li>
           <li><Link to="/messages/10">Message</Link></li>
         </ul>
       </div>
@@ -190,9 +191,35 @@ class Task extends React.Component<TaskProps, TaskState> {
   }
 }
 
-
+/*
 ReactDOM.render(
   <TaskListBase/>
   ,
+  document.querySelector('.content')
+);
+*/
+
+export class About extends React.Component {
+  render() {
+    return <h3>About</h3>
+  }
+}
+
+export class Message extends React.Component {
+  render() {
+//    return <h3>Message {this.props.match.params.id}</h3>
+    return <h3>Message</h3>
+  }
+}
+
+
+ReactDOM.render(
+  <Router history={history}>
+    <div>
+      <Route exact path="/" component={App} />
+      <Route path="/about" component={About} />
+      <Route path="/messages/:id" component={Message} />
+    </div>
+  </Router>,
   document.querySelector('.content')
 );
