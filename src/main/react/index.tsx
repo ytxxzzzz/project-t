@@ -55,10 +55,25 @@ export class Message extends React.Component<RouteComponentProps<MessageParams>,
   }
 }
 
+interface HeaderProps {
+}
+interface HeaderStates {
+}
+export class Header extends React.Component<HeaderProps, HeaderStates> {
+  render() {
+    return (
+      <div style={{backgroundColor: "#777", height: "30px", color: "#fff"}}>
+      ヘッダ領域でっす
+      </div>
+    )
+  }
+}
+
 
 ReactDOM.render(
   <Router history={history}>
     <div>
+      <Header />
       <Route exact path="/" component={App} />
       <Route path="/about" component={About} />
       <Route path="/task" component={TaskListPage} />
