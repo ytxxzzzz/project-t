@@ -3,173 +3,43 @@ import './css/base.css';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { DragSource } from "react-dnd";
+import { Router, Route, RouteComponentProps } from "react-router";
+import { Link } from 'react-router-dom';
+import createHistory from 'history/createBrowserHistory';
+
 import * as _ from "lodash";
 
-import * as Element from './elements/element'
+import * as Element from './elements/element';
+import { TaskListPage} from './pages/tasklist';
+import {LoginPage} from './pages/login';
 import {TaskDialog} from './pageparts/dialogs';
 
-// action定義
-interface ADD_TODO
-{
-  type: 'ADD_TODO',
-  text: 'Build my first Redux app'
-}
 
-interface TaskListBaseProps {
-}
-interface TaskListBaseState {
-  taskGroups: TaskGroupSchema[]
-}
-class TaskListBase extends React.Component<TaskListBaseProps, TaskListBaseState> {
-  constructor(props: TaskListBaseProps) {
-    super(props)
-    this.state = {
-      taskGroups: [{
-        taskGroupId: 1,
-        taskGroupTitle: "taskGroup_title",
-        tasks: [
-          {
-            taskId: 1,
-            taskTitle: "task_title",
-            taskDetail: "task_detail",
-          },
-          {
-            taskId: 2,
-            taskTitle: "task_titleその２",
-            taskDetail: "task_detailその２",
-          }
-        ]
-      }],
-    }
-  }
-  reloadTaskGroups() {
-    this.setState({
-      taskGroups: [{
-        taskGroupId: 1,
-        taskGroupTitle: "taskGroup_title",
-        tasks: [{
-          taskId: 1,
-          taskTitle: "task_title",
-          taskDetail: "task_detail",
-        }]
-      }]
-    })
-  }
-  handleAddTaskGroupClick() {
-    const taskGroups = this.state.taskGroups
+const history = createHistory();
 
-    taskGroups.push({
-      taskGroupTitle: "新しいタスクグループ",
-      tasks: [],
-    })
-
-    this.setState({
-      taskGroups: taskGroups,
-    })
-  }
+interface MessageParams {
+  id: string,
+}
+export class Message extends React.Component<RouteComponentProps<MessageParams>, any> {
   render() {
     return (
-      <div className="task-list-base">
-        {
-          this.state.taskGroups.map(taskGroup => {
-            return (
-              <TaskGroup taskGroup={taskGroup}></TaskGroup>
-            )
-          })
-        }
-        <Element.Button caption="タスクグループ追加" handleClick={this.handleAddTaskGroupClick.bind(this)}></Element.Button>
+      <div>
+        <h3>Message {this.props.match.params.id}</h3>
+        <li><Link to="/">トップへ戻るわよ！</Link></li>
       </div>
     )
   }
 }
 
-interface TaskGroupProps {
-  taskGroup: TaskGroupSchema
+interface HeaderProps {
 }
-interface TaskGroupState {
-  taskGroupTitle: string,
-  tasks: TaskSchema[],
+interface HeaderStates {
 }
-class TaskGroup extends React.Component<TaskGroupProps, TaskGroupState> {
-  constructor(props: TaskGroupProps) {
-    super(props)
-    this.state = {
-      taskGroupTitle: props.taskGroup.taskGroupTitle,
-      tasks: props.taskGroup.tasks,
-    }
-  }
-  handleAddTaskClick() {
-    const tasks = this.state.tasks
-
-    tasks.push({
-      taskTitle: "新しいタスク",
-      taskDetail: "タスクの詳細",
-    })
-
-    this.setState({
-      tasks: tasks,
-    })
-  }
+export class Header extends React.Component<HeaderProps, HeaderStates> {
   render() {
     return (
-      <div className="task-group-base">
-        <Element.Output value={this.state.taskGroupTitle}></Element.Output>
-        {
-          this.props.taskGroup.tasks.map(task => {
-            return (
-              <Task task={task}></Task>
-            )
-          })
-        }
-        <Element.Button caption="タスク追加" handleClick={this.handleAddTaskClick.bind(this)}></Element.Button>
-      </div>
-    )
-  }
-}
-
-interface TaskProps {
-  task: TaskSchema
-}
-interface TaskState {
-  isOpen: boolean
-  task: TaskSchema
-}
-class Task extends React.Component<TaskProps, TaskState> {
-  constructor(props: TaskProps) {
-    super(props)
-    this.state = {
-      task: {
-        taskTitle: props.task.taskTitle,
-        taskDetail: props.task.taskDetail,
-      },
-      isOpen: false,
-    }
-  }
-  toggleModal = () => {
-    this.setState({
-      isOpen: !this.state.isOpen
-    });
-  }
-  handleEditClick() {
-    this.toggleModal()
-  }
-  onSave(newValues: TaskSchema) {
-    this.setState({
-      task: newValues
-    })
-  }
-  render() {
-    const modalFuncProps: ModalFuncPropsSchema<TaskSchema> = {
-      show: this.state.isOpen,
-      onClose: this.toggleModal.bind(this),
-      onSave: this.onSave.bind(this),
-    }
-    return (
-      <div className="task-base" onClick={this.handleEditClick.bind(this)}>
-        <Element.Output value={this.state.task.taskTitle}></Element.Output>
-
-        <TaskDialog task={this.state.task} modalFuncProps={modalFuncProps}>
-        </TaskDialog>
+      <div style={{backgroundColor: "#777", height: "30px", color: "#fff"}}>
+      ヘッダ領域でっす
       </div>
     )
   }
@@ -177,7 +47,13 @@ class Task extends React.Component<TaskProps, TaskState> {
 
 
 ReactDOM.render(
-  <TaskListBase/>
-  ,
+  <Router history={history}>
+    <div>
+      <Header />
+      <Route exact path="/" component={LoginPage} />
+      <Route path="/task" component={TaskListPage} />
+      <Route path="/messages/:id" component={Message} />
+    </div>
+  </Router>,
   document.querySelector('.content')
 );

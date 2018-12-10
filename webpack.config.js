@@ -11,7 +11,7 @@ module.exports = {
 
   devServer: {
     open: true,
-    openPage: "index.html",
+    openPage: "",
 //    contentBase: path.join(__dirname, "public"),
     watchContentBase: true,
     port: 8080,
