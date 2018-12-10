@@ -11,35 +11,11 @@ import * as _ from "lodash";
 
 import * as Element from './elements/element';
 import { TaskListPage} from './pages/tasklist';
+import {LoginPage} from './pages/login';
 import {TaskDialog} from './pageparts/dialogs';
 
 
 const history = createHistory();
-
-interface AppProps {
-}
-interface AppState {
-}
-class App extends React.Component<AppProps, AppState> {
-  render() {
-    return (
-      <div>
-        <h1>App</h1>
-        <ul>
-          <li><Link to="/about">About</Link></li>
-          <li><Link to="/task">Task</Link></li>
-          <li><Link to="/messages/10">Message</Link></li>
-        </ul>
-      </div>
-    )
-  }
-}
-
-export class About extends React.Component {
-  render() {
-    return <h3>About</h3>
-  }
-}
 
 interface MessageParams {
   id: string,
@@ -74,8 +50,7 @@ ReactDOM.render(
   <Router history={history}>
     <div>
       <Header />
-      <Route exact path="/" component={App} />
-      <Route path="/about" component={About} />
+      <Route exact path="/" component={LoginPage} />
       <Route path="/task" component={TaskListPage} />
       <Route path="/messages/:id" component={Message} />
     </div>
