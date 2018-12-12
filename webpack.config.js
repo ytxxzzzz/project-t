@@ -5,14 +5,15 @@ module.exports = {
   context: path.join(__dirname, "src", "main", "react"),
   entry: path.join(__dirname, "src", "main", "react", "index.tsx"),
   output: {
-    filename: "bundle.js",
-    path: path.join(__dirname, "dist")
+    filename: "bundle.js"
   },
 
   devServer: {
     open: true,
+    inline: true,
+    historyApiFallback: true,
     openPage: "",
-//    contentBase: path.join(__dirname, "public"),
+    contentBase: path.join(__dirname, "public"),
     watchContentBase: true,
     port: 8080,
   },
