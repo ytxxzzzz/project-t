@@ -1,16 +1,16 @@
 # -*- coding:utf-8 -*-
 
-# Flask などの必要なライブラリをインポートする
 from flask import Flask, Blueprint, render_template, request, redirect, url_for, jsonify, abort
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from sqlalchemy.orm.attributes import InstrumentedAttribute
 import json
 import re
+import jwt
+
 import numpy as np
 
 app = Flask(__name__)
-v1 = Blueprint('v1', __name__, url_prefix='/v1')
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:pass@localhost/project_t?charset=utf8'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
@@ -54,7 +54,7 @@ class Task(db.Model):
         return re.sub("_(.)",lambda x:x.group(1).upper(),snake)
 
 
-@v1.route('/task', methods=['POST'])
+@app.route('/task', methods=['POST'])
 def add_new_task():
     req_data = json.loads(request.data)
     if 'taskId' in req_data:
@@ -67,7 +67,7 @@ def add_new_task():
 
     return jsonify(task.to_dict()), 200
 
-@v1.route('/task', methods=['PUT'])
+@app.route('/task', methods=['PUT'])
 def update_task():
     req_data = json.loads(request.data)
 
@@ -89,7 +89,7 @@ def update_task():
     return jsonify(task.to_dict()), 200
 
 
-@v1.route('/task/<task_id>', methods=['GET'])
+@app.route('/task/<task_id>', methods=['GET'])
 def get_task_by_id(task_id):
     task = Task.query.get(task_id)
 
@@ -99,7 +99,7 @@ def get_task_by_id(task_id):
 
     return jsonify(task.to_dict()), 200
 
-@v1.route('/task/<task_id>', methods=['DELETE'])
+@app.route('/task/<task_id>', methods=['DELETE'])
 def delete_task(task_id):
     task = Task.query.get(task_id)
 
@@ -113,11 +113,32 @@ def delete_task(task_id):
 
     return jsonify(task.to_dict()), 200
 
-@v1.route('/task/findAll', methods=['GET'])
+@app.route('/task/findAll', methods=['GET'])
 def find_all_tasks():
     tasks = Task.query.all()
 
     return jsonify([x.to_dict() for x in tasks]), 200
+
+@app.route('/login/<token>', methods=['GET'])
+def login(token):
+    decoded = jwt.decode(token, 'secret', algorithms=['HS256'])
+
+    print(decoded)
+    return jsonify(decoded), 200
+
+# テスト用トークン発行
+@app.route('/token/<user_mail>', methods=['GET'])
+def generate_token(user_mail: str):
+    token = jwt.encode({"userMail": user_mail}, 'secret', algorithm='HS256')
+
+    print(token)
+    print(token.decode())
+
+    return jsonify({"token": token.decode()}), 200
+
+@app.route('/favicon.ico', methods=['GET'])
+def favicon():
+    return "", 200
 
 
 @app.errorhandler(400)
@@ -130,11 +151,7 @@ def error_handler(error):
 
 
 if __name__ == '__main__':
-    app.register_blueprint(v1)
-
     app.debug = True # デバッグモード有効化
-
     # modelとして定義した全テーブルをCreateする
     db.create_all()
-
     app.run(host='0.0.0.0') # どこからでもアクセス可能に
