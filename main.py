@@ -9,7 +9,7 @@ import jwt
 from py.appbase.database import db
 from py.appbase.app import app
 from py.models.task import Task
-from py.models import to_dict
+from py.models import to_dict, set_attributes_from_dict
 
 import numpy as np
 
@@ -45,7 +45,7 @@ def update_task():
         abort(404, {'msg':'指定されたtaskIdのデータが見つかりませんでした。'})
 
     # 値の更新
-    task.set_attributes_from_dict(req_data)
+    set_attributes_from_dict(task, req_data)
     db.session.commit()
 
     return jsonify(to_dict(task)), 200
