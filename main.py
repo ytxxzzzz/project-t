@@ -3,14 +3,13 @@
 from flask import Flask, Blueprint, render_template, request, redirect, url_for, jsonify, abort
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from sqlalchemy.orm.attributes import InstrumentedAttribute
 import json
-import re
 import jwt
 
 from py.appbase.database import db
 from py.appbase.app import app
 from py.models.task import Task
+from py.models import to_dict
 
 import numpy as np
 
@@ -28,7 +27,7 @@ def add_new_task():
     db.session.add(task)
     db.session.commit()
 
-    return jsonify(task.to_dict()), 200
+    return jsonify(to_dict(task)), 200
 
 @app.route('/task', methods=['PUT'])
 def update_task():
@@ -49,7 +48,7 @@ def update_task():
     task.set_attributes_from_dict(req_data)
     db.session.commit()
 
-    return jsonify(task.to_dict()), 200
+    return jsonify(to_dict(task)), 200
 
 
 @app.route('/task/<task_id>', methods=['GET'])
@@ -60,7 +59,7 @@ def get_task_by_id(task_id):
     if task is None:
         abort(404, {'msg':'指定されたtaskIdのデータが見つかりませんでした。'})
 
-    return jsonify(task.to_dict()), 200
+    return jsonify(to_dict(task)), 200
 
 @app.route('/task/<task_id>', methods=['DELETE'])
 def delete_task(task_id):
@@ -74,13 +73,13 @@ def delete_task(task_id):
     db.session.delete(task)
     db.session.commit()
 
-    return jsonify(task.to_dict()), 200
+    return jsonify(to_dict(task)), 200
 
 @app.route('/task/findAll', methods=['GET'])
 def find_all_tasks():
     tasks = Task.query.all()
 
-    return jsonify([x.to_dict() for x in tasks]), 200
+    return jsonify([to_dict(x) for x in tasks]), 200
 
 @app.route('/login/<token>', methods=['GET'])
 def login(token):
