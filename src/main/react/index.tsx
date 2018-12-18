@@ -13,6 +13,7 @@ import * as _ from "lodash";
 import * as Element from './elements/element';
 import { TaskListPage} from './pages/tasklist';
 import {LoginPage} from './pages/login';
+import {EntryPage} from './pages/entry';
 import {TaskDialog} from './pageparts/dialogs';
 
 
@@ -51,7 +52,8 @@ ReactDOM.render(
   <Router history={history}>
     <div>
       <Header />
-      <Route exact path="/" component={LoginPage} />
+      <Route exact path="/" component={EntryPage} />
+      <Route path="/login/:token" component={LoginPage} />
       <Route path="/task" component={TaskListPage} />
       <Route path="/messages/:id" component={Message} />
     </div>

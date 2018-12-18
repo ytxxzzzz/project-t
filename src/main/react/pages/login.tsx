@@ -1,69 +1,41 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { DragSource } from "react-dnd";
-import { Router, Route, RouteComponentProps } from "react-router";
+import { Router, Route, RouteComponentProps, Redirect } from "react-router";
 import { Link } from 'react-router-dom';
-import createHistory from 'history/createBrowserHistory';
+import axios from 'axios';
 
 import * as _ from "lodash";
 
 import * as Element from '../elements/element'
-import {TaskDialog} from '../pageparts/dialogs';
 
-interface LoginPageProps {
+interface LoginParam {
+  token: string,
 }
 interface LoginPageState {
-  [key: string]: any  // シグネチャを追加して、フィールドの動的アクセスを許可
-  userId: string
-  password: string
+  isLogin: boolean
 }
-export class LoginPage extends React.Component<LoginPageProps, LoginPageState> {
-  constructor(props: LoginPageProps) {
+export class LoginPage extends React.Component<RouteComponentProps<LoginParam>, LoginPageState> {
+  constructor(props: RouteComponentProps<LoginParam>) {
     super(props)
     this.state = {
-      userId: "",
-      password: "",
+      isLogin: false,
     }
   }
-  handleModalInput(e: any) {
-    const newState: LoginPageState = _.cloneDeep(this.state)
-    newState[e.target.name] = e.target.value
-    this.setState(newState)
+  async onLogin() {
+    const result = await axios.get(`http://localhost:5000/login/${this.props.match.params.token}`)
+    alert(result.data)
   }
-  onLogin() {
-    alert(`${this.state.userId}   ${this.state.password}`)
-  }
-  render() {
-    return (
-      <div>
-        <h1>App</h1>
-        <ul>
-          <li><Link to="/about">About</Link></li>
-          <li><Link to="/task">Task</Link></li>
-          <li><Link to="/messages/10">Message</Link></li>
-        </ul>
-        <ul>
-          <li>
-            <label htmlFor="title">ユーザID</label>
-            <Element.Input 
-              name="userId"
-              handleChange={this.handleModalInput.bind(this)}
-            />
-          </li>
-          <li>
-            <label htmlFor="detail">パスワード</label>
-            <Element.Input
-              name="password" 
-              handleChange={this.handleModalInput.bind(this)}
-              />
-          </li>
-        </ul>
-        <div>
-          <button onClick={this.onLogin.bind(this)}>
-            ログイン
-          </button>
-        </div>
-      </div>
-    )
+  async render() {
+    await this.onLogin()
+    if(this.state.isLogin) {
+      return (
+        <Redirect to={'/task'} />
+      )
+    } else {
+      return (
+        <Redirect to={'/entry'} />
+      )
+    }
   }
 }

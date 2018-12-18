@@ -86,7 +86,8 @@ def login(token):
     decoded = jwt.decode(token, 'secret', algorithms=['HS256'])
 
     print(decoded)
-    return jsonify(decoded), 200
+    new_token = jwt.encode({"userId": decoded['userMail']}, 'secret', algorithm='HS256')
+    return jsonify({"token": new_token.decode()}), 200
 
 # テスト用トークン発行
 @app.route('/token/<user_mail>', methods=['GET'])
