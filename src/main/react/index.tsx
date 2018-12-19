@@ -21,7 +21,7 @@ const history = createHistory();
 
 // TODO: バックエンドのURLを仮決めハードコード
 const apiHost = `http://${window.location.hostname}:5000`
-axios.defaults.baseURL = `${apiHost}`
+axios.defaults.baseURL = `${apiHost}/api`
 axios.defaults.withCredentials = false  // 当面Cookieのやりとりは無し
 
 interface MessageParams {
