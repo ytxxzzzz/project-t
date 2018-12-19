@@ -11,7 +11,12 @@ module.exports = {
   devServer: {
     open: true,
     inline: true,
-    historyApiFallback: true,
+    // ブラウザに直接アドレスを入力されてもルーティングする設定
+    // 本フロントアプリの実体はboundle.jsしかないので、当然ブラウザに直接アドレス入れると、
+    // 存在しないのでNotFoundとなってしまう。その時にとりあえずルートへリダイレクトする設定
+    historyApiFallback: {
+      disableDotRule: true  // react-routerのURLの変数部にドットがある場合に正常動作させるおまじない
+    },
     openPage: "",
     contentBase: path.join(__dirname, "public"),
     watchContentBase: true,

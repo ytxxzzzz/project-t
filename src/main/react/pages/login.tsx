@@ -23,8 +23,8 @@ export class LoginPage extends React.Component<RouteComponentProps<LoginParam>, 
     }
   }
   async onLogin() {
-    const result = await axios.get(`http://localhost:5000/login/${this.props.match.params.token}`)
-    alert(result.data)
+    const result = await axios.get(`/login/${this.props.match.params.token}`)
+    alert(result.data.token)
   }
   async render() {
     await this.onLogin()

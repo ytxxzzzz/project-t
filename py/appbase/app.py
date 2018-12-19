@@ -1,10 +1,12 @@
 from flask import Flask
+from flask_cors import CORS
 
 from py.appbase.database import init_db
 
 
 def create_app():
     app = Flask(__name__)
+    CORS(app)
 #    app.config.from_object('py.config.Config')
 
     app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:pass@localhost/project_t?charset=utf8'
