@@ -19,16 +19,24 @@ export class LoginPage extends React.Component<RouteComponentProps<LoginParam>, 
   constructor(props: RouteComponentProps<LoginParam>) {
     super(props)
     this.state = {
-      isLogin: false,
+      isLogin: null,
     }
+    this.onLogin()
   }
   async onLogin() {
-    const result = await axios.get(`/login/${this.props.match.params.token}`)
-    alert(result.data.token)
+    try{
+      const result = await axios.get(`/login/${this.props.match.params.token}`)
+      localStorage.setItem('authToken', result.data.token)
+      this.setState({isLogin: true})
+    } catch(e) {
+      localStorage.removeItem('authToken')
+      this.setState({isLogin: false})
+    }
   }
-  async render() {
-    await this.onLogin()
-    if(this.state.isLogin) {
+  render() {
+    if(this.state.isLogin === null) {
+      return <div></div>
+    } else if(this.state.isLogin) {
       return (
         <Redirect to={'/task'} />
       )
