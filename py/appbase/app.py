@@ -2,7 +2,7 @@ from flask import Flask, Blueprint
 from flask_cors import CORS
 
 from py.appbase.database import init_db
-from py.views.mainview import path_prefix
+from py.api.api import path_prefix
 
 def create_app():
     app = Flask(__name__)

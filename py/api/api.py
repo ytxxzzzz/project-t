@@ -107,5 +107,8 @@ def favicon():
 @path_prefix.errorhandler(404)
 @path_prefix.errorhandler(500)
 def error_handler(error):
-    response = jsonify({'message': error.description['msg'], 'statusCode': error.code})
-    return response, error.code
+    try:
+        response = {'message': error.description['msg'], 'statusCode': error.code}
+    except:
+        response = {'message': str(error), 'statusCode': 500}
+    return jsonify(response), response['statusCode']
