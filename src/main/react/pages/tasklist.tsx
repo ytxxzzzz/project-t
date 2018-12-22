@@ -7,7 +7,10 @@ import createHistory from 'history/createBrowserHistory';
 
 import * as _ from "lodash";
 
-import * as Element from '../elements/element'
+import {TaskGroupSchema, 
+        TaskSchema, 
+        ModalFuncPropsSchema} from '../models/models';
+import * as Element from '../elements/element';
 import {TaskDialog} from '../pageparts/dialogs';
 
 interface TaskListPageProps {

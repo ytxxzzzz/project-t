@@ -7,6 +7,7 @@ import { Router, Route, RouteComponentProps } from "react-router";
 import { Link } from 'react-router-dom';
 import createHistory from 'history/createBrowserHistory';
 import axios from 'axios';
+import {AxiosRequestConfig} from 'axios';
 
 import * as _ from "lodash";
 
@@ -15,7 +16,7 @@ import { TaskListPage} from './pages/tasklist';
 import {LoginPage} from './pages/login';
 import {EntryPage} from './pages/entry';
 import {TaskDialog} from './pageparts/dialogs';
-
+import {LocalStorageKeys} from './models/models'
 
 const history = createHistory();
 
@@ -23,6 +24,12 @@ const history = createHistory();
 const apiHost = `http://${window.location.hostname}:5000`
 axios.defaults.baseURL = `${apiHost}/api`
 axios.defaults.withCredentials = false  // 当面Cookieのやりとりは無し
+axios.interceptors.request.use((value: AxiosRequestConfig)=>{
+  // 非効率だがリクエストのときに認証キーを毎回ローカルストレージより転記
+  const token = localStorage.getItem(LocalStorageKeys.authToken)
+  value.headers.common['Authorization'] = `Bearer ${token}`
+  return value
+})
 
 interface MessageParams {
   id: string,

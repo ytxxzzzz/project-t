@@ -42,7 +42,7 @@ export class LoginPage extends React.Component<RouteComponentProps<LoginParam>, 
       )
     } else {
       return (
-        <Redirect to={'/entry'} />
+        <Redirect to={'/'} />
       )
     }
   }
