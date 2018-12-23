@@ -1,6 +1,12 @@
 
 import re
 from sqlalchemy.orm.attributes import InstrumentedAttribute
+from py.appbase.database import db
+from datetime import datetime
+
+class CommonColumnsMixin(object):
+    created = db.Column('created', db.DATETIME, default=datetime.now, nullable=False)
+    updated = db.Column('updated', db.DATETIME, default=datetime.now, nullable=False)
 
 def set_attributes_from_dict(obj, data: dict):
     # JSONのキーと同名だったフィールド全てに値をセット

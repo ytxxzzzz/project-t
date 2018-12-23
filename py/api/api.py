@@ -8,6 +8,7 @@ import jwt
 
 from py.appbase.database import db
 from py.models.task import Task
+from py.models.user import User
 from py.models import to_dict, set_attributes_from_dict
 
 import numpy as np
