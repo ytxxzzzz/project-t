@@ -9,7 +9,6 @@ import jwt
 from py.appbase.database import db
 from py.models.task import Task
 from py.models.user import User
-from py.models import to_dict, set_attributes_from_dict
 
 import numpy as np
 
@@ -27,7 +26,7 @@ def add_new_task():
     db.session.add(task)
     db.session.commit()
 
-    return jsonify(to_dict(task)), 200
+    return jsonify(task.to_dict()), 200
 
 @path_prefix.route('/task', methods=['PUT'])
 def update_task():
@@ -38,32 +37,32 @@ def update_task():
         abort(400, {'msg':'更新オペレーションなので、PK(taskId)の指定は必須です。'})
 
     # 指定されたIDをSELECT
-    task = db.session.query(Task).filter_by(task_id=req_data['taskId']).first()
+    task: Task = db.session.query(Task).filter_by(task_id=req_data['taskId']).first()
 
     # 指定されたIDのデータが見つからず
     if task is None:
         abort(404, {'msg':'指定されたtaskIdのデータが見つかりませんでした。'})
 
     # 値の更新
-    set_attributes_from_dict(task, req_data)
+    task.set_attributes_from_dict(req_data)
     db.session.commit()
 
-    return jsonify(to_dict(task)), 200
+    return jsonify(task.to_dict()), 200
 
 
 @path_prefix.route('/task/<task_id>', methods=['GET'])
 def get_task_by_id(task_id):
-    task = Task.query.get(task_id)
+    task: Task = Task.query.get(task_id)
 
     # 指定されたIDのデータが見つからず
     if task is None:
         abort(404, {'msg':'指定されたtaskIdのデータが見つかりませんでした。'})
 
-    return jsonify(to_dict(task)), 200
+    return jsonify(task.to_dict()), 200
 
 @path_prefix.route('/task/<task_id>', methods=['DELETE'])
 def delete_task(task_id):
-    task = Task.query.get(task_id)
+    task: Task = Task.query.get(task_id)
 
     # 指定されたIDのデータが見つからず
     if task is None:
@@ -73,13 +72,13 @@ def delete_task(task_id):
     db.session.delete(task)
     db.session.commit()
 
-    return jsonify(to_dict(task)), 200
+    return jsonify(task.to_dict()), 200
 
 @path_prefix.route('/task/findAll', methods=['GET'])
 def find_all_tasks():
     tasks = Task.query.all()
 
-    return jsonify([to_dict(x) for x in tasks]), 200
+    return jsonify([x.to_dict() for x in tasks]), 200
 
 @path_prefix.route('/login/<token>', methods=['GET'])
 def login(token):
