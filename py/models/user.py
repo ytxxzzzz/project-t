@@ -18,9 +18,9 @@ class UserGroup(Base):
 
     # Many-to-Many relation
     users = db.relationship('User', secondary=user_group_rel, lazy='subquery',
-                            backref=db.backref('UserGroups', lazy=True))
+                            backref=db.backref('UserGroup', lazy=True))
     # One-to-Many relation
-    task_groups = db.relationship('TaskGroup', backref='user_group', lazy=True)
+    task_groups = db.relationship('TaskGroup', backref='UserGroup', lazy=True)
 
 class User(Base):
     user_id = db.Column(db.Integer, primary_key=True)
@@ -28,4 +28,4 @@ class User(Base):
 
     # Many-to-Many relation
     user_groups = db.relationship('UserGroup', secondary=user_group_rel, lazy='subquery',
-                                backref=db.backref('Users', lazy=True))
+                                backref=db.backref('User', lazy=True))

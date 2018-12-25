@@ -85,13 +85,15 @@ def login(token):
     decoded = jwt.decode(token, 'secret', algorithms=['HS256'])
 
     print(decoded)
-    new_token = jwt.encode({"userId": decoded['userMail']}, 'secret', algorithm='HS256')
+    new_token = jwt.encode({"userId": decoded['user_id'], "eMail": decoded['e_mail']}, 'secret', algorithm='HS256')
     return jsonify({"token": new_token.decode()}), 200
 
 # テスト用トークン発行
-@path_prefix.route('/token/<user_mail>', methods=['GET'])
-def generate_token(user_mail: str):
-    token = jwt.encode({"userMail": user_mail}, 'secret', algorithm='HS256')
+@path_prefix.route('/token/<user_id>', methods=['GET'])
+def generate_token(user_id: int):
+    user: User = User.query.get(user_id)
+
+    token = jwt.encode({"user_id": user_id, "e_mail": user.e_mail}, 'secret', algorithm='HS256')
 
     print(token)
     print(token.decode())

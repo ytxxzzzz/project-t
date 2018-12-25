@@ -8,8 +8,6 @@ import jwt
 
 from py.appbase.database import db, init_db
 from py.appbase.app import app
-from py.models.task import Task
-from py.models import to_dict, set_attributes_from_dict
 
 
 if __name__ == '__main__':

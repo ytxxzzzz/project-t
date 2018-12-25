@@ -2,7 +2,7 @@
 import re
 from sqlalchemy.orm.attributes import InstrumentedAttribute
 from sqlalchemy.ext.declarative import declared_attr
-from py.appbase.database import db
+import sqlalchemy as sa
 from datetime import datetime
 
 # テーブルの共通設定
@@ -11,8 +11,8 @@ class Base(object):
     def __tablename__(cls):
         return uppercamel_to_snake(cls.__name__)
 
-    created = db.Column('created', db.DATETIME, default=datetime.now, nullable=False)
-    updated = db.Column('updated', db.DATETIME, default=datetime.now, nullable=False)
+    created = sa.Column('created', sa.DATETIME, default=datetime.now, nullable=False)
+    updated = sa.Column('updated', sa.DATETIME, default=datetime.now, nullable=False)
 
     def set_attributes_from_dict(self, data: dict):
         # JSONのキーと同名だったフィールド全てに値をセット
