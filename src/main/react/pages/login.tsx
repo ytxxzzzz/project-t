@@ -21,6 +21,8 @@ export class LoginPage extends React.Component<RouteComponentProps<LoginParam>, 
     this.state = {
       isLogin: null,
     }
+  }
+  componentDidMount() {
     this.onLogin()
   }
   async onLogin() {

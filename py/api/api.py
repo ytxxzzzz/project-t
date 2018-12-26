@@ -5,6 +5,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 import json
 import jwt
+import datetime
+from functools import wraps
 
 from py.appbase.database import db
 from py.models.task import Task
@@ -14,6 +16,52 @@ import numpy as np
 
 # Blueprintにて、APIパスのprefix定義
 path_prefix = Blueprint('api', __name__)
+
+def login_required(method):
+    @wraps(method)
+    def wrapper(*args, **kwargs):
+        header = request.headers.get('Authorization')
+        _, token = header.split()
+        try:
+            # TODO: シークレット固定
+            decoded = jwt.decode(token, 'secret', algorithms='HS256')
+        except jwt.DecodeError:
+            abort(400, {'msg':'不正なトークン'})
+        except jwt.ExpiredSignatureError:
+            abort(400, {'msg':'トークン有効期限切れ'})
+        user = User.query.filter_by(user_id=decoded['userId'], e_mail=decoded['eMail']).first()
+        if user is None:
+            abort(400, {'msg':'存在しないユーザでログインが試行されました'})
+
+        # 元のメソッドの第１引数にログインユーザを付与してコールする
+        return method(*((user,) + args), **kwargs)
+    return wrapper
+
+@path_prefix.route('/login/<token>', methods=['GET'])
+def login(token):
+    # TODO: シークレット固定
+    decoded = jwt.decode(token, 'secret', algorithms=['HS256'])
+
+    # ログイン後のトークン有効期限 TODO:仮決め有効期限7日
+    exp = datetime.datetime.utcnow() + datetime.timedelta(days=7)
+
+    new_token = jwt.encode({"userId": decoded['user_id'], "eMail": decoded['e_mail'], "exp": exp}, 'secret', algorithm='HS256')
+    return jsonify({"token": new_token.decode()}), 200
+
+# テスト用トークン発行
+@path_prefix.route('/token/<user_id>', methods=['GET'])
+def generate_token(user_id: int):
+    user: User = User.query.get(user_id)
+    # トークンの有効期限 TODO:仮決め有効期限1日
+    exp = datetime.datetime.utcnow() + datetime.timedelta(days=1)
+    # TODO: シークレット固定
+    token = jwt.encode({"user_id": user_id, "e_mail": user.e_mail, "exp": exp}, 'secret', algorithm='HS256')
+
+    print(token)
+    print(token.decode())
+
+    return jsonify({"token": token.decode()}), 200
+
 
 @path_prefix.route('/task', methods=['POST'])
 def add_new_task():
@@ -75,30 +123,11 @@ def delete_task(task_id):
     return jsonify(task.to_dict()), 200
 
 @path_prefix.route('/task/findAll', methods=['GET'])
-def find_all_tasks():
+@login_required
+def find_all_tasks(login_user):
     tasks = Task.query.all()
 
     return jsonify([x.to_dict() for x in tasks]), 200
-
-@path_prefix.route('/login/<token>', methods=['GET'])
-def login(token):
-    decoded = jwt.decode(token, 'secret', algorithms=['HS256'])
-
-    print(decoded)
-    new_token = jwt.encode({"userId": decoded['user_id'], "eMail": decoded['e_mail']}, 'secret', algorithm='HS256')
-    return jsonify({"token": new_token.decode()}), 200
-
-# テスト用トークン発行
-@path_prefix.route('/token/<user_id>', methods=['GET'])
-def generate_token(user_id: int):
-    user: User = User.query.get(user_id)
-
-    token = jwt.encode({"user_id": user_id, "e_mail": user.e_mail}, 'secret', algorithm='HS256')
-
-    print(token)
-    print(token.decode())
-
-    return jsonify({"token": token.decode()}), 200
 
 @path_prefix.route('/favicon.ico', methods=['GET'])
 def favicon():
