@@ -2,6 +2,8 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import * as _ from "lodash";
 
+import {TaskSchema,
+        ModalFuncPropsSchema} from '../models/models';
 import * as Element from '../elements/element'
 import ModalDialogBase from '../dialogbase/modal'
 

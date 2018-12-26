@@ -5,14 +5,20 @@ module.exports = {
   context: path.join(__dirname, "src", "main", "react"),
   entry: path.join(__dirname, "src", "main", "react", "index.tsx"),
   output: {
-    filename: "bundle.js",
-    path: path.join(__dirname, "dist")
+    filename: "bundle.js"
   },
 
   devServer: {
     open: true,
+    inline: true,
+    // ブラウザに直接アドレスを入力されてもルーティングする設定
+    // 本フロントアプリの実体はboundle.jsしかないので、当然ブラウザに直接アドレス入れると、
+    // 存在しないのでNotFoundとなってしまう。その時にとりあえずルートへリダイレクトする設定
+    historyApiFallback: {
+      disableDotRule: true  // react-routerのURLの変数部にドットがある場合に正常動作させるおまじない
+    },
     openPage: "",
-//    contentBase: path.join(__dirname, "public"),
+    contentBase: path.join(__dirname, "public"),
     watchContentBase: true,
     port: 8080,
   },

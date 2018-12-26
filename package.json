@@ -6,7 +6,7 @@
   "scripts": {
     "build": "webpack",
     "watch": "webpack --watch",
-    "start": "webpack-dev-server",
+    "start": "webpack-dev-server --hot",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -35,6 +35,7 @@
     "@types/react-dom": "^16.0.7",
     "@types/react-router": "^4.4.1",
     "@types/react-router-dom": "^4.3.1",
+    "axios": "^0.18.0",
     "lodash": "^4.17.10",
     "react": "^16.4.2",
     "react-dnd": "^5.0.0",

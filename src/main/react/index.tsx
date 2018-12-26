@@ -6,16 +6,30 @@ import { DragSource } from "react-dnd";
 import { Router, Route, RouteComponentProps } from "react-router";
 import { Link } from 'react-router-dom';
 import createHistory from 'history/createBrowserHistory';
+import axios from 'axios';
+import {AxiosRequestConfig} from 'axios';
 
 import * as _ from "lodash";
 
 import * as Element from './elements/element';
 import { TaskListPage} from './pages/tasklist';
 import {LoginPage} from './pages/login';
+import {EntryPage} from './pages/entry';
 import {TaskDialog} from './pageparts/dialogs';
-
+import {LocalStorageKeys} from './models/models'
 
 const history = createHistory();
+
+// TODO: バックエンドのURLを仮決めハードコード
+const apiHost = `http://${window.location.hostname}:5000`
+axios.defaults.baseURL = `${apiHost}/api`
+axios.defaults.withCredentials = false  // 当面Cookieのやりとりは無し
+axios.interceptors.request.use((value: AxiosRequestConfig)=>{
+  // 非効率だがリクエストのときに認証キーを毎回ローカルストレージより転記
+  const token = localStorage.getItem(LocalStorageKeys.authToken)
+  value.headers.common['Authorization'] = `Bearer ${token}`
+  return value
+})
 
 interface MessageParams {
   id: string,
@@ -50,7 +64,8 @@ ReactDOM.render(
   <Router history={history}>
     <div>
       <Header />
-      <Route exact path="/" component={LoginPage} />
+      <Route exact path="/" component={EntryPage} />
+      <Route path="/login/:token" component={LoginPage} />
       <Route path="/task" component={TaskListPage} />
       <Route path="/messages/:id" component={Message} />
     </div>
