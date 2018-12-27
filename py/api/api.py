@@ -9,8 +9,8 @@ import datetime
 from functools import wraps
 
 from py.appbase.database import db
-from py.models.task import Task
-from py.models.user import User
+from py.models.task import Task, TaskGroup
+from py.models.user import User, UserGroup
 
 import numpy as np
 
@@ -122,12 +122,12 @@ def delete_task(task_id):
 
     return jsonify(task.to_dict()), 200
 
-@path_prefix.route('/task/findAll', methods=['GET'])
+@path_prefix.route('/taskGroup/findAll', methods=['GET'])
 @login_required
-def find_all_tasks(login_user):
-    tasks = Task.query.all()
-
-    return jsonify([x.to_dict() for x in tasks]), 200
+def find_all_task_groups(login_user: User):
+    task_groups: list[TaskGroup] = TaskGroup.query.filter(TaskGroup.user_group_id.in_([x.user_group_id for x in login_user.user_groups])).all()
+    task_groups_dict_list = [x.to_dict([TaskGroup, Task, UserGroup, User]) for x in task_groups]
+    return jsonify(task_groups_dict_list), 200
 
 @path_prefix.route('/favicon.ico', methods=['GET'])
 def favicon():
