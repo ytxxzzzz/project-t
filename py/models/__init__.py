@@ -3,7 +3,7 @@ import re
 from sqlalchemy.orm.attributes import InstrumentedAttribute
 from sqlalchemy.ext.declarative import declared_attr
 import sqlalchemy as sa
-from datetime import datetime
+from datetime import datetime, date
 from typing import List, Any, Tuple
 
 # 再起呼び出しのストップ用例外
@@ -49,11 +49,7 @@ class Base(object):
             if hasattr(self, snake_key) and \
                         isinstance(getattr(self.__class__, snake_key), InstrumentedAttribute):
                 val = getattr(self, snake_key)
-                if isinstance(val, int):
-                    ret_dict[snake_to_camel(snake_key)] = val
-                elif isinstance(val, str):
-                    ret_dict[snake_to_camel(snake_key)] = val
-                elif isinstance(val, datetime):
+                if any([isinstance(val, x) for x in [int, str, datetime, date]]):
                     ret_dict[snake_to_camel(snake_key)] = val
                 elif isinstance(val, list):
                     try:
