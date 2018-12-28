@@ -4,6 +4,7 @@ import { DragSource } from "react-dnd";
 import { Router, Route, RouteComponentProps } from "react-router";
 import { Link } from 'react-router-dom';
 import createHistory from 'history/createBrowserHistory';
+import axios from 'axios';
 
 import * as _ from "lodash";
 
@@ -22,23 +23,15 @@ export class TaskListPage extends React.Component<TaskListPageProps, TaskListPag
   constructor(props: TaskListPageProps) {
     super(props)
     this.state = {
-      taskGroups: [{
-        taskGroupId: 1,
-        taskGroupTitle: "taskGroup_title",
-        tasks: [
-          {
-            taskId: 1,
-            taskTitle: "task_title",
-            taskDetail: "task_detail",
-          },
-          {
-            taskId: 2,
-            taskTitle: "task_titleその２",
-            taskDetail: "task_detailその２",
-          }
-        ]
-      }],
+      taskGroups: [],
     }
+  }
+  componentDidMount() {
+    this.onInit()
+  }
+  async onInit() {
+    const result = await axios.get(`/taskGroup/findAll`)
+    this.setState({taskGroups: result.data})
   }
   reloadTaskGroups() {
     this.setState({
