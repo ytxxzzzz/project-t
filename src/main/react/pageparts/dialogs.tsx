@@ -24,9 +24,17 @@ export class TaskDialog extends React.Component<TaskDialogProps, TaskDialogState
       }
     }
   }
-  handleModalInput(e: any) {
+  componentWillReceiveProps(nextProps: Readonly<TaskDialogProps>) {
+    this.setState({
+      task: {
+        taskTitle: nextProps.task.taskTitle,
+        taskDetail: nextProps.task.taskDetail,
+      }
+    })
+  }
+  handleModalInput(e: React.FormEvent<HTMLInputElement>) {
     const newState: TaskDialogState = _.cloneDeep(this.state)
-    newState.task[e.target.name] = e.target.value
+    newState.task[e.currentTarget.name] = e.currentTarget.value
     this.setState(newState)
   }
   render() {

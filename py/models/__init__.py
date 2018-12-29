@@ -6,7 +6,7 @@ import sqlalchemy as sa
 from datetime import datetime, date
 from typing import List, Any, Tuple
 
-# 再起呼び出しのストップ用例外
+# Base.to_dict()の再起呼び出しのストップ用例外
 class NotTraceRecursive(Exception):
     pass
 
@@ -42,25 +42,22 @@ class Base(object):
 
         ret_dict = {}
         for snake_key in self.__class__.__dict__:
-            # SQLAlchemy管理のフィールドがあり、それらは先頭大文字なので排除する
-            if len(snake_key) > 0 and snake_key[0].isupper():
-                continue
-            # クラス定義を調べて、SQLAlchemyのカラム型だったら、DictへKeyValueをコピーする(Key名はキャメル変更した上で)
-            if hasattr(self, snake_key) and \
-                        isinstance(getattr(self.__class__, snake_key), InstrumentedAttribute):
-                val = getattr(self, snake_key)
-                if any([isinstance(val, x) for x in [int, str, datetime, date]]):
-                    ret_dict[snake_to_camel(snake_key)] = val
-                elif isinstance(val, list):
-                    try:
+            try:
+                # SQLAlchemy管理のフィールドがあり、それらは先頭大文字なので排除する
+                if len(snake_key) > 0 and snake_key[0].isupper():
+                    continue
+                # クラス定義を調べて、SQLAlchemyのカラム型だったら、DictへKeyValueをコピーする(Key名はキャメル変更した上で)
+                if hasattr(self, snake_key) and \
+                            isinstance(getattr(self.__class__, snake_key), InstrumentedAttribute):
+                    val = getattr(self, snake_key)
+                    if any([isinstance(val, x) for x in [int, str, datetime, date]]):
+                        ret_dict[snake_to_camel(snake_key)] = val
+                    elif isinstance(val, list):
                         ret_dict[snake_to_camel(snake_key)] = [x.to_dict(need_models, traced_models) for x in val]
-                    except NotTraceRecursive:
-                        pass
-                elif hasattr(val, 'to_dict'):
-                    try:
+                    elif hasattr(val, 'to_dict'):
                         ret_dict[snake_to_camel(snake_key)] = val.to_dict(need_models, traced_models)
-                    except NotTraceRecursive:
-                        pass
+            except NotTraceRecursive:
+                pass
 
         return ret_dict
 

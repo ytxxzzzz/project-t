@@ -30,8 +30,12 @@ export class TaskListPage extends React.Component<TaskListPageProps, TaskListPag
     this.onInit()
   }
   async onInit() {
-    const result = await axios.get(`/taskGroup/findAll`)
-    this.setState({taskGroups: result.data})
+    try{
+      const result = await axios.get(`/taskGroup/findAll`)
+      this.setState({taskGroups: result.data})
+    } catch(e) {
+      alert(JSON.stringify(e.response.data, null, " "))
+    }
   }
   reloadTaskGroups() {
     this.setState({

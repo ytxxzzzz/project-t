@@ -8,7 +8,7 @@ interface InputProps {
   defaultValue?: string
   value?: string
   name: string
-  handleChange?(e: any): void
+  handleChange?(e: React.FormEvent<HTMLInputElement>): void
 }
 export const Input: React.StatelessComponent<InputProps> = (props) => {
   return (
