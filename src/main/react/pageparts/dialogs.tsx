@@ -25,6 +25,7 @@ export class TaskDialog extends React.Component<TaskDialogProps, TaskDialogState
     }
   }
   componentWillReceiveProps(nextProps: Readonly<TaskDialogProps>) {
+    // ダイアログが再表示された時に、新しいpropsで
     this.setState({
       task: {
         taskTitle: nextProps.task.taskTitle,
@@ -60,6 +61,7 @@ export class TaskDialog extends React.Component<TaskDialogProps, TaskDialogState
       padding: 30,
       cursor: 'auto',
     };
+    // ModalDialogBaseに渡す関数オブジェクトは、onSaveだけ差し替える
     const modalFuncProps = _.cloneDeep(this.props.modalFuncProps)
     modalFuncProps.onSave = () => {
       if(this.props.modalFuncProps.onSave) {
