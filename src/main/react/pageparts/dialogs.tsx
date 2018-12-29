@@ -70,24 +70,26 @@ export class TaskDialog extends React.Component<TaskDialogProps, TaskDialogState
     }
     return (
       <ModalDialogBase modalFuncProps={modalFuncProps} modalStyleProps={{backdropStyle: backdropStyle, modalStyle: modalStyle}} >
-        <ul>
-          <li>
-            <label htmlFor="title">タイトル</label>
-            <Element.Input 
-              name="taskTitle" 
-              defaultValue={this.props.task.taskTitle}
-              handleChange={this.handleModalInput.bind(this)}
-            />
-          </li>
-          <li>
-            <label htmlFor="detail">詳細</label>
-            <Element.Input
-              name="taskDetail" 
-              defaultValue={this.props.task.taskDetail}
-              handleChange={this.handleModalInput.bind(this)}
+        <div className="task-dialog">
+          <ul>
+            <li>
+              <label htmlFor="title">タイトル</label>
+              <Element.Input 
+                name="taskTitle" 
+                defaultValue={this.props.task.taskTitle}
+                handleChange={this.handleModalInput.bind(this)}
               />
-          </li>
-        </ul>
+            </li>
+            <li>
+              <label htmlFor="detail">詳細</label>
+              <Element.Input
+                name="taskDetail" 
+                defaultValue={this.props.task.taskDetail}
+                handleChange={this.handleModalInput.bind(this)}
+                />
+            </li>
+          </ul>
+        </div>
       </ModalDialogBase>
     )
   }

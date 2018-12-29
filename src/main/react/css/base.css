@@ -9,6 +9,12 @@ body {
   background-color: aquamarine;
 }
 
+/* デフォルト書式キャンセル */
+input{
+  border:none;
+  background:none;
+}
+
 ul li {
   list-style: none;
 }
@@ -21,10 +27,6 @@ label {
 ul {
   width: 500px;
   margin: 0 auto;
-}
-
-div {
-
 }
 
 div.task-list-base {
@@ -48,4 +50,13 @@ div.task-base {
   margin: 10px;
   border-radius: 10px;
   cursor: pointer;
+}
+
+div.task-dialog input {
+  border: solid;
+  border-width: 1px;
+  border-radius: 3px;
+  margin: 5px;
+  padding: 5px;
+  width: 300px;
 }
