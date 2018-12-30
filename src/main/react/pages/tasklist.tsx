@@ -26,7 +26,7 @@ export class TaskListPage extends React.Component<TaskListPageProps, TaskListPag
       taskGroups: [],
     }
   }
-  componentDidMount() {
+  componentWillMount() {
     this.onInit()
   }
   async onInit() {
@@ -36,19 +36,6 @@ export class TaskListPage extends React.Component<TaskListPageProps, TaskListPag
     } catch(e) {
       alert(JSON.stringify(e.response.data, null, " "))
     }
-  }
-  reloadTaskGroups() {
-    this.setState({
-      taskGroups: [{
-        taskGroupId: 1,
-        taskGroupTitle: "taskGroup_title",
-        tasks: [{
-          taskId: 1,
-          taskTitle: "task_title",
-          taskDetail: "task_detail",
-        }]
-      }]
-    })
   }
   handleAddTaskGroupClick() {
     const taskGroups = this.state.taskGroups
