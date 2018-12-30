@@ -20,6 +20,22 @@ export const Input: React.StatelessComponent<InputProps> = (props) => {
   )
 }
 
+interface MultiLineInputProps {
+  defaultValue?: string
+  value?: string
+  name: string
+  handleChange?(e: React.FormEvent<HTMLTextAreaElement>): void
+}
+export const MultiLineInput: React.StatelessComponent<MultiLineInputProps> = (props) => {
+  return (
+    <textarea
+      defaultValue={props.defaultValue?props.defaultValue : undefined}
+      name={props.name} 
+      value={props.value?props.value : undefined} 
+      onInput={props.handleChange} />
+  )
+}
+
 /* ボタンを出力する「Buttonコンポーネント」 */
 interface ButtonProps {
   caption: string
