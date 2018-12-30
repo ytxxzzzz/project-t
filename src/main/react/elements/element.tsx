@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { DragSource } from "react-dnd";
 import * as _ from "lodash";
+import Textarea from 'react-textarea-autosize';
 
 /* 入力フォームを出力する「Inputコンポーネント」 */
 interface InputProps {
@@ -28,11 +29,12 @@ interface MultiLineInputProps {
 }
 export const MultiLineInput: React.StatelessComponent<MultiLineInputProps> = (props) => {
   return (
-    <textarea
+    <Textarea
       defaultValue={props.defaultValue?props.defaultValue : undefined}
       name={props.name} 
       value={props.value?props.value : undefined} 
-      onInput={props.handleChange} />
+      onInput={props.handleChange}
+      minRows={2} />
   )
 }
 
