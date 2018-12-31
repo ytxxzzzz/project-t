@@ -88,19 +88,27 @@ class TaskGroup extends React.Component<TaskGroupProps, TaskGroupState> {
     this.setState({
       isShowTaskAdding: true,
     })
+  }
+  handleTaskAddingDecision(newTaskTitle: string) {
+
+    if(newTaskTitle.trim().length == 0) {
+      this.setState({
+        isShowTaskAdding: false,
+      })
+      return
+    }
+
     const tasks = this.state.tasks
 
     tasks.push({
-      taskTitle: "新しいタスク",
-      taskDetail: "タスクの詳細",
+      taskTitle: newTaskTitle,
+      taskDetail: "",
     })
 
     this.setState({
       tasks: tasks,
+      isShowTaskAdding: false,
     })
-  }
-  handleTaskAddingChange(newTaskTitle: string) {
-
   }
   render() {
     return (
@@ -115,7 +123,7 @@ class TaskGroup extends React.Component<TaskGroupProps, TaskGroupState> {
         }
         <TaskAddingPart 
           isShow={this.state.isShowTaskAdding}
-          handleChange={this.handleTaskAddingChange.bind(this)}
+          handleDecision={this.handleTaskAddingDecision.bind(this)}
         />
         <Element.Button caption="タスク追加" handleClick={this.handleAddTaskClick.bind(this)}></Element.Button>
       </div>
@@ -125,14 +133,14 @@ class TaskGroup extends React.Component<TaskGroupProps, TaskGroupState> {
 
 interface TaskAddingPartProps {
   isShow: boolean,
-  handleChange?(newTaskTitle: string): void
+  handleDecision?(newTaskTitle: string): void
 }
 interface TaskAddingPartState {
   taskTitle: string,
 }
 class TaskAddingPart extends React.Component<TaskAddingPartProps, TaskAddingPartState> {
-  handleTitleChange(e: React.FormEvent<HTMLTextAreaElement>) {
-    this.props.handleChange(e.currentTarget.value)
+  handleBlur(e: React.FormEvent<HTMLTextAreaElement>) {
+    this.props.handleDecision(e.currentTarget.value)
   }
   render() {
     if(!this.props.isShow) {
@@ -140,7 +148,7 @@ class TaskAddingPart extends React.Component<TaskAddingPartProps, TaskAddingPart
     }
     return(
       <div className="task-adding-part">
-        <Element.MultiLineInput handleChange={this.handleTitleChange.bind(this)} />
+        <Element.MultiLineInput handleBlur={this.handleBlur.bind(this)} />
       </div>
     )
   }

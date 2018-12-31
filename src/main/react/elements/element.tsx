@@ -26,6 +26,7 @@ interface MultiLineInputProps {
   value?: string
   name?: string
   handleChange?(e: React.FormEvent<HTMLTextAreaElement>): void
+  handleBlur?(e: React.FormEvent<HTMLTextAreaElement>): void
 }
 export const MultiLineInput: React.StatelessComponent<MultiLineInputProps> = (props) => {
   return (
@@ -33,7 +34,8 @@ export const MultiLineInput: React.StatelessComponent<MultiLineInputProps> = (pr
       defaultValue={props.defaultValue?props.defaultValue : undefined}
       name={props.name? props.name : undefined} 
       value={props.value? props.value : undefined} 
-      onInput={props.handleChange}
+      onInput={props.handleChange? props.handleChange : undefined}
+      onBlur={props.handleBlur? props.handleBlur : undefined}
       minRows={2} />
   )
 }

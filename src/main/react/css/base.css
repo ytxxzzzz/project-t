@@ -44,13 +44,20 @@ div.task-list-base {
   padding: 1px;
 }
 
-div.task-adding-part textarea {
+div.task-adding-part {
   border: none;
   border-radius: 10px;
-  background-color: white;
+  background-color: rgb(255, 247, 133);
   font-size: 14px !important;
   margin: 10px;
   padding: 5px 10px;
+}
+
+div.task-adding-part textarea {
+  border: none;
+  width: 100%;
+  margin: 0 auto;
+  background: none;
 }
 
 div.task-group-base {
