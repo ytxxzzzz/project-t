@@ -18,6 +18,10 @@ input{
   background-color: cornsilk;
 }
 
+textarea{
+  display: block;
+}
+
 ul li {
   list-style: none;
 }
@@ -38,6 +42,15 @@ div.task-list-base {
   margin: 10px;
   border-radius: 10px;
   padding: 1px;
+}
+
+div.task-adding-part textarea {
+  border: none;
+  border-radius: 10px;
+  background-color: white;
+  font-size: 14px !important;
+  margin: 10px;
+  padding: 5px 10px;
 }
 
 div.task-group-base {
@@ -69,7 +82,6 @@ div.task-dialog textarea{
   border:solid;
   border-width: 1px;
   border-radius: 5px;
-  display: block;
   background-color: white;
   width: 95%;
   margin: 0 auto;

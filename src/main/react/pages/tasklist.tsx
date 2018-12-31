@@ -70,6 +70,8 @@ interface TaskGroupProps {
 }
 interface TaskGroupState {
   taskGroupTitle: string,
+  isShowTaskAdding: boolean,
+  taskAddingTitle: string,
   tasks: TaskSchema[],
 }
 class TaskGroup extends React.Component<TaskGroupProps, TaskGroupState> {
@@ -77,10 +79,15 @@ class TaskGroup extends React.Component<TaskGroupProps, TaskGroupState> {
     super(props)
     this.state = {
       taskGroupTitle: props.taskGroup.taskGroupTitle,
+      isShowTaskAdding: false,
+      taskAddingTitle: null,
       tasks: props.taskGroup.tasks,
     }
   }
   handleAddTaskClick() {
+    this.setState({
+      isShowTaskAdding: true,
+    })
     const tasks = this.state.tasks
 
     tasks.push({
@@ -91,6 +98,9 @@ class TaskGroup extends React.Component<TaskGroupProps, TaskGroupState> {
     this.setState({
       tasks: tasks,
     })
+  }
+  handleTaskAddingChange(newTaskTitle: string) {
+
   }
   render() {
     return (
@@ -103,11 +113,39 @@ class TaskGroup extends React.Component<TaskGroupProps, TaskGroupState> {
             )
           })
         }
+        <TaskAddingPart 
+          isShow={this.state.isShowTaskAdding}
+          handleChange={this.handleTaskAddingChange.bind(this)}
+        />
         <Element.Button caption="タスク追加" handleClick={this.handleAddTaskClick.bind(this)}></Element.Button>
       </div>
     )
   }
 }
+
+interface TaskAddingPartProps {
+  isShow: boolean,
+  handleChange?(newTaskTitle: string): void
+}
+interface TaskAddingPartState {
+  taskTitle: string,
+}
+class TaskAddingPart extends React.Component<TaskAddingPartProps, TaskAddingPartState> {
+  handleTitleChange(e: React.FormEvent<HTMLTextAreaElement>) {
+    this.props.handleChange(e.currentTarget.value)
+  }
+  render() {
+    if(!this.props.isShow) {
+      return null;
+    }
+    return(
+      <div className="task-adding-part">
+        <Element.MultiLineInput handleChange={this.handleTitleChange.bind(this)} />
+      </div>
+    )
+  }
+}
+
 
 interface TaskProps {
   task: TaskSchema

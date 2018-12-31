@@ -24,15 +24,15 @@ export const Input: React.StatelessComponent<InputProps> = (props) => {
 interface MultiLineInputProps {
   defaultValue?: string
   value?: string
-  name: string
+  name?: string
   handleChange?(e: React.FormEvent<HTMLTextAreaElement>): void
 }
 export const MultiLineInput: React.StatelessComponent<MultiLineInputProps> = (props) => {
   return (
     <Textarea
       defaultValue={props.defaultValue?props.defaultValue : undefined}
-      name={props.name} 
-      value={props.value?props.value : undefined} 
+      name={props.name? props.name : undefined} 
+      value={props.value? props.value : undefined} 
       onInput={props.handleChange}
       minRows={2} />
   )
