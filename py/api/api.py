@@ -62,19 +62,28 @@ def generate_token(user_id: int):
 
     return jsonify({"token": token.decode()}), 200
 
+@path_prefix.route('/taskGroup/findAll', methods=['GET'])
+@login_required
+def find_all_task_groups(login_user: User):
+    task_groups: list[TaskGroup] = TaskGroup.query.filter(TaskGroup.user_group_id.in_([x.user_group_id for x in login_user.user_groups])).all()
+    task_groups_dict_list = [x.to_dict([TaskGroup, Task, UserGroup, User]) for x in task_groups]
+    return jsonify(task_groups_dict_list), 200
 
 @path_prefix.route('/task', methods=['POST'])
-def add_new_task():
+@login_required
+def add_new_task(login_user: User):
     req_data = json.loads(request.data)
     if 'taskId' in req_data:
         del(req_data['taskId'])
+
+    # TODO: task_group_idが本当にログインユーザに紐づくものかのチェックが必要
 
     task = Task(req_data)
 
     db.session.add(task)
     db.session.commit()
 
-    return jsonify(task.to_dict()), 200
+    return jsonify(task.to_dict([Task])), 200
 
 @path_prefix.route('/task', methods=['PUT'])
 def update_task():
@@ -121,13 +130,6 @@ def delete_task(task_id):
     db.session.commit()
 
     return jsonify(task.to_dict()), 200
-
-@path_prefix.route('/taskGroup/findAll', methods=['GET'])
-@login_required
-def find_all_task_groups(login_user: User):
-    task_groups: list[TaskGroup] = TaskGroup.query.filter(TaskGroup.user_group_id.in_([x.user_group_id for x in login_user.user_groups])).all()
-    task_groups_dict_list = [x.to_dict([TaskGroup, Task, UserGroup, User]) for x in task_groups]
-    return jsonify(task_groups_dict_list), 200
 
 @path_prefix.route('/favicon.ico', methods=['GET'])
 def favicon():

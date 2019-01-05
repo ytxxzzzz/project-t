@@ -34,7 +34,11 @@ export class TaskListPage extends React.Component<TaskListPageProps, TaskListPag
       const result = await axios.get(`/taskGroup/findAll`)
       this.setState({taskGroups: result.data})
     } catch(e) {
-      alert(JSON.stringify(e.response.data, null, " "))
+      try{
+        alert(JSON.stringify(e.response.data, null, " "))
+      } catch(e2) {
+        alert(e.message)
+      }
     }
   }
   handleAddTaskGroupClick() {
@@ -89,8 +93,8 @@ class TaskGroup extends React.Component<TaskGroupProps, TaskGroupState> {
       isShowTaskAdding: true,
     })
   }
-  handleTaskAddingDecision(newTaskTitle: string) {
-
+  async handleTaskAddingDecision(newTaskTitle: string) {
+    // タイトルが指定されていなかったらタスク入力欄を非表示に
     if(newTaskTitle.trim().length == 0) {
       this.setState({
         isShowTaskAdding: false,
@@ -98,12 +102,16 @@ class TaskGroup extends React.Component<TaskGroupProps, TaskGroupState> {
       return
     }
 
-    const tasks = this.state.tasks
-
-    tasks.push({
+    const newTask: TaskSchema = {
       taskTitle: newTaskTitle,
       taskDetail: "",
-    })
+      taskGroupId: this.props.taskGroup.taskGroupId,
+    }
+    const addedResult = await axios.post(`/task`, newTask)
+    const addedTask: TaskSchema = addedResult.data
+
+    const tasks = this.state.tasks
+    tasks.push(addedTask)
 
     this.setState({
       tasks: tasks,
@@ -123,7 +131,7 @@ class TaskGroup extends React.Component<TaskGroupProps, TaskGroupState> {
         }
         <TaskAddingPart 
           isShow={this.state.isShowTaskAdding}
-          handleDecision={this.handleTaskAddingDecision.bind(this)}
+          handleTaskDecision={this.handleTaskAddingDecision.bind(this)}
         />
         <Element.Button caption="タスク追加" handleClick={this.handleAddTaskClick.bind(this)}></Element.Button>
       </div>
@@ -133,14 +141,14 @@ class TaskGroup extends React.Component<TaskGroupProps, TaskGroupState> {
 
 interface TaskAddingPartProps {
   isShow: boolean,
-  handleDecision?(newTaskTitle: string): void
+  handleTaskDecision?(newTaskTitle: string): void
 }
 interface TaskAddingPartState {
   taskTitle: string,
 }
 class TaskAddingPart extends React.Component<TaskAddingPartProps, TaskAddingPartState> {
   handleBlur(e: React.FormEvent<HTMLTextAreaElement>) {
-    this.props.handleDecision(e.currentTarget.value)
+    this.props.handleTaskDecision(e.currentTarget.value)
   }
   render() {
     if(!this.props.isShow) {
@@ -166,10 +174,7 @@ class Task extends React.Component<TaskProps, TaskState> {
   constructor(props: TaskProps) {
     super(props)
     this.state = {
-      task: {
-        taskTitle: props.task.taskTitle,
-        taskDetail: props.task.taskDetail,
-      },
+      task: props.task,
       isOpen: false,
     }
   }

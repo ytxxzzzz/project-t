@@ -14,6 +14,7 @@ export interface TaskSchema {
   taskId?: number
   taskTitle: string
   taskDetail: string
+  taskGroupId: number
 }
 
 export interface ModalFuncPropsSchema<TargetScema> {

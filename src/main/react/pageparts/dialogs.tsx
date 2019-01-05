@@ -18,19 +18,13 @@ export class TaskDialog extends React.Component<TaskDialogProps, TaskDialogState
   constructor(props: TaskDialogProps) {
     super(props)
     this.state = {
-      task: {
-        taskTitle: props.task.taskTitle,
-        taskDetail: props.task.taskDetail,
-      }
+      task: props.task
     }
   }
   componentWillReceiveProps(nextProps: Readonly<TaskDialogProps>) {
     // ダイアログが再表示された時に、新しいpropsで
     this.setState({
-      task: {
-        taskTitle: nextProps.task.taskTitle,
-        taskDetail: nextProps.task.taskDetail,
-      }
+      task: nextProps.task
     })
   }
   handleModalInput(e: React.FormEvent<HTMLTextAreaElement>) {
