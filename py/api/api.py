@@ -15,8 +15,11 @@ from py.models.user import User, UserGroup
 import numpy as np
 
 # Blueprintにて、APIパスのprefix定義
-path_prefix = Blueprint('api', __name__)
+api = Blueprint('api', __name__)
 
+# ログイン用のデコレータ
+# ログイン必須のアクションメソッドにこれを付ける
+# これを付けたメソッドの第１引数にログインユーザが指定される
 def login_required(method):
     @wraps(method)
     def wrapper(*args, **kwargs):
@@ -37,7 +40,7 @@ def login_required(method):
         return method(*((user,) + args), **kwargs)
     return wrapper
 
-@path_prefix.route('/login/<token>', methods=['GET'])
+@api.route('/login/<token>', methods=['GET'])
 def login(token):
     # TODO: シークレット固定
     decoded = jwt.decode(token, 'secret', algorithms=['HS256'])
@@ -49,7 +52,7 @@ def login(token):
     return jsonify({"token": new_token.decode()}), 200
 
 # テスト用トークン発行
-@path_prefix.route('/token/<user_id>', methods=['GET'])
+@api.route('/token/<user_id>', methods=['GET'])
 def generate_token(user_id: int):
     user: User = User.query.get(user_id)
     # トークンの有効期限 TODO:仮決め有効期限1日
@@ -62,14 +65,14 @@ def generate_token(user_id: int):
 
     return jsonify({"token": token.decode()}), 200
 
-@path_prefix.route('/taskGroup/findAll', methods=['GET'])
+@api.route('/taskGroup/findAll', methods=['GET'])
 @login_required
 def find_all_task_groups(login_user: User):
     task_groups: list[TaskGroup] = TaskGroup.query.filter(TaskGroup.user_group_id.in_([x.user_group_id for x in login_user.user_groups])).all()
     task_groups_dict_list = [x.to_dict([TaskGroup, Task, UserGroup, User]) for x in task_groups]
     return jsonify(task_groups_dict_list), 200
 
-@path_prefix.route('/task', methods=['POST'])
+@api.route('/task', methods=['POST'])
 @login_required
 def add_new_task(login_user: User):
     req_data = json.loads(request.data)
@@ -85,7 +88,7 @@ def add_new_task(login_user: User):
 
     return jsonify(task.to_dict([Task])), 200
 
-@path_prefix.route('/task', methods=['PUT'])
+@api.route('/task', methods=['PUT'])
 @login_required
 def update_task(login_user: User):
     req_data = json.loads(request.data)
@@ -110,7 +113,7 @@ def update_task(login_user: User):
     return jsonify(task.to_dict([Task])), 200
 
 
-@path_prefix.route('/task/<task_id>', methods=['GET'])
+@api.route('/task/<task_id>', methods=['GET'])
 def get_task_by_id(task_id):
     task: Task = Task.query.get(task_id)
 
@@ -120,7 +123,7 @@ def get_task_by_id(task_id):
 
     return jsonify(task.to_dict()), 200
 
-@path_prefix.route('/task/<task_id>', methods=['DELETE'])
+@api.route('/task/<task_id>', methods=['DELETE'])
 def delete_task(task_id):
     task: Task = Task.query.get(task_id)
 
@@ -134,14 +137,14 @@ def delete_task(task_id):
 
     return jsonify(task.to_dict()), 200
 
-@path_prefix.route('/favicon.ico', methods=['GET'])
+@api.route('/favicon.ico', methods=['GET'])
 def favicon():
     return "", 200
 
 
-@path_prefix.errorhandler(400)
-@path_prefix.errorhandler(404)
-@path_prefix.errorhandler(500)
+@api.errorhandler(400)
+@api.errorhandler(404)
+@api.errorhandler(500)
 def error_handler(error):
     try:
         response = {'message': error.description['msg'], 'statusCode': error.code}
