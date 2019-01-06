@@ -86,12 +86,15 @@ def add_new_task(login_user: User):
     return jsonify(task.to_dict([Task])), 200
 
 @path_prefix.route('/task', methods=['PUT'])
-def update_task():
+@login_required
+def update_task(login_user: User):
     req_data = json.loads(request.data)
 
     # 更新なので、PK未指定は当然エラー
     if 'taskId' not in req_data:
         abort(400, {'msg':'更新オペレーションなので、PK(taskId)の指定は必須です。'})
+
+    # TODO: task_group_idが本当にログインユーザに紐づくものかのチェックが必要
 
     # 指定されたIDをSELECT
     task: Task = db.session.query(Task).filter_by(task_id=req_data['taskId']).first()
@@ -104,7 +107,7 @@ def update_task():
     task.set_attributes_from_dict(req_data)
     db.session.commit()
 
-    return jsonify(task.to_dict()), 200
+    return jsonify(task.to_dict([Task])), 200
 
 
 @path_prefix.route('/task/<task_id>', methods=['GET'])

@@ -102,6 +102,7 @@ class TaskGroup extends React.Component<TaskGroupProps, TaskGroupState> {
       return
     }
 
+    // タスクの登録
     const newTask: TaskSchema = {
       taskTitle: newTaskTitle,
       taskDetail: "",
@@ -186,7 +187,8 @@ class Task extends React.Component<TaskProps, TaskState> {
   handleEditClick() {
     this.toggleModal()
   }
-  onSave(newValues: TaskSchema) {
+  async onSave(newValues: TaskSchema) {
+    const addedResult = await axios.put(`/task`, newValues)
     this.setState({
       task: newValues
     })

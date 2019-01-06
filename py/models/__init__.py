@@ -13,6 +13,9 @@ class NotTraceRecursive(Exception):
 
 # テーブルの共通設定
 class Base(object):
+
+    DATETIME_FORMAT = "%Y/%m/%d %H:%M:%S"
+
     @declared_attr
     def __tablename__(cls):
         return uppercamel_to_snake(cls.__name__)
@@ -25,7 +28,10 @@ class Base(object):
         for camel_key in data.keys():
             snake_key = camel_to_snake(camel_key)
             if snake_key in self.__class__.__dict__:
-                setattr(self, snake_key, data[camel_key])
+                if any([isinstance(getattr(self, snake_key), x) for x in [datetime, date]]):
+                    setattr(self, snake_key, datetime.strptime(data[camel_key], self.__class__.DATETIME_FORMAT))
+                else:
+                    setattr(self, snake_key, data[camel_key])
 
     def to_dict(self, need_models: List[Any]):
         return self._to_dict(need_models, [])
@@ -53,8 +59,10 @@ class Base(object):
                 if hasattr(self, snake_key) and \
                             isinstance(getattr(self.__class__, snake_key), InstrumentedAttribute):
                     val = getattr(self, snake_key)
-                    if any([isinstance(val, x) for x in [int, str, datetime, date]]):
+                    if any([isinstance(val, x) for x in [int, str]]):
                         ret_dict[snake_to_camel(snake_key)] = val
+                    elif any([isinstance(val, x) for x in [datetime, date]]):
+                        ret_dict[snake_to_camel(snake_key)] = val.strftime(self.__class__.DATETIME_FORMAT)
                     elif isinstance(val, list):
                         ret_dict[snake_to_camel(snake_key)] = [x._to_dict(need_models, traced_models_copy) for x in val]
                     elif hasattr(val, '_to_dict'):
