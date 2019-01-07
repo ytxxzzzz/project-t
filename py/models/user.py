@@ -15,6 +15,7 @@ user_group_rel = db.Table('user_group_rel',
 
 class UserGroup(Base):
     user_group_id = db.Column(db.Integer, primary_key=True)
+    user_group_name = db.Column(db.String(200), unique=False)
 
     # Many-to-Many relation
     users = db.relationship('User', secondary=user_group_rel, lazy='subquery',

@@ -23,6 +23,14 @@ $ FLASK_APP=main.py flask db migrate
 3. 差分を接続先のDBへ適用(つまり実際にAlter Tableする)
 $ FLASK_APP=main.py flask db upgrade
 
+※DBを一旦migrate管理外で初期化してしまった場合は、
+　Flask-migrateを初期化するために以下を行ってみると、再度migrateで再び管理できるようになるかも
+
+1. mysqlの該当データベース内にある「alembic_version」テーブルをDropする
+2. ソースフォルダのルート直下にある「migrations」フォルダを削除
+3. 以下のコマンドで初期化
+FLASK_APP=main.py flask db init
+
 ```
 
 ## React Typescript 環境構築

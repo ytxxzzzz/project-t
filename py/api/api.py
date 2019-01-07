@@ -72,6 +72,7 @@ def find_all_task_groups(login_user: User):
     task_groups_dict_list = [x.to_dict([TaskGroup, Task, UserGroup, User]) for x in task_groups]
     return jsonify(task_groups_dict_list), 200
 
+# タスクの新規追加
 @api.route('/task', methods=['POST'])
 @login_required
 def add_new_task(login_user: User):
@@ -88,6 +89,7 @@ def add_new_task(login_user: User):
 
     return jsonify(task.to_dict([Task])), 200
 
+# タスクの更新
 @api.route('/task', methods=['PUT'])
 @login_required
 def update_task(login_user: User):
@@ -108,6 +110,23 @@ def update_task(login_user: User):
 
     # 値の更新
     task.set_attributes_from_dict(req_data)
+    db.session.commit()
+
+    return jsonify(task.to_dict([Task])), 200
+
+# タスクグループの新規追加
+@api.route('/taskGroup', methods=['POST'])
+@login_required
+def add_new_task_group(login_user: User):
+    req_data = json.loads(request.data)
+    if 'taskGroupId' in req_data:
+        del(req_data['taskGroupId'])
+
+    # TODO: task_group_idが本当にログインユーザに紐づくものかのチェックが必要
+
+    task_group = TaskGroup(req_data)
+
+    db.session.add(task)
     db.session.commit()
 
     return jsonify(task.to_dict([Task])), 200
