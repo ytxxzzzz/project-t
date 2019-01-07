@@ -2,12 +2,12 @@ from flask import Flask, Blueprint
 from flask_cors import CORS
 
 from py.appbase.database import init_db
-from py.api.api import path_prefix
+from py.api.api import api
 
 def create_app():
     app = Flask(__name__)
     # パスのPrefixを登録
-    app.register_blueprint(path_prefix, url_prefix='/api')
+    app.register_blueprint(api, url_prefix='/api')
     # cors対策
     CORS(app)
 
