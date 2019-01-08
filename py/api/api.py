@@ -82,7 +82,7 @@ def add_new_task(login_user: User):
 
     # TODO: task_group_idが本当にログインユーザに紐づくものかのチェックが必要
 
-    task = Task(req_data)
+    task = Task.get_instance(req_data)
 
     db.session.add(task)
     db.session.commit()
@@ -122,14 +122,19 @@ def add_new_task_group(login_user: User):
     if 'taskGroupId' in req_data:
         del(req_data['taskGroupId'])
 
+    if len(login_user.user_groups) != 1:
+        # TODO: １ユーザに対し複数のユーザグループは現在未対応です
+        abort(400, {'msg': '１ユーザに対し複数のユーザグループは現在未対応です'})
+
     # TODO: task_group_idが本当にログインユーザに紐づくものかのチェックが必要
 
-    task_group = TaskGroup(req_data)
+    task_group: TaskGroup = TaskGroup.get_instance(req_data)
+    task_group.user_group_id = login_user.user_groups[0].user_group_id
 
-    db.session.add(task)
+    db.session.add(task_group)
     db.session.commit()
 
-    return jsonify(task.to_dict([Task])), 200
+    return jsonify(task_group.to_dict([TaskGroup])), 200
 
 
 @api.route('/task/<task_id>', methods=['GET'])

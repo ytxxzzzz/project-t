@@ -31,8 +31,5 @@ class Task(Base):
     # One-to-One relation
     task_group = db.relationship('TaskGroup', backref='Task', lazy=True)
 
-    def __init__(self, task: dict):
-        self.set_attributes_from_dict(task)
-
     def __repr__(self):
         return '<Task %r, %s>' % (self.task_id, self.title)

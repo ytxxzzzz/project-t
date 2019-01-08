@@ -23,6 +23,13 @@ class Base(object):
     created = sa.Column('created', sa.DATETIME, default=datetime.now, nullable=False)
     updated = sa.Column('updated', sa.DATETIME, default=datetime.now, nullable=False)
 
+    @classmethod
+    def get_instance(cls, data: dict):
+        new_instance = cls()
+        new_instance.set_attributes_from_dict(data)
+        return new_instance
+
+
     def set_attributes_from_dict(self, data: Dict):
         # JSONのキーと同名だったフィールド全てに値をセット
         for camel_key in data.keys():

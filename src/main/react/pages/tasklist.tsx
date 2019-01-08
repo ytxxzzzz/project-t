@@ -41,13 +41,16 @@ export class TaskListPage extends React.Component<TaskListPageProps, TaskListPag
       }
     }
   }
-  handleAddTaskGroupClick() {
+  async handleAddTaskGroupClick() {
     const taskGroups = this.state.taskGroups
 
-    taskGroups.push({
-      taskGroupTitle: "新しいタスクグループ",
+    const newTaskGroup: TaskGroupSchema = {
+      taskGroupTitle: "新しいグループ",
       tasks: [],
-    })
+    }
+
+    const addedResponse = await axios.post(`/taskGroup`, newTaskGroup)
+    taskGroups.push(addedResponse.data)
 
     this.setState({
       taskGroups: taskGroups,
@@ -108,8 +111,8 @@ class TaskGroup extends React.Component<TaskGroupProps, TaskGroupState> {
       taskDetail: "",
       taskGroupId: this.props.taskGroup.taskGroupId,
     }
-    const addedResult = await axios.post(`/task`, newTask)
-    const addedTask: TaskSchema = addedResult.data
+    const addedResponse = await axios.post(`/task`, newTask)
+    const addedTask: TaskSchema = addedResponse.data
 
     const tasks = this.state.tasks
     tasks.push(addedTask)
@@ -188,9 +191,9 @@ class Task extends React.Component<TaskProps, TaskState> {
     this.toggleModal()
   }
   async onSave(newValues: TaskSchema) {
-    const addedResult = await axios.put(`/task`, newValues)
+    const response = await axios.put(`/task`, newValues)
     this.setState({
-      task: newValues
+      task: response.data
     })
   }
   render() {
