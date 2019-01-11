@@ -48,7 +48,7 @@ export default class ModalDialogBase<TargetScema> extends React.Component<ModalD
               style={this.props.modalStyleProps.modalStyle} 
               onClick={(e)=>{e.stopPropagation()/*親要素へのクリックイベント伝播阻止*/}}
         >
-          <i className="fas fa-times"></i>
+          <div className="fas fa-times fa-2x dialog-close" onClick={this.onCancel.bind(this)}></div>
           {this.props.children}
 
           <div className="footer">
