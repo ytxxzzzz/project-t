@@ -122,9 +122,13 @@ class TaskGroup extends React.Component<TaskGroupProps, TaskGroupState> {
       isShowTaskAdding: false,
     })
   }
+  async handleTaskGroupArchive(e: React.FormEvent<HTMLDivElement>) {
+    alert('タスクをアーカイブするんかい？')
+  }
   render() {
     return (
       <div className="task-group-base">
+        <div className="fas fa-times fa-2x taskgroup-close-btn" onClick={this.handleTaskGroupArchive.bind(this)} ></div>
         <Element.Output value={this.state.taskGroupTitle}></Element.Output>
         {
           this.props.taskGroup.tasks.map(task => {
