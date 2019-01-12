@@ -95,13 +95,14 @@ div.task-dialog textarea{
 }
 
 .dialog-close-btn{
-  color: dimgray;
+  color: gray;
   display: block;
   margin-left: auto;
   width: 20px;
   height: 20px;
   margin-bottom: 15px;
   position: relative;
+  cursor: pointer;
 }
 .dialog-close-btn:hover{
   transition: all .3s ease;
@@ -110,12 +111,13 @@ div.task-dialog textarea{
 
 .taskgroup-close-btn{
   float: right;
-  color: dimgray;
+  color: gray;
   display: flow;
   margin-right: 10px;
   width: 20px;
   height: 20px;
   margin-bottom: 15px;
+  cursor: pointer;
 }
 .taskgroup-close-btn:hover{
   transition: all .3s ease;
