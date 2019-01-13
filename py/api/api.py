@@ -152,11 +152,11 @@ def update_task_group(login_user: User):
     task_group: TaskGroup = db.session.query(TaskGroup).filter_by(task_group_id=req_data['taskGroupId']).first()
 
     # 指定されたIDのデータが見つからず
-    if task is None:
-        abort(404, {'msg':'指定されたtaskIdのデータが見つかりませんでした。'})
+    if task_group is None:
+        abort(404, {'msg':'指定されたtaskGroupIdのデータが見つかりませんでした。'})
 
     # 値の更新
-    task.set_attributes_from_dict(req_data)
+    task_group.set_attributes_from_dict(req_data)
     db.session.commit()
 
     return jsonify(task.to_dict([Task])), 200
