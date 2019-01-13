@@ -136,6 +136,31 @@ def add_new_task_group(login_user: User):
 
     return jsonify(task_group.to_dict([TaskGroup])), 200
 
+# タスクグループの更新
+@api.route('/taskGroup', methods=['PUT'])
+@login_required
+def update_task_group(login_user: User):
+    req_data = json.loads(request.data)
+
+    # 更新なので、PK未指定は当然エラー
+    if 'taskGroupId' not in req_data:
+        abort(400, {'msg':'更新オペレーションなので、PK(taskGroupId)の指定は必須です。'})
+
+    # TODO: task_group_idが本当にログインユーザに紐づくものかのチェックが必要
+
+    # 指定されたIDをSELECT
+    task_group: TaskGroup = db.session.query(TaskGroup).filter_by(task_group_id=req_data['taskGroupId']).first()
+
+    # 指定されたIDのデータが見つからず
+    if task is None:
+        abort(404, {'msg':'指定されたtaskIdのデータが見つかりませんでした。'})
+
+    # 値の更新
+    task.set_attributes_from_dict(req_data)
+    db.session.commit()
+
+    return jsonify(task.to_dict([Task])), 200
+
 
 @api.route('/task/<task_id>', methods=['GET'])
 def get_task_by_id(task_id):
