@@ -12,6 +12,7 @@ class TaskGroup(Base):
     task_group_title = db.Column(db.String(200), unique=False)
     user_group_id = db.Column(db.Integer, db.ForeignKey('user_group.user_group_id'))
     archived = db.Column(db.DateTime)
+    is_archived = db.Column(db.Boolean, default=False)
 
     # One-to-Many relation
     tasks = db.relationship('Task', backref='TaskGroup', lazy=True)

@@ -31,7 +31,11 @@ export class TaskListPage extends React.Component<TaskListPageProps, TaskListPag
   }
   async onInit() {
     try{
-      const result = await axios.get(`/taskGroup/findAll`)
+      const result = await axios.get(`/taskGroup/findAll`, {
+        params: {
+          isArchived: false
+        }
+      })
       this.setState({taskGroups: result.data})
     } catch(e) {
       try{
@@ -85,12 +89,7 @@ class TaskGroup extends React.Component<TaskGroupProps, TaskGroupState> {
   constructor(props: TaskGroupProps) {
     super(props)
     this.state = {
-      taskGroup: {
-        taskGroupId: props.taskGroup.taskGroupId,
-        taskGroupTitle: props.taskGroup.taskGroupTitle,
-        isArchived: false,
-        tasks: props.taskGroup.tasks,
-      },
+      taskGroup: props.taskGroup,
       isShowTaskAdding: false,
       taskAddingTitle: null,
     }
@@ -100,6 +99,7 @@ class TaskGroup extends React.Component<TaskGroupProps, TaskGroupState> {
       isShowTaskAdding: true,
     })
   }
+  // タスク追加編集が確定されたとき
   async handleTaskAddingDecision(newTaskTitle: string) {
     // タイトルが指定されていなかったらタスク入力欄を非表示に
     if(newTaskTitle.trim().length == 0) {
@@ -132,7 +132,7 @@ class TaskGroup extends React.Component<TaskGroupProps, TaskGroupState> {
     const doArchive = confirm(`${this.state.taskGroup.taskGroupTitle}をアーカイブしますか？`)
 
     if(doArchive) {
-      const response = await axios.post(`/taskGroup`, {
+      const response = await axios.put(`/taskGroup`, {
         taskGroupId: this.state.taskGroup.taskGroupId,
         isArchived: true,
       })
@@ -142,6 +142,9 @@ class TaskGroup extends React.Component<TaskGroupProps, TaskGroupState> {
     }
   }
   render() {
+    if(this.state.taskGroup.isArchived) {
+      return null
+    }
     return (
       <div className="task-group-base">
         <div className="fas fa-times fa-2x taskgroup-close-btn" onClick={this.handleTaskGroupArchive.bind(this)} ></div>
