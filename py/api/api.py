@@ -7,6 +7,7 @@ import json
 import jwt
 import datetime
 from functools import wraps
+from typing import List, Any, Tuple, Dict
 
 from py.appbase.database import db
 from py.models.task import Task, TaskGroup
@@ -68,7 +69,7 @@ def generate_token(user_id: int):
 @api.route('/taskGroup/findAll', methods=['GET'])
 @login_required
 def find_all_task_groups(login_user: User):
-    task_groups: list[TaskGroup] = TaskGroup.query.filter(TaskGroup.user_group_id.in_([x.user_group_id for x in login_user.user_groups])).all()
+    task_groups: List[TaskGroup] = TaskGroup.query.filter(TaskGroup.user_group_id.in_([x.user_group_id for x in login_user.user_groups])).all()
     task_groups_dict_list = [x.to_dict([TaskGroup, Task, UserGroup, User]) for x in task_groups]
     return jsonify(task_groups_dict_list), 200
 
@@ -159,7 +160,7 @@ def update_task_group(login_user: User):
     task_group.set_attributes_from_dict(req_data)
     db.session.commit()
 
-    return jsonify(task.to_dict([Task])), 200
+    return jsonify(task_group.to_dict([Task])), 200
 
 
 @api.route('/task/<task_id>', methods=['GET'])

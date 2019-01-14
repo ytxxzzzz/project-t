@@ -1,12 +1,8 @@
 export interface TaskGroupSchema {
   taskGroupId?: number
   taskGroupTitle: string
+  isArchived: boolean
   tasks: TaskSchema[]
-}
-export interface TaskSchema {
-  taskId?: number
-  taskTitle: string
-  taskDetail: string
 }
 
 export interface TaskSchema {

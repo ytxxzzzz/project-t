@@ -46,6 +46,7 @@ export class TaskListPage extends React.Component<TaskListPageProps, TaskListPag
 
     const newTaskGroup: TaskGroupSchema = {
       taskGroupTitle: "新しいグループ",
+      isArchived: false,
       tasks: [],
     }
 
@@ -76,19 +77,22 @@ interface TaskGroupProps {
   taskGroup: TaskGroupSchema
 }
 interface TaskGroupState {
-  taskGroupTitle: string,
+  taskGroup: TaskGroupSchema
   isShowTaskAdding: boolean,
   taskAddingTitle: string,
-  tasks: TaskSchema[],
 }
 class TaskGroup extends React.Component<TaskGroupProps, TaskGroupState> {
   constructor(props: TaskGroupProps) {
     super(props)
     this.state = {
-      taskGroupTitle: props.taskGroup.taskGroupTitle,
+      taskGroup: {
+        taskGroupId: props.taskGroup.taskGroupId,
+        taskGroupTitle: props.taskGroup.taskGroupTitle,
+        isArchived: false,
+        tasks: props.taskGroup.tasks,
+      },
       isShowTaskAdding: false,
       taskAddingTitle: null,
-      tasks: props.taskGroup.tasks,
     }
   }
   handleAddTaskClick() {
@@ -114,22 +118,34 @@ class TaskGroup extends React.Component<TaskGroupProps, TaskGroupState> {
     const addedResponse = await axios.post(`/task`, newTask)
     const addedTask: TaskSchema = addedResponse.data
 
-    const tasks = this.state.tasks
+    const tasks = this.state.taskGroup.tasks
     tasks.push(addedTask)
-
+    const taskGroup = this.state.taskGroup
+    taskGroup.tasks = tasks
+    
     this.setState({
-      tasks: tasks,
+      taskGroup: taskGroup,
       isShowTaskAdding: false,
     })
   }
   async handleTaskGroupArchive(e: React.FormEvent<HTMLDivElement>) {
-    alert('タスクをアーカイブするんかい？')
+    const doArchive = confirm(`${this.state.taskGroup.taskGroupTitle}をアーカイブしますか？`)
+
+    if(doArchive) {
+      const response = await axios.post(`/taskGroup`, {
+        taskGroupId: this.state.taskGroup.taskGroupId,
+        isArchived: true,
+      })
+      this.setState({
+        taskGroup: response.data
+      })
+    }
   }
   render() {
     return (
       <div className="task-group-base">
         <div className="fas fa-times fa-2x taskgroup-close-btn" onClick={this.handleTaskGroupArchive.bind(this)} ></div>
-        <Element.Output value={this.state.taskGroupTitle}></Element.Output>
+        <Element.Output value={this.state.taskGroup.taskGroupTitle}></Element.Output>
         {
           this.props.taskGroup.tasks.map(task => {
             return (
