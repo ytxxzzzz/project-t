@@ -11,7 +11,7 @@ from functools import wraps
 from typing import List, Any, Tuple, Dict
 
 from py.appbase.database import db
-from py.models.task import Task, TaskGroup
+from py.models.task import Task, TaskGroup, TaskStatus
 from py.models.user import User, UserGroup
 
 import numpy as np

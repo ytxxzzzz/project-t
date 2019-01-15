@@ -20,6 +20,8 @@ class TaskGroup(Base):
     # One-to-One relation
     user_group = db.relationship('UserGroup', backref='TaskGroup', lazy=True)
 
+    # One-to-Many relation
+    task_statuses = db.relationship('TaskStatus', backref='TaskGroup', lazy=True)
 
 class Task(Base):
     task_id = db.Column(db.Integer, primary_key=True)
@@ -34,3 +36,12 @@ class Task(Base):
 
     def __repr__(self):
         return '<Task %r, %s>' % (self.task_id, self.title)
+
+class TaskStatus(Base):
+    task_status_id = db.Column(db.Integer, primary_key=True)
+    task_status_name = db.Column(db.String(200), unique=False)
+
+    task_group_id = db.Column(db.Integer, db.ForeignKey('task_group.task_group_id'))
+
+    # One-to-One relation
+    task_group = db.relationship('TaskGroup', backref='TaskStatus', lazy=True)
