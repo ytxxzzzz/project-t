@@ -25,7 +25,6 @@ class Task(Base):
     task_id = db.Column(db.Integer, primary_key=True)
     task_title = db.Column(db.String(200), unique=False)
     task_detail = db.Column(db.Text, unique=False)
-    status = db.Column(db.String(30))
     deadline = db.Column(db.DATETIME, nullable=True)
 
     task_group_id = db.Column(db.Integer, db.ForeignKey('task_group.task_group_id'))
