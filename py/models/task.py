@@ -40,8 +40,14 @@ class Task(Base):
 class TaskStatus(Base):
     task_status_id = db.Column(db.Integer, primary_key=True)
     task_status_name = db.Column(db.String(200), unique=False)
+    is_done = db.Column(db.Boolean)
 
     task_group_id = db.Column(db.Integer, db.ForeignKey('task_group.task_group_id'))
 
     # One-to-One relation
     task_group = db.relationship('TaskGroup', backref='TaskStatus', lazy=True)
+
+    def __init__(self, task_status_name, is_done, task_group_id):
+        self.task_status_name = task_status_name
+        self.is_done = is_done
+        self.task_group_id = task_group_id

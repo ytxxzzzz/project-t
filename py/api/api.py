@@ -136,13 +136,22 @@ def add_new_task_group(login_user: User):
 
     # TODO: task_group_idが本当にログインユーザに紐づくものかのチェックが必要
 
+    # TaskGroupの作成
     task_group: TaskGroup = TaskGroup.get_instance(req_data)
     task_group.user_group_id = login_user.user_groups[0].user_group_id
-
     db.session.add(task_group)
+
+    # 子レコード登録のために、一旦DBに問い合わせてTaskGroupのPKを確定する
+    db.session.merge(task_group)
+
+    # TaskStatusの作成(デフォルトの2状態todo,doneを作成)
+    task_status_todo: TaskStatus = TaskStatus('todo', False, task_group.task_group_id)
+    task_status_done: TaskStatus = TaskStatus('done', True, task_group.task_group_id)
+    db.session.add_all([task_status_todo, task_status_done])
+
     db.session.commit()
 
-    return jsonify(task_group.to_dict([TaskGroup])), 200
+    return jsonify(task_group.to_dict([TaskGroup, TaskStatus])), 200
 
 # タスクグループの更新
 @api.route('/taskGroup', methods=['PUT'])
