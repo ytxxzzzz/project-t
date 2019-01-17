@@ -90,9 +90,16 @@ def add_new_task(login_user: User):
 
     # TODO: task_group_idが本当にログインユーザに紐づくものかのチェックが必要
 
-    task = Task.get_instance(req_data)
-
+    task: Task = Task.get_instance(req_data)
     db.session.add(task)
+
+    # DBのデータを取得
+    db.session.merge(task)
+    for status in task.task_group.task_statuses:
+        if not status.is_done:
+            task.task_status_id = status.task_status_id
+            break
+
     db.session.commit()
 
     return jsonify(task.to_dict([Task])), 200
