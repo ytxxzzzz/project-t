@@ -30,9 +30,12 @@ class Task(Base):
     deadline = db.Column(db.DATETIME, nullable=True)
 
     task_group_id = db.Column(db.Integer, db.ForeignKey('task_group.task_group_id'))
+    task_status_id = db.Column(db.Integer, db.ForeignKey('task_status.task_status_id'))
 
     # One-to-One relation
     task_group = db.relationship('TaskGroup', backref='Task', lazy=True)
+    # One-to-One relation
+    task_status = db.relationship('TaskStatus', backref='Task', lazy=True)
 
     def __repr__(self):
         return '<Task %r, %s>' % (self.task_id, self.title)

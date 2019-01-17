@@ -77,7 +77,7 @@ def find_all_task_groups(login_user: User):
             TaskGroup.user_group_id.in_([x.user_group_id for x in login_user.user_groups]),
             TaskGroup.is_archived==is_archived
             ).all()
-    task_groups_dict_list = [x.to_dict([TaskGroup, Task, UserGroup, User]) for x in task_groups]
+    task_groups_dict_list = [x.to_dict([TaskGroup, TaskStatus, Task, UserGroup, User]) for x in task_groups]
     return jsonify(task_groups_dict_list), 200
 
 # タスクの新規追加
