@@ -228,7 +228,7 @@ class Task extends React.Component<TaskProps, TaskState> {
     return (
       <div className="task-base" onClick={this.handleEditClick.bind(this)}>
         <input type="checkbox" defaultChecked={true} />
-        <Element.Output value={this.state.task.taskTitle}></Element.Output>
+        {this.state.task.taskTitle}
 
         <TaskDialog task={this.state.task} modalFuncProps={modalFuncProps}>
         </TaskDialog>
