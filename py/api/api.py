@@ -102,7 +102,7 @@ def add_new_task(login_user: User):
 
     db.session.commit()
 
-    return jsonify(task.to_dict([Task])), 200
+    return jsonify(task.to_dict([Task, TaskStatus])), 200
 
 # タスクの更新
 @api.route('/task', methods=['PUT'])

@@ -3,6 +3,7 @@ export interface TaskGroupSchema {
   taskGroupTitle: string
   isArchived: boolean
   tasks: TaskSchema[]
+  taskStatuses?: TaskStatusSchema[]
 }
 
 export interface TaskSchema {
@@ -10,6 +11,15 @@ export interface TaskSchema {
   taskId?: number
   taskTitle: string
   taskDetail: string
+  taskGroupId: number
+  taskStatusId: number
+  taskStatus: TaskStatusSchema
+}
+
+export interface TaskStatusSchema {
+  taskStatusId: number
+  taskStatusName: string
+  isDone: boolean
   taskGroupId: number
 }
 
