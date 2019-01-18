@@ -12,8 +12,8 @@ export interface TaskSchema {
   taskTitle: string
   taskDetail: string
   taskGroupId: number
-  taskStatusId: number
-  taskStatus: TaskStatusSchema
+  taskStatusId?: number
+  taskStatus?: TaskStatusSchema
 }
 
 export interface TaskStatusSchema {

@@ -36,8 +36,10 @@ class Base(object):
             snake_key = camel_to_snake(camel_key)
             if snake_key in self.__class__.__dict__:
                 if any([isinstance(getattr(self, snake_key), x) for x in [datetime, date]]):
+                    # 日付系の型のフィールドだったら、日付型に変換する
                     setattr(self, snake_key, datetime.strptime(data[camel_key], self.__class__.DATETIME_FORMAT))
-                else:
+                elif not isinstance(getattr(self, snake_key), Base):
+                    # Modelのフィールドはコピーしないので、除外。それ以外の文字列や数値等の純粋な値だけをセットする
                     setattr(self, snake_key, data[camel_key])
 
     def to_dict(self, need_models: List[Any]):
