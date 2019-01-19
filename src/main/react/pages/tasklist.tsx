@@ -225,8 +225,8 @@ class Task extends React.Component<TaskProps, TaskState> {
     const isDone = this.state.task.taskStatus.isDone
     const newStatusId = this.props.taskStatuses.map((status)=>{
       return (status.isDone == !isDone)? status.taskStatusId : null
-    }).filter((statusId)=>{statusId != null}).pop()
-
+    }).filter((statusId)=>statusId != null).pop()
+    
     const newTask = _.cloneDeep(this.state.task)
     newTask.taskStatusId = newStatusId
 
@@ -246,6 +246,7 @@ class Task extends React.Component<TaskProps, TaskState> {
         <input type="checkbox" className="task-checkbox" 
           defaultChecked={this.state.task.taskStatus.isDone}
           onChange={this.handleCheck.bind(this)}
+          onClick={(e)=>{e.stopPropagation()/*親要素へのクリックイベント伝播阻止*/}}
         />
         {this.state.task.taskTitle}
 
