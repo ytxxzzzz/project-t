@@ -127,7 +127,7 @@ def update_task(login_user: User):
     task.set_attributes_from_dict(req_data)
     db.session.commit()
 
-    return jsonify(task.to_dict([Task])), 200
+    return jsonify(task.to_dict([Task, TaskStatus])), 200
 
 # タスクグループの新規追加
 @api.route('/taskGroup', methods=['POST'])

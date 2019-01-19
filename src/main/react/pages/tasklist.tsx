@@ -9,7 +9,8 @@ import axios from 'axios';
 import * as _ from "lodash";
 
 import {TaskGroupSchema, 
-        TaskSchema, 
+        TaskSchema,
+        TaskStatusSchema,
         ModalFuncPropsSchema} from '../models/models';
 import * as Element from '../elements/element';
 import {TaskDialog} from '../pageparts/dialogs';
@@ -152,7 +153,7 @@ class TaskGroup extends React.Component<TaskGroupProps, TaskGroupState> {
         {
           this.props.taskGroup.tasks.map(task => {
             return (
-              <Task task={task}></Task>
+              <Task task={task} taskStatuses={this.state.taskGroup.taskStatuses}></Task>
             )
           })
         }
@@ -192,6 +193,7 @@ class TaskAddingPart extends React.Component<TaskAddingPartProps, TaskAddingPart
 
 interface TaskProps {
   task: TaskSchema
+  taskStatuses: TaskStatusSchema[]
 }
 interface TaskState {
   isOpen: boolean
@@ -213,8 +215,22 @@ class Task extends React.Component<TaskProps, TaskState> {
   handleEditClick() {
     this.toggleModal()
   }
-  async onSave(newValues: TaskSchema) {
-    const response = await axios.put(`/task`, newValues)
+  async onSave(newTask: TaskSchema) {
+    const response = await axios.put(`/task`, newTask)
+    this.setState({
+      task: response.data
+    })
+  }
+  async handleCheck() {
+    const isDone = this.state.task.taskStatus.isDone
+    const newStatusId = this.props.taskStatuses.map((status)=>{
+      return (status.isDone == !isDone)? status.taskStatusId : null
+    }).filter((statusId)=>{statusId != null}).pop()
+
+    const newTask = _.cloneDeep(this.state.task)
+    newTask.taskStatusId = newStatusId
+
+    const response = await axios.put(`/task`, newTask)
     this.setState({
       task: response.data
     })
@@ -227,7 +243,10 @@ class Task extends React.Component<TaskProps, TaskState> {
     }
     return (
       <div className="task-base" onClick={this.handleEditClick.bind(this)}>
-        <input type="checkbox" defaultChecked={true} />
+        <input type="checkbox" className="task-checkbox" 
+          defaultChecked={this.state.task.taskStatus.isDone}
+          onChange={this.handleCheck.bind(this)}
+        />
         {this.state.task.taskTitle}
 
         <TaskDialog task={this.state.task} modalFuncProps={modalFuncProps}>
