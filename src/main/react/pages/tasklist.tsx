@@ -235,6 +235,9 @@ class Task extends React.Component<TaskProps, TaskState> {
       task: response.data
     })
   }
+  getCheckboxId() {
+    return `task-checkbox-${this.props.task.taskId}`
+  }
   render() {
     const modalFuncProps: ModalFuncPropsSchema<TaskSchema> = {
       show: this.state.isOpen,
@@ -243,11 +246,16 @@ class Task extends React.Component<TaskProps, TaskState> {
     }
     return (
       <div className="task-base" onClick={this.handleEditClick.bind(this)}>
-        <input type="checkbox" className="task-checkbox" 
+        <input type="checkbox" className="task-checkbox"
+          id={this.getCheckboxId()}
           defaultChecked={this.state.task.taskStatus.isDone}
           onChange={this.handleCheck.bind(this)}
           onClick={(e)=>{e.stopPropagation()/*親要素へのクリックイベント伝播阻止*/}}
         />
+        <label htmlFor={this.getCheckboxId()}
+          onClick={(e)=>{e.stopPropagation()/*親要素へのクリックイベント伝播阻止*/}}
+        >{"　"}
+        </label>
         {this.state.task.taskTitle}
 
         <TaskDialog task={this.state.task} modalFuncProps={modalFuncProps}>

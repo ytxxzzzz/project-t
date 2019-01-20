@@ -34,7 +34,13 @@ module.exports = {
   module: {
     rules: [
       // css loader
-      {test: /\.css$/, use: ['style-loader', 'css-loader']},
+      {
+        test: /\.css$/, 
+        use: [
+          'style-loader', 
+          {loader: 'css-loader', options: {url: true}},
+        ]
+      },
 
       // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
       { test: /\.tsx?$/, loader: "awesome-typescript-loader" },
