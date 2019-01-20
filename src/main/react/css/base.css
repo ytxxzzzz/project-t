@@ -128,7 +128,7 @@ input[type=checkbox] + label:before {
   font-family: FontAwesome;
   display: inline-block;
   cursor: pointer;
-  font-size: 20px;
+  font-size: 24px;
 }
 input[type=checkbox] + label {
   cursor: pointer;
