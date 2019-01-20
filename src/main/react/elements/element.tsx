@@ -21,6 +21,57 @@ export const Input: React.StatelessComponent<InputProps> = (props) => {
   )
 }
 
+interface EditableDivProps {
+  defaultValue?: string
+  name: string
+  handleChange?(e: React.FormEvent<HTMLInputElement>): void
+}
+interface EditableDivState {
+  isEditable: boolean
+  value: string
+}
+class EditableDiv extends React.Component<EditableDivProps, EditableDivState> {
+  constructor(props: EditableDivProps) {
+    super(props)
+    this.state = {
+      isEditable: false,
+      value: props.defaultValue
+    }
+  }
+  handleDivClick(e: React.FormEvent<HTMLDivElement>) {
+    this.setState({
+      isEditable: true
+    })
+  }
+  handleBlur(e: React.FormEvent<HTMLInputElement>) {
+    this.setState({
+      isEditable: false
+    })
+  }
+  handleInputChange(e: React.FormEvent<HTMLInputElement>) {
+
+  }
+  render() {
+    if(this.state.isEditable) {
+      return (
+        <input type="text"
+          defaultValue={this.props.defaultValue}
+          name={this.props.name} 
+          value={this.state.value?this.state.value : undefined} 
+          onChange={this.handleInputChange.bind(this)} />
+      )
+    } else {
+      return (
+        <div
+          onClick={this.handleDivClick.bind(this)}
+        >
+          {this.state.value}
+        </div>
+      )
+    }
+  }
+}
+
 interface MultiLineInputProps {
   defaultValue?: string
   value?: string
