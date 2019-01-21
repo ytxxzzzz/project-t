@@ -23,14 +23,14 @@ export const Input: React.StatelessComponent<InputProps> = (props) => {
 
 interface EditableDivProps {
   defaultValue?: string
-  name: string
-  handleChange?(e: React.FormEvent<HTMLInputElement>): void
+  name?: string
+  handleValueDetermined​​?(newValue: string): void
 }
 interface EditableDivState {
   isEditable: boolean
   value: string
 }
-class EditableDiv extends React.Component<EditableDivProps, EditableDivState> {
+export class EditableDiv extends React.Component<EditableDivProps, EditableDivState> {
   constructor(props: EditableDivProps) {
     super(props)
     this.state = {
@@ -47,9 +47,14 @@ class EditableDiv extends React.Component<EditableDivProps, EditableDivState> {
     this.setState({
       isEditable: false
     })
+    this.props.handleValueDetermined​​(e.currentTarget.value)
   }
   handleInputChange(e: React.FormEvent<HTMLInputElement>) {
-
+    this.setState(
+      {
+        value: e.currentTarget.value
+      }
+    )
   }
   render() {
     if(this.state.isEditable) {
@@ -58,7 +63,9 @@ class EditableDiv extends React.Component<EditableDivProps, EditableDivState> {
           defaultValue={this.props.defaultValue}
           name={this.props.name} 
           value={this.state.value?this.state.value : undefined} 
-          onChange={this.handleInputChange.bind(this)} />
+          onChange={this.handleInputChange.bind(this)} 
+          onBlur={this.handleBlur.bind(this)}
+        />
       )
     } else {
       return (

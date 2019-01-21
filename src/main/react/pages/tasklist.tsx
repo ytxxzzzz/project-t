@@ -142,6 +142,15 @@ class TaskGroup extends React.Component<TaskGroupProps, TaskGroupState> {
       })
     }
   }
+  async handleTaskGroupNameChanged(newTaskGroupName: string) {
+    const response = await axios.put(`/taskGroup`, {
+      taskGroupId: this.state.taskGroup.taskGroupId,
+      taskGroupTitle: newTaskGroupName,
+    })
+    this.setState({
+      taskGroup: response.data
+    })
+}
   render() {
     if(this.state.taskGroup.isArchived) {
       return null
@@ -149,7 +158,10 @@ class TaskGroup extends React.Component<TaskGroupProps, TaskGroupState> {
     return (
       <div className="task-group-base">
         <div className="fas fa-times fa-2x taskgroup-close-btn" onClick={this.handleTaskGroupArchive.bind(this)} ></div>
-        <Element.Output value={this.state.taskGroup.taskGroupTitle}></Element.Output>
+        <Element.EditableDiv
+          defaultValue={this.state.taskGroup.taskGroupTitle}
+          handleValueDetermined={this.handleTaskGroupNameChanged.bind(this)}
+        />
         {
           this.props.taskGroup.tasks.map(task => {
             return (
