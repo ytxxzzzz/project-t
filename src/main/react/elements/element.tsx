@@ -29,23 +29,27 @@ interface EditableDivProps {
 interface EditableDivState {
   isEditable: boolean
   value: string
+  valueBeforeChange: string
 }
 export class EditableDiv extends React.Component<EditableDivProps, EditableDivState> {
   constructor(props: EditableDivProps) {
     super(props)
     this.state = {
       isEditable: false,
-      value: props.defaultValue
+      value: props.defaultValue,
+      valueBeforeChange: props.defaultValue,
     }
   }
   handleDivClick(e: React.FormEvent<HTMLDivElement>) {
     this.setState({
-      isEditable: true
+      isEditable: true,
+      valueBeforeChange: this.state.value
     })
   }
   handleBlur(e: React.FormEvent<HTMLInputElement>) {
     this.setState({
-      isEditable: false
+      isEditable: false,
+      value: (this.state.value.length > 0)? this.state.value : this.state.valueBeforeChange
     })
     this.props.handleValueDetermined​​(e.currentTarget.value)
   }
