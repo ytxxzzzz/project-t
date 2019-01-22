@@ -163,7 +163,7 @@ class TaskGroup extends React.Component<TaskGroupProps, TaskGroupState> {
           handleValueDetermined={this.handleTaskGroupNameChanged.bind(this)}
         />
         {
-          this.props.taskGroup.tasks.map(task => {
+          this.state.taskGroup.tasks.map(task => {
             return (
               <Task task={task} taskStatuses={this.state.taskGroup.taskStatuses}></Task>
             )
