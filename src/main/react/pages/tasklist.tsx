@@ -150,7 +150,7 @@ class TaskGroup extends React.Component<TaskGroupProps, TaskGroupState> {
     this.setState({
       taskGroup: response.data
     })
-}
+  }
   render() {
     if(this.state.taskGroup.isArchived) {
       return null
