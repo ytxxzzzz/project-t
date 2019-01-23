@@ -130,7 +130,7 @@ class TaskGroup extends React.Component<TaskGroupProps, TaskGroupState> {
     })
   }
   async handleTaskGroupArchive(e: React.FormEvent<HTMLDivElement>) {
-    const doArchive = confirm(`${this.state.taskGroup.taskGroupTitle}をアーカイブしますか？`)
+    const doArchive = confirm(`"${this.state.taskGroup.taskGroupTitle}" をアーカイブしますか？`)
 
     if(doArchive) {
       const response = await axios.put(`/taskGroup`, {
@@ -250,7 +250,24 @@ class Task extends React.Component<TaskProps, TaskState> {
   getCheckboxId() {
     return `task-checkbox-${this.props.task.taskId}`
   }
+  async handleTaskArchive(e: React.FormEvent<HTMLDivElement>) {
+    e.stopPropagation()
+    const doArchive = confirm(`"${this.state.task.taskTitle}" をアーカイブしますか？`)
+
+    if(doArchive) {
+      const response = await axios.put(`/task`, {
+        taskId: this.state.task.taskId,
+        isArchived: true,
+      })
+      this.setState({
+        task: response.data
+      })
+    }
+  }
   render() {
+    if(this.state.task.isArchived) {
+      return null
+    }
     const modalFuncProps: ModalFuncPropsSchema<TaskSchema> = {
       show: this.state.isOpen,
       onClose: this.toggleModal.bind(this),
@@ -269,7 +286,7 @@ class Task extends React.Component<TaskProps, TaskState> {
         >{"　"}
         </label>
         {this.state.task.taskTitle}
-
+        <div className="fas fa-times fa-2x taskgroup-close-btn" onClick={this.handleTaskArchive.bind(this)} ></div>
         <TaskDialog task={this.state.task} modalFuncProps={modalFuncProps}>
         </TaskDialog>
       </div>
