@@ -14,7 +14,7 @@ export interface TaskSchema {
   taskGroupId: number
   taskStatusId?: number
   taskStatus?: TaskStatusSchema
-  isArchived: boolean
+  isArchived?: boolean
 }
 
 export interface TaskStatusSchema {
