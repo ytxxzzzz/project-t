@@ -15,6 +15,34 @@ import {TaskGroupSchema,
 import * as Element from '../elements/element';
 import {TaskDialog} from '../pageparts/dialogs';
 
+interface ErrorBoundaryProps {
+}
+interface ErrorBoundaryState {
+  hasError: boolean
+}
+export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  constructor(props: ErrorBoundaryProps) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  /********* これが新しく追加 ************/
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+    // Display fallback UI
+    this.setState({ hasError: true });
+    // You can also log the error to an error reporting service
+    console.log(`${JSON.stringify(error)}¥n ${JSON.stringify(errorInfo)}`)
+    console.log()
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return
+    }
+    return this.props.children;
+  }
+}
+
 interface TaskListPageProps {
 }
 interface TaskListPageState {
@@ -31,20 +59,12 @@ export class TaskListPage extends React.Component<TaskListPageProps, TaskListPag
     this.onInit()
   }
   async onInit() {
-    try{
       const result = await axios.get(`/taskGroup/findAll`, {
         params: {
           isArchived: false
         }
       })
       this.setState({taskGroups: result.data})
-    } catch(e) {
-      try{
-        alert(JSON.stringify(e.response.data, null, " "))
-      } catch(e2) {
-        alert(e.message)
-      }
-    }
   }
   async handleAddTaskGroupClick() {
     const taskGroups = this.state.taskGroups
