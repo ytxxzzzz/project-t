@@ -44,6 +44,9 @@ class Task(Base):
     task_detail = db.Column(db.Text, unique=False)
     deadline = db.Column(db.DATETIME, nullable=True)
 
+    archived = db.Column(db.DateTime)
+    is_archived = db.Column(db.Boolean, default=False)
+
     task_group_id = db.Column(db.Integer, db.ForeignKey('task_group.task_group_id'))
     task_status_id = db.Column(db.Integer, db.ForeignKey('task_status.task_status_id'))
 

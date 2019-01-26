@@ -50,7 +50,7 @@ export class TaskListPage extends React.Component<TaskListPageProps, TaskListPag
     const taskGroups = this.state.taskGroups
 
     const newTaskGroup: TaskGroupSchema = {
-      taskGroupTitle: "新しいグループ",
+      taskGroupTitle: "新しいリスト",
       isArchived: false,
       tasks: [],
     }
@@ -72,7 +72,7 @@ export class TaskListPage extends React.Component<TaskListPageProps, TaskListPag
             )
           })
         }
-        <Element.Button caption="タスクグループ追加" handleClick={this.handleAddTaskGroupClick.bind(this)}></Element.Button>
+        <Element.Button caption="タスクリスト追加" handleClick={this.handleAddTaskGroupClick.bind(this)}></Element.Button>
       </div>
     )
   }
@@ -130,7 +130,7 @@ class TaskGroup extends React.Component<TaskGroupProps, TaskGroupState> {
     })
   }
   async handleTaskGroupArchive(e: React.FormEvent<HTMLDivElement>) {
-    const doArchive = confirm(`${this.state.taskGroup.taskGroupTitle}をアーカイブしますか？`)
+    const doArchive = confirm(`"${this.state.taskGroup.taskGroupTitle}" をアーカイブしますか？`)
 
     if(doArchive) {
       const response = await axios.put(`/taskGroup`, {
@@ -142,6 +142,15 @@ class TaskGroup extends React.Component<TaskGroupProps, TaskGroupState> {
       })
     }
   }
+  async handleTaskGroupNameChanged(newTaskGroupName: string) {
+    const response = await axios.put(`/taskGroup`, {
+      taskGroupId: this.state.taskGroup.taskGroupId,
+      taskGroupTitle: newTaskGroupName,
+    })
+    this.setState({
+      taskGroup: response.data
+    })
+  }
   render() {
     if(this.state.taskGroup.isArchived) {
       return null
@@ -149,9 +158,12 @@ class TaskGroup extends React.Component<TaskGroupProps, TaskGroupState> {
     return (
       <div className="task-group-base">
         <div className="fas fa-times fa-2x taskgroup-close-btn" onClick={this.handleTaskGroupArchive.bind(this)} ></div>
-        <Element.Output value={this.state.taskGroup.taskGroupTitle}></Element.Output>
+        <Element.EditableDiv
+          defaultValue={this.state.taskGroup.taskGroupTitle}
+          handleValueDetermined={this.handleTaskGroupNameChanged.bind(this)}
+        />
         {
-          this.props.taskGroup.tasks.map(task => {
+          this.state.taskGroup.tasks.map(task => {
             return (
               <Task task={task} taskStatuses={this.state.taskGroup.taskStatuses}></Task>
             )
@@ -238,7 +250,24 @@ class Task extends React.Component<TaskProps, TaskState> {
   getCheckboxId() {
     return `task-checkbox-${this.props.task.taskId}`
   }
+  async handleTaskArchive(e: React.FormEvent<HTMLDivElement>) {
+    e.stopPropagation()
+    const doArchive = confirm(`"${this.state.task.taskTitle}" をアーカイブしますか？`)
+
+    if(doArchive) {
+      const response = await axios.put(`/task`, {
+        taskId: this.state.task.taskId,
+        isArchived: true,
+      })
+      this.setState({
+        task: response.data
+      })
+    }
+  }
   render() {
+    if(this.state.task.isArchived) {
+      return null
+    }
     const modalFuncProps: ModalFuncPropsSchema<TaskSchema> = {
       show: this.state.isOpen,
       onClose: this.toggleModal.bind(this),
@@ -257,7 +286,7 @@ class Task extends React.Component<TaskProps, TaskState> {
         >{"　"}
         </label>
         {this.state.task.taskTitle}
-
+        <div className="fas fa-times fa-2x taskgroup-close-btn" onClick={this.handleTaskArchive.bind(this)} ></div>
         <TaskDialog task={this.state.task} modalFuncProps={modalFuncProps}>
         </TaskDialog>
       </div>

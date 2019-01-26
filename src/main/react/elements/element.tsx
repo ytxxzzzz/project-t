@@ -21,6 +21,68 @@ export const Input: React.StatelessComponent<InputProps> = (props) => {
   )
 }
 
+interface EditableDivProps {
+  defaultValue?: string
+  name?: string
+  handleValueDetermined​​?(newValue: string): void
+}
+interface EditableDivState {
+  isEditable: boolean
+  value: string
+  valueBeforeChange: string
+}
+export class EditableDiv extends React.Component<EditableDivProps, EditableDivState> {
+  constructor(props: EditableDivProps) {
+    super(props)
+    this.state = {
+      isEditable: false,
+      value: props.defaultValue,
+      valueBeforeChange: props.defaultValue,
+    }
+  }
+  handleDivClick(e: React.FormEvent<HTMLDivElement>) {
+    this.setState({
+      isEditable: true,
+      valueBeforeChange: this.state.value
+    })
+  }
+  handleBlur(e: React.FormEvent<HTMLInputElement>) {
+    this.setState({
+      isEditable: false,
+      value: (this.state.value.length > 0)? this.state.value : this.state.valueBeforeChange
+    })
+    this.props.handleValueDetermined​​(e.currentTarget.value)
+  }
+  handleInputChange(e: React.FormEvent<HTMLInputElement>) {
+    this.setState(
+      {
+        value: e.currentTarget.value
+      }
+    )
+  }
+  render() {
+    if(this.state.isEditable) {
+      return (
+        <input type="text"
+          defaultValue={this.props.defaultValue}
+          name={this.props.name} 
+          value={this.state.value?this.state.value : undefined} 
+          onChange={this.handleInputChange.bind(this)} 
+          onBlur={this.handleBlur.bind(this)}
+        />
+      )
+    } else {
+      return (
+        <div
+          onClick={this.handleDivClick.bind(this)}
+        >
+          {this.state.value}
+        </div>
+      )
+    }
+  }
+}
+
 interface MultiLineInputProps {
   defaultValue?: string
   value?: string

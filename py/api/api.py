@@ -183,7 +183,7 @@ def update_task_group(login_user: User):
     task_group.set_attributes_from_dict(req_data)
     db.session.commit()
 
-    return jsonify(task_group.to_dict([TaskGroup])), 200
+    return jsonify(task_group.to_dict([TaskGroup, Task])), 200
 
 
 @api.route('/task/<task_id>', methods=['GET'])
