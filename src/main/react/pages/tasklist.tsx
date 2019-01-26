@@ -50,7 +50,7 @@ export class TaskListPage extends React.Component<TaskListPageProps, TaskListPag
     const taskGroups = this.state.taskGroups
 
     const newTaskGroup: TaskGroupSchema = {
-      taskGroupTitle: "新しいグループ",
+      taskGroupTitle: "新しいリスト",
       isArchived: false,
       tasks: [],
     }
@@ -72,7 +72,7 @@ export class TaskListPage extends React.Component<TaskListPageProps, TaskListPag
             )
           })
         }
-        <Element.Button caption="タスクグループ追加" handleClick={this.handleAddTaskGroupClick.bind(this)}></Element.Button>
+        <Element.Button caption="タスクリスト追加" handleClick={this.handleAddTaskGroupClick.bind(this)}></Element.Button>
       </div>
     )
   }
