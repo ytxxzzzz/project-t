@@ -38,6 +38,7 @@ def login_required(method):
         except jwt.ExpiredSignatureError:
             abort(400, {'msg':'トークン有効期限切れ'})
         if decoded.get('userAgent') != user_agent:
+            # TODO: たぶんデバイスエラーは教えない方が良い→本番環境ではエラー理由を隠す
             abort(400, {'msg':'未知のデバイス'})
         user = User.query.filter_by(user_id=decoded['userId'], e_mail=decoded['eMail']).first()
         if user is None:
