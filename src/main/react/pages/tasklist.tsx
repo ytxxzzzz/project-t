@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { DragSource } from "react-dnd";
-import { Router, Route, RouteComponentProps } from "react-router";
+import { Router, Route, RouteComponentProps, Redirect } from "react-router";
 import { Link } from 'react-router-dom';
 import createHistory from 'history/createBrowserHistory';
 import axios from 'axios';
@@ -19,12 +19,14 @@ interface TaskListPageProps {
 }
 interface TaskListPageState {
   taskGroups: TaskGroupSchema[]
+  hasError: boolean
 }
 export class TaskListPage extends React.Component<TaskListPageProps, TaskListPageState> {
   constructor(props: TaskListPageProps) {
     super(props)
     this.state = {
       taskGroups: [],
+      hasError: false,
     }
   }
   componentWillMount() {
@@ -39,11 +41,9 @@ export class TaskListPage extends React.Component<TaskListPageProps, TaskListPag
       })
       this.setState({taskGroups: result.data})
     } catch(e) {
-      try{
-        alert(JSON.stringify(e.response.data, null, " "))
-      } catch(e2) {
-        alert(e.message)
-      }
+      console.log(`onInitでキャッチ: ${JSON.stringify(e, null, 1)}`)
+      alert(e.response.data.message?e.response.data.message: JSON.stringify(e))
+      this.setState({hasError: true})
     }
   }
   async handleAddTaskGroupClick() {
@@ -63,6 +63,7 @@ export class TaskListPage extends React.Component<TaskListPageProps, TaskListPag
     })
   }
   render() {
+    if(this.state.hasError) return <Redirect to="/" />
     return (
       <div className="task-list-base">
         {

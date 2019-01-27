@@ -6,7 +6,7 @@ import { DragSource } from "react-dnd";
 import { Router, Route, RouteComponentProps } from "react-router";
 import { Link } from 'react-router-dom';
 import createHistory from 'history/createBrowserHistory';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import {AxiosRequestConfig} from 'axios';
 
 import * as _ from "lodash";
@@ -29,6 +29,10 @@ axios.interceptors.request.use((value: AxiosRequestConfig)=>{
   const token = localStorage.getItem(LocalStorageKeys.authToken)
   value.headers.common['Authorization'] = `Bearer ${token}`
   return value
+})
+axios.interceptors.response.use((response: AxiosResponse<any>)=>{
+  console.log(`index.tsx: ${JSON.stringify(response.data)}`)
+  return response
 })
 
 interface MessageParams {
