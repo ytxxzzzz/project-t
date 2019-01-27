@@ -12,7 +12,7 @@ import {AxiosRequestConfig} from 'axios';
 import * as _ from "lodash";
 
 import * as Element from './elements/element';
-import { TaskListPage, ErrorBoundary} from './pages/tasklist';
+import { TaskListPage} from './pages/tasklist';
 import {LoginPage} from './pages/login';
 import {EntryPage} from './pages/entry';
 import {TaskDialog} from './pageparts/dialogs';
@@ -31,8 +31,7 @@ axios.interceptors.request.use((value: AxiosRequestConfig)=>{
   return value
 })
 axios.interceptors.response.use((response: AxiosResponse<any>)=>{
-  alert('レスポンス！')
-  alert(JSON.stringify(response.data))
+  console.log(`index.tsx: ${JSON.stringify(response.data)}`)
   return response
 })
 
@@ -69,12 +68,10 @@ ReactDOM.render(
   <Router history={history}>
     <div>
       <Header />
-      <ErrorBoundary>
-        <Route exact path="/" component={EntryPage} />
-        <Route path="/login/:token" component={LoginPage} />
-        <Route path="/task" component={TaskListPage} />
-        <Route path="/messages/:id" component={Message} />
-      </ErrorBoundary>
+      <Route exact path="/" component={EntryPage} />
+      <Route path="/login/:token" component={LoginPage} />
+      <Route path="/task" component={TaskListPage} />
+      <Route path="/messages/:id" component={Message} />
     </div>
   </Router>,
   document.querySelector('.content')

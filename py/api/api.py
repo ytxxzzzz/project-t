@@ -6,6 +6,7 @@ from flask_migrate import Migrate
 import json
 import jwt
 import datetime
+import os
 from distutils.util import strtobool
 from functools import wraps
 from typing import List, Any, Tuple, Dict
@@ -16,6 +17,8 @@ from py.models.user import User, UserGroup
 
 import numpy as np
 
+SECRET = os.environ['login_secret']
+
 # Blueprintにて、APIパスのprefix定義
 api = Blueprint('api', __name__)
 
@@ -25,15 +28,17 @@ api = Blueprint('api', __name__)
 def login_required(method):
     @wraps(method)
     def wrapper(*args, **kwargs):
-        header = request.headers.get('Authorization')
-        _, token = header.split()
+        authorization = request.headers.get('Authorization')
+        user_agent = request.headers.get('User-Agent')
+        _, token = authorization.split()
         try:
-            # TODO: シークレット固定
-            decoded = jwt.decode(token, 'secret', algorithms='HS256')
+            decoded = jwt.decode(token, SECRET, algorithms='HS256')
         except jwt.DecodeError:
             abort(400, {'msg':'不正なトークン'})
         except jwt.ExpiredSignatureError:
             abort(400, {'msg':'トークン有効期限切れ'})
+        if decoded.get('userAgent') != user_agent:
+            abort(400, {'msg':'未知のデバイス'})
         user = User.query.filter_by(user_id=decoded['userId'], e_mail=decoded['eMail']).first()
         if user is None:
             abort(400, {'msg':'存在しないユーザでログインが試行されました'})
@@ -44,23 +49,27 @@ def login_required(method):
 
 @api.route('/login/<token>', methods=['GET'])
 def login(token):
-    # TODO: シークレット固定
-    decoded = jwt.decode(token, 'secret', algorithms=['HS256'])
+    decoded = jwt.decode(token, SECRET, algorithms=['HS256'])
+    user_agent = request.headers.get('User-Agent')
 
-    # ログイン後のトークン有効期限 TODO:仮決め有効期限7日
-    exp = datetime.datetime.utcnow() + datetime.timedelta(days=7)
+    # ログイン後のトークン有効期限 TODO:仮決め有効期限30日
+    exp = datetime.datetime.utcnow() + datetime.timedelta(days=30)
 
-    new_token = jwt.encode({"userId": decoded['user_id'], "eMail": decoded['e_mail'], "exp": exp}, 'secret', algorithm='HS256')
+    new_token = jwt.encode({
+        "userId": decoded['user_id'], 
+        "eMail": decoded['e_mail'], 
+        "userAgent": user_agent,
+        "exp": exp
+        }, SECRET, algorithm='HS256')
     return jsonify({"token": new_token.decode()}), 200
 
 # テスト用トークン発行
 @api.route('/token/<user_id>', methods=['GET'])
 def generate_token(user_id: int):
     user: User = User.query.get(user_id)
-    # トークンの有効期限 TODO:仮決め有効期限1日
-    exp = datetime.datetime.utcnow() + datetime.timedelta(days=1)
-    # TODO: シークレット固定
-    token = jwt.encode({"user_id": user_id, "e_mail": user.e_mail, "exp": exp}, 'secret', algorithm='HS256')
+    # トークンの有効期限 １時間
+    exp = datetime.datetime.utcnow() + datetime.timedelta(hours=1)
+    token = jwt.encode({"user_id": user_id, "e_mail": user.e_mail, "exp": exp}, SECRET, algorithm='HS256')
 
     print(token)
     print(token.decode())
