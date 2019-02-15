@@ -10,7 +10,7 @@ pip-selfcheck.json
 mysql-docker-compose/mysql_data/
 __pycache__
 .vscode/
-dist/
+dist/bundle/
 node_modules/
 migrations/
 
