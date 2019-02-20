@@ -1,13 +1,19 @@
-from flask import Flask, Blueprint
+from flask import Flask, Blueprint, redirect
 from flask_cors import CORS
 
 from py.appbase.database import init_db
-from py.api.api import api
+from py.urls.api import api
+from py.urls.front import front
 
 def create_app():
-    app = Flask(__name__)
+    app = Flask(__name__, 
+                static_folder='../../dist',
+                template_folder='../../dist',
+                static_url_path='')
+    print(app.url_map)
     # パスのPrefixを登録
     app.register_blueprint(api, url_prefix='/api')
+    app.register_blueprint(front, url_prefix='/')
     # cors対策
     CORS(app)
 

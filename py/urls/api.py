@@ -14,6 +14,7 @@ from typing import List, Any, Tuple, Dict
 from py.appbase.database import db
 from py.models.task import Task, TaskGroup, TaskStatus
 from py.models.user import User, UserGroup
+from py.utils.mail import send_mail
 
 import numpy as np
 
@@ -63,6 +64,25 @@ def login(token):
         "exp": exp
         }, SECRET, algorithm='HS256')
     return jsonify({"token": new_token.decode()}), 200
+
+@api.route('/entry', methods=['POST'])
+def entry():
+    req_data = json.loads(request.data)
+    user: User = User.query.filter_by(e_mail=req_data['eMail']).first()
+    if user is None:
+        abort(400, {'msg':'存在しないユーザでログインが試行されました'})
+
+    # 一時トークンの有効期限 10分
+    exp = datetime.datetime.utcnow() + datetime.timedelta(minutes=10)
+    token = jwt.encode({"user_id": user.user_id, "e_mail": user.e_mail, "exp": exp}, SECRET, algorithm='HS256')
+
+    print(token)
+    print(token.decode())
+    # TODO: ログインURLが決め打ちなので、ちゃんと環境変化に強くする必要がある
+    send_mail(user.e_mail, 'ログインURL', f"http://localhost:8080/login/{token.decode()}")
+
+    return jsonify(user.to_dict()), 200
+
 
 # テスト用トークン発行
 @api.route('/token/<user_id>', methods=['GET'])

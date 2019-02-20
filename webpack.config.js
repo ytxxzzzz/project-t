@@ -5,6 +5,7 @@ module.exports = {
   context: path.join(__dirname, "src", "main", "react"),
   entry: path.join(__dirname, "src", "main", "react", "index.tsx"),
   output: {
+    path: path.join(__dirname, 'dist/bundle'),
     filename: "bundle.js"
   },
 
@@ -18,7 +19,7 @@ module.exports = {
       disableDotRule: true  // react-routerのURLの変数部にドットがある場合に正常動作させるおまじない
     },
     openPage: "",
-    contentBase: path.join(__dirname, "public"),
+    contentBase: path.join(__dirname, "dist"),
     watchContentBase: true,
     port: 8080,
   },

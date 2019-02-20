@@ -13,13 +13,13 @@ interface EntryPageProps {
 }
 interface EntryPageState {
   [key: string]: any  // シグネチャを追加して、フィールドの動的アクセスを許可
-  userId: string
+  eMail: string
 }
 export class EntryPage extends React.Component<EntryPageProps, EntryPageState> {
   constructor(props: EntryPageProps) {
     super(props)
     this.state = {
-      userId: "",
+      eMail: "",
     }
   }
   handleModalInput(e: any) {
@@ -28,8 +28,13 @@ export class EntryPage extends React.Component<EntryPageProps, EntryPageState> {
     this.setState(newState)
   }
   async onEntry() {
-    alert(`${this.state.userId}`)
-    await axios.get(`http://localhost:5000/Entry/${this.state.userId}`)
+    if(this.state.eMail.length == 0) {
+      return
+    }
+    alert(`${this.state.eMail}`)
+    const response = await axios.post(`/entry`, {
+      eMail: this.state.eMail,
+    })
   }
   render() {
     return (
@@ -41,9 +46,9 @@ export class EntryPage extends React.Component<EntryPageProps, EntryPageState> {
         </ul>
         <ul>
           <li>
-            <label htmlFor="userId">ユーザID</label>
+            <label htmlFor="eMail">メールアドレス</label>
             <Element.Input 
-              name="userId"
+              name="eMail"
               handleChange={this.handleModalInput.bind(this)}
             />
           </li>
