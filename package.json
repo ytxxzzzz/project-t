@@ -4,10 +4,9 @@
   "description": "## 開発環境",
   "main": "index.js",
   "scripts": {
-    "build": "NODE_ENV=local webpack",
-    "watch": "NODE_ENV=local webpack --watch",
-    "start": "NODE_ENV=local webpack-dev-server --hot",
-    "build-prod": "NODE_ENV=prod webpack",
+    "build": "webpack",
+    "watch": "webpack --watch",
+    "start": "webpack-dev-server --hot",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
