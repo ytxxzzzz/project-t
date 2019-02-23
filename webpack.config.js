@@ -20,6 +20,7 @@ module.exports = {
     },
     openPage: "",
     contentBase: path.join(__dirname, "dist"),
+    publicPath: '/bundle/',
     watchContentBase: true,
     port: 8080,
   },

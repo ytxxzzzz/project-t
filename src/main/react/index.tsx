@@ -20,8 +20,11 @@ import {LocalStorageKeys} from './models/models'
 
 const history = createHistory();
 
-// TODO: バックエンドのURLを仮決めハードコード
-const apiHost = `http://${window.location.hostname}:5000`
+// バックエンド側のURL
+// デバッグ時はFlaskデバッグ用ポート
+// 本番はバックエンドとフロントは同じポート
+const apiPort = (process.env.NODE_ENV == 'local')? 5000 : window.location.port
+const apiHost = `${location.protocol}://${window.location.hostname}:${apiPort}`
 axios.defaults.baseURL = `${apiHost}/api`
 axios.defaults.withCredentials = false  // 当面Cookieのやりとりは無し
 axios.interceptors.request.use((value: AxiosRequestConfig)=>{
