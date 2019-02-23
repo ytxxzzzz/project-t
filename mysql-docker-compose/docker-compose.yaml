@@ -13,5 +13,5 @@ volumes:
   mysql-data:
     driver_opts:
       type: none
-      device: /home/yterui/git_reps/project-t/mysql-docker-compose/mysql_data
+      device: ${PWD}/mysql_data
       o: bind
