@@ -1,7 +1,7 @@
+var webpack = require('webpack');
 const path = require("path");
 
 module.exports = {
-  mode: 'development',
   context: path.join(__dirname, "src", "main", "react"),
   entry: path.join(__dirname, "src", "main", "react", "index.tsx"),
   output: {
@@ -11,7 +11,6 @@ module.exports = {
 
   devServer: {
     open: true,
-    inline: true,
     // ブラウザに直接アドレスを入力されてもルーティングする設定
     // 本フロントアプリの実体はboundle.jsしかないので、当然ブラウザに直接アドレス入れると、
     // 存在しないのでNotFoundとなってしまう。その時にとりあえずルートへリダイレクトする設定
@@ -20,6 +19,7 @@ module.exports = {
     },
     openPage: "",
     contentBase: path.join(__dirname, "dist"),
+    publicPath: '/bundle/',
     watchContentBase: true,
     port: 8080,
   },
@@ -51,5 +51,10 @@ module.exports = {
     ]
   },
 
-};
+  plugins: [
+    new webpack.DefinePlugin({
+      NODE_ENV: JSON.stringify(process.env.NODE_ENV)
+    })
+  ]
 
+};

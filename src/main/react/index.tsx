@@ -18,10 +18,22 @@ import {EntryPage} from './pages/entry';
 import {TaskDialog} from './pageparts/dialogs';
 import {LocalStorageKeys} from './models/models'
 
+// ビルド時に決まる定数定義
+// ※ビルド時に使われるだけなのでクライアントに配布されるコードに定数値は展開されず
+// 　ビルド時の判断結果だけが展開されることに注意。
+// 　(ブラウザのデバッガから見れるTypescriptコードにはあたかも定数がソースにあるように見えるが、実際には定数値は見れない)
+// 関連箇所：
+//   - webpack.config.jsのwebpack.DefinePlugin
+//   - package.jsonのNODE_ENV
+declare var NODE_ENV: string;
+
 const history = createHistory();
 
-// TODO: バックエンドのURLを仮決めハードコード
-const apiHost = `http://${window.location.hostname}:5000`
+// バックエンド側のURL
+// デバッグ時はFlaskデバッグ用ポート
+// 本番はバックエンドとフロントは同じポート
+const apiPort = (NODE_ENV == 'dev')? 5000 : window.location.port
+const apiHost = `${location.protocol}//${window.location.hostname}:${apiPort}`
 axios.defaults.baseURL = `${apiHost}/api`
 axios.defaults.withCredentials = false  // 当面Cookieのやりとりは無し
 axios.interceptors.request.use((value: AxiosRequestConfig)=>{
