@@ -81,7 +81,7 @@ def entry():
     # TODO: ログインURLが決め打ちなので、ちゃんと環境変化に強くする必要がある
     send_mail(user.e_mail, 'ログインURL', f"http://localhost:8080/login/{token.decode()}")
 
-    return jsonify(user.to_dict()), 200
+    return jsonify(user.to_dict([User])), 200
 
 
 # テスト用トークン発行
