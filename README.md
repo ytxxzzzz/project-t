@@ -29,7 +29,10 @@ $ FLASK_APP=main.py flask db upgrade
 1. mysqlの該当データベース内にある「alembic_version」テーブルをDropする
 2. ソースフォルダのルート直下にある「migrations」フォルダを削除
 3. 以下のコマンドで初期化
-FLASK_APP=main.py flask db init
+$ FLASK_APP=main.py flask db init
+4. DB定義の最新化
+$ FLASK_APP=main.py flask db migrate
+$ FLASK_APP=main.py flask db upgrade
 
 ```
 
