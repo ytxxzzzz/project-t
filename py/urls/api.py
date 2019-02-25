@@ -76,10 +76,7 @@ def entry():
     exp = datetime.datetime.utcnow() + datetime.timedelta(minutes=10)
     token = jwt.encode({"user_id": user.user_id, "e_mail": user.e_mail, "exp": exp}, SECRET, algorithm='HS256')
 
-    print(token)
-    print(token.decode())
-    # TODO: ログインURLが決め打ちなので、ちゃんと環境変化に強くする必要がある
-    send_mail(user.e_mail, 'ログインURL', f"http://localhost:8080/login/{token.decode()}")
+    send_mail(user.e_mail, 'ログインURL', f"{request.environ['HTTP_ORIGIN']}/login/{token.decode()}")
 
     return jsonify(user.to_dict([User])), 200
 
@@ -91,9 +88,6 @@ def generate_token(user_id: int):
     # トークンの有効期限 １時間
     exp = datetime.datetime.utcnow() + datetime.timedelta(hours=1)
     token = jwt.encode({"user_id": user_id, "e_mail": user.e_mail, "exp": exp}, SECRET, algorithm='HS256')
-
-    print(token)
-    print(token.decode())
 
     return jsonify({"token": token.decode()}), 200
 
