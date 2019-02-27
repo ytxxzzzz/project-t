@@ -41,45 +41,21 @@ $ FLASK_APP=main.py flask db upgrade
 ## React Typescript 環境構築
 https://mae.chab.in/archives/59782
 
+## docker-py-nginx
 
+```bash
+# 手順検証用コマンド
+docker run -it ubuntu:18.04 bash
 
-## 第１段
+apt update
+apt upgrade -y
 
-### データ構造
+apt-get install python3.6 python3.6-dev -y
 
-- タスク
-    - タスクID
-    - タイトル
-    - 詳細
-    - ステータス
-    - 順序
+# apt-getだとすごい時間かかったから↓に載ってるcurlでやる方法の方が良いかも？でもエラーになって依存関係解決するの大変という話もあるので、apt-getで良いかも。(比較までできてない)
+# https://pip.pypa.io/en/stable/installing/
+apt-get install python-pip -y
 
-- ステータス
-    - ステータスID
-    - 順序
-    - ラベル
+pip install pipenv
 
-### API
-
-- タスク
-    - 新規作成
-    - 更新
-    - 
-
-## そのうち
-- タスク
-    - タスクID
-    - タイトル
-    - 詳細
-    - カテゴリID
-    - カテゴリステータスID
-    - N:タスクリスト
-    - ファイルリスト
-- カテゴリ
-    - カテゴリID
-    - カテゴリ名
-- カテゴリステータス
-    - カテゴリID
-    - カテゴリステータスID
-    - 順序
-    - ラベル
+```
