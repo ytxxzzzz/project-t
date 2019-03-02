@@ -50,12 +50,13 @@ docker run -it ubuntu:18.04 bash
 apt update
 apt upgrade -y
 
-apt-get install python3.6 python3.6-dev -y
+apt-get install python3.6 python3.6-dev python3-pip -y
 
-# apt-getだとすごい時間かかったから↓に載ってるcurlでやる方法の方が良いかも？でもエラーになって依存関係解決するの大変という話もあるので、apt-getで良いかも。(比較までできてない)
-# https://pip.pypa.io/en/stable/installing/
-apt-get install python-pip -y
+pip3 install pipenv
+pip3 install uwsgi
 
-pip install pipenv
+# 現時点で本家を見ると、最新のstableが1.14.2のようなのでそのうちバージョンアップした方が良いかも
+apt-get install nginx=1.14.0-0ubuntu1.2 -y
+
 
 ```
