@@ -4,19 +4,14 @@ services:
     image: mysql:5.7
     volumes:
       - mysql-data:/var/lib/mysql
+      - ./mysql_conf:/etc/mysql/conf.d
     ports:
       - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: pass
-  php-apache:
-    build: php-apache
-    volumes:
-      - ./www:/var/www/html
-    links:
-      - mysql:mysql
-    ports:
-      - "80:80"
 volumes:
   mysql-data:
-    driver: local
-
+    driver_opts:
+      type: none
+      device: ${PWD}/mysql_data
+      o: bind

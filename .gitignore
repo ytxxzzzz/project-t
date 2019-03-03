@@ -7,7 +7,7 @@ pyvenv.cfg
 share
 pip-selfcheck.json
 .idea/
-mysql-docker-compose/mysql_data/
+docker-compose*/mysql_data/
 __pycache__
 .vscode/
 dist/bundle/
