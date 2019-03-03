@@ -58,5 +58,6 @@ pip3 install uwsgi
 # 現時点で本家を見ると、最新のstableが1.14.2のようなのでそのうちバージョンアップした方が良いかも
 apt-get install nginx=1.14.0-0ubuntu1.2 -y
 
+useradd --shell /sbin/nologin -u 1000 nginx
 
 ```
