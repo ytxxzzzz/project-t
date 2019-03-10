@@ -10,8 +10,16 @@ services:
       - ../:/var/www/html/app/
     environment:
       TZ: "Asia/Tokyo"
+      login_secret: ${login_secret}
+      SMTP_LOGIN: ${SMTP_LOGIN}
+      SMTP_PASS: ${SMTP_PASS}
+      SMTP_FROM: ${SMTP_FROM}
+      DB_HOST: ${DB_HOST}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASS}
   mysql:
-    container_name: mysql_db
+    container_name: ${DB_HOST}
     image: mysql:5.7
     volumes:
       - mysql-data:/var/lib/mysql
