@@ -10,14 +10,16 @@ npm install
 # reactのコンパイル
 npm run build
 
-# pipenvのパッケージ再構築
+# pipenvのパッケージ再構築(この環境変数はpipenv仮想環境をプロジェクト直下の".venv"フォルダに作成するおまじない)
+export export PIPENV_VENV_IN_PROJECT=1
 pipenv install
 
 # migrationsの再構築
-rm migrations
+rm -rf migrations
 FLASK_APP=main.py pipenv run flask db init
 FLASK_APP=main.py pipenv run flask db migrate
 FLASK_APP=main.py pipenv run flask db upgrade
 
-#chmod -R 777 .
+# uwsgiの起動
+mkdir -p /var/log/uwsgi/
 uwsgi --ini uwsgi.ini

@@ -20,6 +20,9 @@ RUN apt-get install npm -y
 RUN apt-get install nginx=1.14.0-0ubuntu1.2 -y
 RUN useradd --shell /sbin/nologin -u 1000 nginx
 
+# 基本不要だが、欲しい場合は
+RUN apt-get install mysql-client-5.7 -y
+
 # nginxの設定関係
 COPY conf/nginx.conf /etc/nginx/nginx.conf
 ADD conf/default.conf /etc/nginx/conf.d/default.conf
