@@ -6,6 +6,8 @@ import os
 SMTP_LOGIN = os.environ['SMTP_LOGIN']
 SMTP_PASS =  os.environ['SMTP_PASS']
 FROM_ADDRESS = os.environ['SMTP_FROM']
+SMTP_SERVER = os.environ['SMTP_SERVER']
+SMTP_PORT = os.environ['SMTP_PORT']
 
 def send_mail(to_addr, subject: str, body: str):
     msg = _create_message(FROM_ADDRESS, to_addr, subject, body)
@@ -24,7 +26,7 @@ def _create_message(from_addr, to_addr, subject, body, bcc_addrs=None):
 
 
 def _send(from_addr, to_addrs, msg):
-    smtpobj = smtplib.SMTP('mail.bbm-a.jp', 587)
+    smtpobj = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
     smtpobj.ehlo()
     smtpobj.starttls()
     smtpobj.ehlo()
