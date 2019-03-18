@@ -21,5 +21,6 @@ FLASK_APP=main.py pipenv run flask db migrate
 FLASK_APP=main.py pipenv run flask db upgrade
 
 # uwsgiの起動
+export FLASK_ENV=production
 mkdir -p /var/log/uwsgi/
 uwsgi --ini uwsgi.ini

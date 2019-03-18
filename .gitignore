@@ -15,3 +15,5 @@ node_modules/
 migrations/
 uwsgi.log
 uwsgi.pid
+.venv/
+v8-compile-cache-0/

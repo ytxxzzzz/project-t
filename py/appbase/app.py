@@ -25,7 +25,6 @@ def create_app():
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
     init_db(app)
-    app.debug = True # デバッグモード有効化
 
     return app
 
