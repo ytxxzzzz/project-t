@@ -11,7 +11,7 @@ npm install
 npm run build-prod
 
 # pipenvのパッケージ再構築(この環境変数はpipenv仮想環境をプロジェクト直下の".venv"フォルダに作成するおまじない)
-export export PIPENV_VENV_IN_PROJECT=1
+export PIPENV_VENV_IN_PROJECT=1
 pipenv install
 
 # migrationsの再構築
