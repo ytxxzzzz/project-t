@@ -35,9 +35,6 @@ RUN apt-get install locales
 RUN echo "ja_JP UTF-8" >> /etc/locale.gen
 RUN locale-gen
 
-# コンテナメインプロセス起動用シェル
-ADD ./sh/start.sh /tmp/start.sh
-
 # git clone
 ARG GIT_URI
 RUN mkdir -p /var/www/html/app/
@@ -63,5 +60,8 @@ RUN pipenv install
 # ポートの公開
 EXPOSE 80
 EXPOSE 443
+
+# コンテナメインプロセス起動用シェル
+ADD ./sh/start.sh /tmp/start.sh
 
 CMD /bin/bash /tmp/start.sh

@@ -17,3 +17,4 @@ FLASK_APP=main.py pipenv run flask db upgrade
 export FLASK_ENV=production
 mkdir -p /var/log/uwsgi/
 pipenv run uwsgi --ini uwsgi.ini
+#tail -f /dev/null
