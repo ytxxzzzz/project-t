@@ -43,19 +43,19 @@ RUN ls -R /var/www/html
 RUN git clone ${GIT_URI} /var/www/html/app/
 
 # WEBアプリのデプロイ先
-WORKDIR /var/www/html/app/
+#WORKDIR /var/www/html/app/
 
 # ロケール設定(特に、pipenvで必要となる)
-ENV LANG ja_JP.UTF-8
+#ENV LANG ja_JP.UTF-8
 
 # npmのパッケージ構築
-RUN npm install
+#RUN npm install
 # reactのコンパイル
-RUN npm run build-prod
+#RUN npm run build-prod
 
 # pipenvのパッケージ構築(この環境変数はpipenv仮想環境をプロジェクト直下の".venv"フォルダに作成するおまじない)
-ENV PIPENV_VENV_IN_PROJECT 1
-RUN pipenv install
+#ENV PIPENV_VENV_IN_PROJECT 1
+#RUN pipenv install
 
 # ポートの公開
 EXPOSE 80
