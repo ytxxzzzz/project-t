@@ -13,8 +13,14 @@ RUN pip3 install pipenv
 # uwsgiインストール
 RUN pip3 install uwsgi
 
-# npm インストール
-RUN apt-get install npm -y
+# npm インストール(普通にインストールすると古いので、nパッケージで最新化している。wgetはnで必要みたい)
+RUN apt-get install npm wget -y
+RUN npm install n -g
+RUN n stable
+# 念のため古いnpmを削除
+RUN apt purge -y nodejs npm
+# 更に最新化(2019/03時点でv6.9.0。このVerでは少なくとも動いている)
+RUN npm install npm -g
 
 # git インストール
 RUN apt-get install git -y
@@ -43,19 +49,19 @@ RUN ls -R /var/www/html
 RUN git clone ${GIT_URI} /var/www/html/app/
 
 # WEBアプリのデプロイ先
-#WORKDIR /var/www/html/app/
+WORKDIR /var/www/html/app/
 
 # ロケール設定(特に、pipenvで必要となる)
-#ENV LANG ja_JP.UTF-8
+ENV LANG ja_JP.UTF-8
 
 # npmのパッケージ構築
-#RUN npm install
+RUN npm install
 # reactのコンパイル
-#RUN npm run build-prod
+RUN npm run build-prod
 
 # pipenvのパッケージ構築(この環境変数はpipenv仮想環境をプロジェクト直下の".venv"フォルダに作成するおまじない)
-#ENV PIPENV_VENV_IN_PROJECT 1
-#RUN pipenv install
+ENV PIPENV_VENV_IN_PROJECT 1
+RUN pipenv install
 
 # ポートの公開
 EXPOSE 80
