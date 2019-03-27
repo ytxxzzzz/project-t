@@ -1,0 +1,4 @@
+[mysqld]
+character-set-server=utf8
+default-time-zone = 'Asia/Tokyo'
+
