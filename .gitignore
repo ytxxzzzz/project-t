@@ -17,3 +17,4 @@ uwsgi.log
 uwsgi.pid
 .venv/
 v8-compile-cache-0/
+docker-compose-prod/nginx-uwsgi-py3/ssl_pem/
