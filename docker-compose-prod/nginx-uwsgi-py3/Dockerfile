@@ -19,7 +19,7 @@ RUN npm install n -g
 RUN n stable
 # 念のため古いnpmを削除
 RUN apt purge -y nodejs npm
-# 更に最新化(2019/03時点でv6.9.0。このVerでは少なくとも動いている)
+# 更に最新化(2019/03時点でv6.9.0。このVerでは少なくとも動いている→後にバージョン固定化必要になったらこの近辺に固定するとよろし)
 RUN npm install npm -g
 
 # git インストール
@@ -31,10 +31,6 @@ RUN useradd --shell /sbin/nologin -u 1000 nginx
 
 # mysqlクライアントは不要だが、欲しい場合はインストール
 RUN apt-get install mysql-client-5.7 -y
-
-# nginxの設定関係
-COPY conf/nginx.conf /etc/nginx/nginx.conf
-ADD conf/default.conf /etc/nginx/conf.d/default.conf
 
 # jaロケールの構築
 RUN apt-get install locales
@@ -69,5 +65,12 @@ EXPOSE 443
 
 # コンテナメインプロセス起動用シェル
 ADD ./sh/start.sh /tmp/start.sh
+
+# nginxの設定関係
+COPY conf/nginx.conf /etc/nginx/nginx.conf
+ADD conf/default.conf /etc/nginx/conf.d/default.conf
+ADD ssl_pem/fullchain.pem /etc/nginx/fullchain.pem
+ADD ssl_pem/privkey.pem /etc/nginx/privkey.pem
+RUN chmod 400 /etc/nginx/privkey.pem
 
 CMD /bin/bash /tmp/start.sh
