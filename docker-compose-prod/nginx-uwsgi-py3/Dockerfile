@@ -59,10 +59,6 @@ RUN npm run build-prod
 ENV PIPENV_VENV_IN_PROJECT 1
 RUN pipenv install
 
-# ポートの公開
-EXPOSE 80
-EXPOSE 443
-
 # コンテナメインプロセス起動用シェル
 ADD ./sh/start.sh /tmp/start.sh
 
@@ -72,5 +68,9 @@ ADD conf/default.conf /etc/nginx/conf.d/default.conf
 ADD ssl_pem/fullchain.pem /etc/nginx/fullchain.pem
 ADD ssl_pem/privkey.pem /etc/nginx/privkey.pem
 RUN chmod 400 /etc/nginx/privkey.pem
+
+# ポートの公開
+EXPOSE 80
+EXPOSE 443
 
 CMD /bin/bash /tmp/start.sh
