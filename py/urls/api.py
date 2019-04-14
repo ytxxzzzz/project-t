@@ -238,6 +238,10 @@ def delete_task(task_id):
 def favicon():
     return "", 200
 
+@api.after_request
+def close_session(response):
+    db.session.close()
+    return response
 
 @api.errorhandler(400)
 @api.errorhandler(404)
