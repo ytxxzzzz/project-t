@@ -67,6 +67,8 @@ def login(token):
 
 @api.route('/entry', methods=['POST'])
 def entry():
+    print("yeah!!!")
+    print("来たぜー")
     req_data = json.loads(request.data)
     user: User = User.query.filter_by(e_mail=req_data['eMail']).first()
     if user is None:
