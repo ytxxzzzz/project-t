@@ -27,9 +27,9 @@ def _create_message(from_addr, to_addr, subject, body, bcc_addrs=None):
 
 def _send(from_addr, to_addrs, msg):
     smtpobj = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
-    smtpobj.ehlo()
-    smtpobj.starttls()
-    smtpobj.ehlo()
-    smtpobj.login(SMTP_LOGIN, SMTP_PASS)
-    smtpobj.sendmail(from_addr, to_addrs, msg.as_string())
+    ret1 = smtpobj.ehlo()
+    ret2 = smtpobj.starttls()
+    ret3 = smtpobj.ehlo()
+    ret4 = smtpobj.login(SMTP_LOGIN, SMTP_PASS)
+    ret5 = smtpobj.sendmail(from_addr, to_addrs, msg.as_string())
     smtpobj.close()
