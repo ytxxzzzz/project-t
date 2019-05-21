@@ -22,6 +22,7 @@
   "homepage": "https://github.com/freshbrashman/project-t#readme",
   "devDependencies": {
     "@types/node": "^11.9.5",
+    "@types/react-redux": "^7.0.9",
     "awesome-typescript-loader": "^5.2.1",
     "css-loader": "^1.0.1",
     "source-map-loader": "^0.2.4",
@@ -45,9 +46,13 @@
     "react-dnd-html5-backend": "^5.0.1",
     "react-dom": "^16.7.0",
     "react-easy-state": "^5.1.0",
+    "react-redux": "^7.0.3",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
     "react-textarea-autosize": "^7.1.0",
-    "styled-components": "^3.4.10"
+    "redux": "^4.0.1",
+    "styled-components": "^3.4.10",
+    "typescript-fsa": "^3.0.0-beta-2",
+    "typescript-fsa-reducers": "^1.2.1"
   }
 }
