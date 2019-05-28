@@ -5,5 +5,5 @@ import {TaskBoardState} from '../redux-state/taskBoardState'
 const actionCreator = actionCreatorFactory();
 
 export const taskBoardActions = {
-    loadAllTasks: actionCreator<TaskBoardState>('LOAD_ALL_TASKS'),
+    loadAllTasks: actionCreator<TaskBoardState>('taskboard/load_all_tasks'),
 }

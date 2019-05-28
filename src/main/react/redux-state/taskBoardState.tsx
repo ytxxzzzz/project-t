@@ -4,14 +4,16 @@ import {taskBoardActions} from '../redux-actions/taskBoardActions'
 
 export interface TaskBoardState {
   taskGroups: TaskGroupState[]
+  tasks: TaskState[]
+  taskStatuses: TaskStatusState[]
 }
 
 export interface TaskGroupState {
   taskGroupId?: number
   taskGroupTitle: string
   isArchived: boolean
-  tasks: TaskState[]
-  taskStatuses?: TaskStatusState[]
+  taskIds: number[]
+  taskStatusIds?: number[]
 }
   
 export interface TaskState {
@@ -34,9 +36,11 @@ export interface TaskStatusState {
 
 const initialState: TaskBoardState = {
   taskGroups: [],
+  tasks: [],
+  taskStatuses: [],
 }
 
-export const taskReducer = reducerWithInitialState(initialState)
-  .case(taskBoardActions.loadAllTasks, (state, newState) => {
-    return Object.assign({}, state, newState);
+export const taskBoardReducer = reducerWithInitialState(initialState)
+  .case(taskBoardActions.loadAllTasks, (state, payload) => {
+    return Object.assign({}, state, payload);
   })

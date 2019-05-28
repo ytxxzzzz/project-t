@@ -8,6 +8,8 @@ import { Link } from 'react-router-dom';
 import createHistory from 'history/createBrowserHistory';
 import axios, { AxiosResponse } from 'axios';
 import {AxiosRequestConfig} from 'axios';
+import {createStore, combineReducers, Action} from 'redux'
+import { Provider } from 'react-redux';
 
 import * as _ from "lodash";
 
@@ -17,6 +19,10 @@ import {LoginPage} from './pages/login';
 import {EntryPage} from './pages/entry';
 import {TaskDialog} from './pageparts/dialogs';
 import {LocalStorageKeys} from './models/models'
+
+import {taskBoardReducer, TaskBoardState} from './redux-state/taskBoardState'
+import {taskBoardActions} from './redux-actions/taskBoardActions'
+
 
 // ビルド時に決まる定数定義
 // ※ビルド時に使われるだけなのでクライアントに配布されるコードに定数値は展開されず
@@ -75,16 +81,24 @@ export class Header extends React.Component<HeaderProps, HeaderStates> {
   }
 }
 
+const store = createStore(
+  combineReducers({
+    taskBoardReducer
+  })
+)
+
 
 ReactDOM.render(
-  <Router history={history}>
-    <div>
-      <Header />
-      <Route exact path="/" component={EntryPage} />
-      <Route path="/login/:token" component={LoginPage} />
-      <Route path="/task" component={TaskListPage} />
-      <Route path="/messages/:id" component={Message} />
-    </div>
-  </Router>,
+  <Provider store={store}>
+    <Router history={history}>
+      <div>
+        <Header />
+        <Route exact path="/" component={EntryPage} />
+        <Route path="/login/:token" component={LoginPage} />
+        <Route path="/task" component={TaskListPage} />
+        <Route path="/messages/:id" component={Message} />
+      </div>
+    </Router>
+  </Provider>,
   document.querySelector('.content')
 );
