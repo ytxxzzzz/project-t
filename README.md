@@ -61,3 +61,8 @@ apt-get install nginx=1.14.0-0ubuntu1.2 -y
 useradd --shell /sbin/nologin -u 1000 nginx
 
 ```
+
+## 作業メモ
+
+現在、以下を参考に実装中
+https://qiita.com/uryyyyyyy/items/3ad88cf9ca9393335f8c
