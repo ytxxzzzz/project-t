@@ -41,23 +41,20 @@ $ FLASK_APP=main.py flask db upgrade
 ## React Typescript 環境構築
 https://mae.chab.in/archives/59782
 
-## docker-py-nginx
+# 環境初期構築
+- git clone
+- python系
+  - python3.6インストール
+  - pipenvをインストールする
+  - pipenvのパッケージインストール
+    - `pipenv install`
+    - ※install前に`export PIPENV_VENV_IN_PROJECT=true`をやった方が何かと都合良い　→これはプロジェクトフォルダ配下にvenvを作る設定
+    - 当たり前だが、ログインシェルに入れておいた方がいいと思う
+- npm系
+  - npmのインストール
+  - npmのパッケージインストール
+    - `npm install`
+  - フロントのコンパイル＆お試し起動
+    - `npm start`
 
-```bash
-# 手順検証用コマンド
-docker run -it ubuntu:18.04 bash
 
-apt update
-apt upgrade -y
-
-apt-get install python3.6 python3.6-dev python3-pip -y
-
-pip3 install pipenv
-pip3 install uwsgi
-
-# 現時点で本家を見ると、最新のstableが1.14.2のようなのでそのうちバージョンアップした方が良いかも
-apt-get install nginx=1.14.0-0ubuntu1.2 -y
-
-useradd --shell /sbin/nologin -u 1000 nginx
-
-```
