@@ -57,4 +57,10 @@ https://mae.chab.in/archives/59782
   - フロントのコンパイル＆お試し起動
     - `npm start`
 
+# トラブルシュート
+- 初期構築後、フロント側が、index.tsxのcreateHistory()のところでエラーになる場合
+  - npmのバージョンが古い疑惑が濃厚 →aptで気にせずインストールするとかなり古い
+    - https://qiita.com/seibe/items/36cef7df85fe2cefa3ea
+  - 
+
 
