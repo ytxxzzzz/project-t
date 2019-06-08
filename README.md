@@ -57,7 +57,21 @@ https://mae.chab.in/archives/59782
   - フロントのコンパイル＆お試し起動
     - `npm start`
 
-# トラブルシュート
+## 初期構築番外編　Windows10 HomeのWSL1で　Dockerを動かす
+- WSLをubuntu16.04とした場合のDockerダウンロードコマンド
+  - curl -O https://download.docker.com/linux/ubuntu/dists/xenial/pool/stable/amd64/docker-ce_17.09.0~ce-0~ubuntu_amd64.deb
+  - バージョン違う場合は、xenialの部分を対象バージョンに合わせる←ここが開発コードになってる
+
+
+- 参考
+  - Dockerをインストールする方法
+    - https://qiita.com/kogaH/items/534560dd1e4004e80df4
+  - Docker17.09.0より新しいDockerはWSL1では動作しない、という情報
+    - https://qiita.com/guchio/items/3eb0818df44fdbab3d14
+  - WSLにWindowsディレクトリマウントするときのオプションの話とか
+    - https://www.clear-code.com/blog/2017/11/8.html
+
+## トラブルシュート
 - 初期構築後、フロント側が、index.tsxのcreateHistory()のところでエラーになる場合
   - npmのバージョンが古い疑惑が濃厚 →aptで気にせずインストールするとかなり古い
     - https://qiita.com/seibe/items/36cef7df85fe2cefa3ea
