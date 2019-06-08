@@ -58,10 +58,47 @@ https://mae.chab.in/archives/59782
     - `npm start`
 
 ## 初期構築番外編　Windows10 HomeのWSL1で　Dockerを動かす
-- WSLをubuntu16.04とした場合のDockerダウンロードコマンド
-  - curl -O https://download.docker.com/linux/ubuntu/dists/xenial/pool/stable/amd64/docker-ce_17.09.0~ce-0~ubuntu_amd64.deb
-  - バージョン違う場合は、xenialの部分を対象バージョンに合わせる←ここが開発コードになってる
+```
+# WSLのインストールなど
+https://qiita.com/kogaH/items/534560dd1e4004e80df4
 
+※但し、現在はDockerのバージョンが新しくなっているため、WSL1では動作しない
+　→動かすには、古いバージョンのDockerで環境構築する必要があるが、
+　ubuntuのaptでインストールすると、最新が入ってしまうため、debパッケージを自前で
+　ダウンロードしてインストールする必要がある。
+
+以下、それを考慮して書いた手順。
+
+# aptの更新
+sudo apt update
+sudo apt upgrade
+
+# WSLをubuntu16.04とした場合のDockerダウンロードコマンド
+curl -O https://download.docker.com/linux/ubuntu/dists/xenial/pool/stable/amd64/docker-ce_17.09.0~ce-0~ubuntu_amd64.deb
+
+# ↑でubuntuのバージョン違う場合は、xenialの部分を対象バージョンに合わせる←ここが開発コードになってる
+# 開発コードとバージョンの対応表
+  * https://kledgeb.blogspot.com/2013/08/ubuntu.html
+
+# aptでファイルからインストール(※WSLは管理者モードで起動する必要あり)
+sudo apt-get install ./docker-ce_17.09.0~ce-0~ubuntu_amd64.deb
+
+# あんまりよくわからんが、wslからdockerを使えるようにするおまじないらしい
+sudo cgroupfs-mount
+
+# dockerグループに現在のユーザを追加して、sudoなしでdocker利用できるようにする設定
+sudo usermod -aG docker $USER
+
+# dockerサービスの起動
+sudo service docker start
+
+# 次回以降、WSL起動時に毎回以下のコマンドでdockerサービスを起動する必要あり
+sudo cgroupfs-mount && sudo service docker start
+
+# docker-composeをインストールする場合
+sudo apt-get install docker-compose
+
+```
 
 - 参考
   - Dockerをインストールする方法
