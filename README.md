@@ -58,6 +58,8 @@ https://mae.chab.in/archives/59782
     - `npm start`
 
 ## 初期構築番外編　Windows10 HomeのWSL1で　Dockerを動かす
+- dockerは古ければ動く
+- docker-composeは動かず
 ```
 # WSLのインストールなど
 https://qiita.com/kogaH/items/534560dd1e4004e80df4
@@ -95,17 +97,19 @@ sudo service docker start
 # 次回以降、WSL起動時に毎回以下のコマンドでdockerサービスを起動する必要あり
 sudo cgroupfs-mount && sudo service docker start
 
-# docker-composeをインストールする場合
-sudo apt-get install docker-compose
+# docker-composeをインストールする -> ダメ
+このURL通りの結果でした
+https://gdgd-shinoyu.hatenablog.com/entry/2018/07/10/032023
+
+おしい
 
 ```
-
 - 参考
   - Dockerをインストールする方法
     - https://qiita.com/kogaH/items/534560dd1e4004e80df4
   - Docker17.09.0より新しいDockerはWSL1では動作しない、という情報
     - https://qiita.com/guchio/items/3eb0818df44fdbab3d14
-  - WSLにWindowsディレクトリマウントするときのオプションの話とか
+  - WSLにWindowsディレクトリマウントするときのパーミッションが777になっちゃう件の回避策など
     - https://www.clear-code.com/blog/2017/11/8.html
 
 ## トラブルシュート
