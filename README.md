@@ -112,6 +112,13 @@ https://gdgd-shinoyu.hatenablog.com/entry/2018/07/10/032023
   - WSLにWindowsディレクトリマウントするときのパーミッションが777になっちゃう件の回避策など
     - https://www.clear-code.com/blog/2017/11/8.html
 
+## 環境構築番外編２　ｗSLでLinux版VSCodeを使う
+理由・動機：Win版のVSCodeでデバッグするにはWindows版のPythonで動作させる必要があり、Linux上での動作と異なる可能性がありだいぶ嫌な感じなので。
+
+参考：
+https://gist.github.com/wilfrem/d2c1c6223608d8e23a93451981935c91
+
+
 ## トラブルシュート
 - 初期構築後、フロント側が、index.tsxのcreateHistory()のところでエラーになる場合
   - npmのバージョンが古い疑惑が濃厚 →aptで気にせずインストールするとかなり古い
