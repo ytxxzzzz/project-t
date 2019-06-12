@@ -31,10 +31,14 @@ export class EntryPage extends React.Component<EntryPageProps, EntryPageState> {
     if(this.state.eMail.length == 0) {
       return
     }
-    const response = await axios.post(`/entry`, {
-      eMail: this.state.eMail,
-    })
-    alert(`status: ${response.status}, data: ${response.data}`)
+    try{
+      const response = await axios.post(`/entry`, {
+        eMail: this.state.eMail,
+      })
+      alert(`status: ${response.status}, data: ${response.data}`)
+    } catch(error) {
+      alert(`error: ${error}`)
+    }
   }
   render() {
     return (
