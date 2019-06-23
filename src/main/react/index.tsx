@@ -20,9 +20,11 @@ import {EntryPage} from './pages/entry';
 import {TaskDialog} from './pageparts/dialogs';
 import {LocalStorageKeys} from './models/models'
 
-import {taskBoardReducer, TaskBoardState} from './redux-state/taskBoardState'
+import {TaskBoardState} from './redux-state/taskBoardState'
+import {taskBoardReducer} from './redux-reducer/taskBoardReducer'
 import {taskBoardActions} from './redux-actions/taskBoardActions'
 
+import TaskListPageContainer from './redux-containers/TaskListPageContainer'
 
 // ビルド時に決まる定数定義
 // ※ビルド時に使われるだけなのでクライアントに配布されるコードに定数値は展開されず
@@ -95,7 +97,7 @@ ReactDOM.render(
         <Header />
         <Route exact path="/" component={EntryPage} />
         <Route path="/login/:token" component={LoginPage} />
-        <Route path="/task" component={TaskListPage} />
+        <Route path="/task" component={TaskListPageContainer} />
         <Route path="/messages/:id" component={Message} />
       </div>
     </Router>

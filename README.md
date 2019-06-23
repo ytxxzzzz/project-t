@@ -66,3 +66,12 @@ useradd --shell /sbin/nologin -u 1000 nginx
 
 現在、以下を参考に実装中
 https://qiita.com/uryyyyyyy/items/3ad88cf9ca9393335f8c
+
+XWindowでLinux版のVSCodeでやっていたが、VSCodeのリモート開発プラグインの方がウインドウの動きが良いこと＆デバッグ含め何でもできることが
+わかり、リモート開発プラグインを利用した。
+
+F1でRemoteｘｘを選択すると初期セットアップが始まる
+→この時、WSL用のパーミッション設定が悪さをした。(WSL関連のシェルスクリプトに+xをつけることで解決)
+
+Qiitaに書くネタかも。
+

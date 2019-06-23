@@ -14,80 +14,18 @@ import {TaskGroupSchema,
         ModalFuncPropsSchema} from '../models/models';
 import * as Element from '../elements/element';
 import {TaskDialog} from '../pageparts/dialogs';
-
-interface TaskListPageProps {
-}
-interface TaskListPageState {
-  taskGroups: TaskGroupSchema[]
-  hasError: boolean
-}
-export class TaskListPage extends React.Component<TaskListPageProps, TaskListPageState> {
-  constructor(props: TaskListPageProps) {
-    super(props)
-    this.state = {
-      taskGroups: [],
-      hasError: false,
-    }
-  }
-  componentWillMount() {
-    this.onInit()
-  }
-  async onInit() {
-    try{
-      const result = await axios.get(`/taskGroup/findAll`, {
-        params: {
-          isArchived: false
-        }
-      })
-      this.setState({taskGroups: result.data})
-    } catch(e) {
-      console.log(`onInitでキャッチ: ${JSON.stringify(e, null, 1)}`)
-      alert(e.response.data.message?e.response.data.message: JSON.stringify(e))
-      this.setState({hasError: true})
-    }
-  }
-  async handleAddTaskGroupClick() {
-    const taskGroups = this.state.taskGroups
-
-    const newTaskGroup: TaskGroupSchema = {
-      taskGroupTitle: "新しいリスト",
-      isArchived: false,
-      tasks: [],
-    }
-
-    const addedResponse = await axios.post(`/taskGroup`, newTaskGroup)
-    taskGroups.push(addedResponse.data)
-
-    this.setState({
-      taskGroups: taskGroups,
-    })
-  }
-  render() {
-    if(this.state.hasError) return <Redirect to="/" />
-    return (
-      <div className="task-list-base">
-        {
-          this.state.taskGroups.map(taskGroup => {
-            return (
-              <TaskGroup taskGroup={taskGroup}></TaskGroup>
-            )
-          })
-        }
-        <Element.Button caption="タスクリスト追加" handleClick={this.handleAddTaskGroupClick.bind(this)}></Element.Button>
-      </div>
-    )
-  }
-}
+import {TaskBoardProps} from '../redux-containers/TaskListPage/TaskListPageContainer';
+import {TaskBoardState, TaskGroupState, TaskState, TaskStatusState} from '../redux-state/taskBoardState'
 
 interface TaskGroupProps {
-  taskGroup: TaskGroupSchema
+  taskGroupId: number,
 }
-interface TaskGroupState {
+interface TaskGroupStateOld {
   taskGroup: TaskGroupSchema
   isShowTaskAdding: boolean,
   taskAddingTitle: string,
 }
-class TaskGroup extends React.Component<TaskGroupProps, TaskGroupState> {
+class TaskGroup extends React.Component<TaskGroupProps, TaskGroupStateOld> {
   constructor(props: TaskGroupProps) {
     super(props)
     this.state = {
@@ -208,11 +146,11 @@ interface TaskProps {
   task: TaskSchema
   taskStatuses: TaskStatusSchema[]
 }
-interface TaskState {
+interface TaskStateOld {
   isOpen: boolean
   task: TaskSchema
 }
-class Task extends React.Component<TaskProps, TaskState> {
+class Task extends React.Component<TaskProps, TaskStateOld> {
   constructor(props: TaskProps) {
     super(props)
     this.state = {

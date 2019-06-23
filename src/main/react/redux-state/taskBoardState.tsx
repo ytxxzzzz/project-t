@@ -34,13 +34,10 @@ export interface TaskStatusState {
   taskGroupId: number
 }
 
-const initialState: TaskBoardState = {
+export const initialState: TaskBoardState = {
   taskGroups: [],
   tasks: [],
   taskStatuses: [],
 }
 
-export const taskBoardReducer = reducerWithInitialState(initialState)
-  .case(taskBoardActions.loadAllTasks, (state, payload) => {
-    return Object.assign({}, state, payload);
-  })
+export type TaskBoardStates = TaskBoardState | TaskGroupState | TaskState | TaskStatusState
