@@ -10,11 +10,11 @@ import * as _ from "lodash";
 
 import * as Element from '../../elements/element';
 import {TaskDialog} from '../../pageparts/dialogs';
-import {TaskBoardProps} from '../../redux-containers/TaskListPage/TaskListPageContainer';
+import {TaskListPageContainerProps} from '../../redux-containers/TaskListPage/TaskListPageContainer';
 import {TaskBoardState, TaskGroupState, TaskState, TaskStatusState} from '../../redux-state/taskBoardState'
-import {TaskGroup} from '../TaskGroup/TaskGroup'
+import TaskGroupContainer from '../TaskGroup/TaskGroupContainer'
 
-type TaskListPageProps = TaskBoardProps & TaskBoardState
+type TaskListPageProps = TaskListPageContainerProps & TaskBoardState
 interface TaskListPageUIState {
   hasError: boolean
 }
@@ -60,7 +60,7 @@ export class TaskListPage extends React.Component<TaskListPageProps, TaskListPag
         {
           this.props.taskGroups.map(taskGroup => {
             return (
-              <TaskGroup taskGroupId={taskGroup.taskGroupId}></TaskGroup>
+              <TaskGroupContainer></TaskGroupContainer>
             )
           })
         }

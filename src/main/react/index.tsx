@@ -14,7 +14,6 @@ import { Provider } from 'react-redux';
 import * as _ from "lodash";
 
 import * as Element from './elements/element';
-import { TaskListPage} from './pages/tasklist';
 import {LoginPage} from './pages/login';
 import {EntryPage} from './pages/entry';
 import {TaskDialog} from './pageparts/dialogs';
@@ -24,7 +23,7 @@ import {TaskBoardState} from './redux-state/taskBoardState'
 import {taskBoardReducer} from './redux-reducer/taskBoardReducer'
 import {taskBoardActions} from './redux-actions/taskBoardActions'
 
-import TaskListPageContainer from './redux-containers/TaskListPageContainer'
+import TaskListPageContainer from './redux-containers/TaskListPage/TaskListPageContainer'
 
 // ビルド時に決まる定数定義
 // ※ビルド時に使われるだけなのでクライアントに配布されるコードに定数値は展開されず

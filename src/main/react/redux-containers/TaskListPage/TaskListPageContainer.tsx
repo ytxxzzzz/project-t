@@ -5,12 +5,12 @@ import { Action } from 'typescript-fsa'
 import {taskBoardActions} from '../../redux-actions/taskBoardActions'
 import {TaskBoardState, TaskGroupState, TaskBoardStates} from '../../redux-state/taskBoardState'
 
-export interface TaskBoardProps {
+export interface TaskListPageContainerProps {
   loadAllTasks: (x: TaskBoardState) => Action<TaskBoardState>
   addTaskGroup: (x: TaskGroupState) => Action<TaskGroupState>
 }
 
-function mapDispatchToProps(dispatch: Dispatch<Action<TaskBoardStates>>): TaskBoardProps {
+function mapDispatchToProps(dispatch: Dispatch<Action<TaskBoardStates>>): TaskListPageContainerProps {
   return {
     loadAllTasks: (newState: TaskBoardState) => dispatch(taskBoardActions.loadAllTasks(newState)),
     addTaskGroup: (taskGroup: TaskGroupState) => dispatch(taskBoardActions.addTaskGroup(taskGroup)),

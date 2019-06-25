@@ -10,12 +10,11 @@ import * as _ from "lodash";
 
 import * as Element from '../../elements/element';
 import {TaskDialog} from '../../pageparts/dialogs';
-import {TaskBoardProps} from '../TaskListPage/TaskListPageContainer';
+import {TaskListPageContainerProps} from '../TaskListPage/TaskListPageContainer';
 import {TaskBoardState, TaskGroupState, TaskState, TaskStatusState} from '../../redux-state/taskBoardState'
+import {TaskGroupContainerProps} from './TaskGroupContainer'
 
-interface TaskGroupProps {
-  taskGroupId: number,
-}
+type TaskGroupProps = TaskGroupContainerProps & TaskGroupState & TaskBoardState
 interface TaskGroupUIState {
   isShowTaskAdding: boolean,
   taskAddingTitle: string,
@@ -44,68 +43,57 @@ export class TaskGroup extends React.Component<TaskGroupProps, TaskGroupUIState>
     }
 
     // タスクの登録
-    const newTask: TaskSchema = {
+    const newTask: TaskState = {
       taskTitle: newTaskTitle,
       taskDetail: "",
-      taskGroupId: this.props.taskGroup.taskGroupId,
+      taskGroupId: this.props.taskGroupId,
     }
     const addedResponse = await axios.post(`/task`, newTask)
-    const addedTask: TaskSchema = addedResponse.data
+    const addedTask: TaskState = addedResponse.data
 
-    const tasks = this.state.taskGroup.tasks
-    tasks.push(addedTask)
-    const taskGroup = this.state.taskGroup
-    taskGroup.tasks = tasks
-    
+    this.props.addTask(addedTask)
     this.setState({
-      taskGroup: taskGroup,
       isShowTaskAdding: false,
     })
   }
   async handleTaskGroupArchive(e: React.FormEvent<HTMLDivElement>) {
-    const doArchive = confirm(`"${this.state.taskGroup.taskGroupTitle}" をアーカイブしますか？`)
+    const doArchive = confirm(`"${this.props.taskGroupTitle}" をアーカイブしますか？`)
 
     if(doArchive) {
       const response = await axios.put(`/taskGroup`, {
-        taskGroupId: this.state.taskGroup.taskGroupId,
+        taskGroupId: this.props.taskGroupId,
         isArchived: true,
       })
-      this.setState({
-        taskGroup: response.data
-      })
+      this.props.updateTaskGroup(response.data)
     }
   }
   async handleTaskGroupNameChanged(newTaskGroupName: string) {
     const response = await axios.put(`/taskGroup`, {
-      taskGroupId: this.state.taskGroup.taskGroupId,
+      taskGroupId: this.props.taskGroupId,
       taskGroupTitle: newTaskGroupName,
     })
-    this.setState({
-      taskGroup: response.data
-    })
+    this.props.updateTaskGroup(response.data)
   }
   render() {
-    if(this.state.taskGroup.isArchived) {
+    if(this.props.isArchived) {
       return null
     }
     return (
       <div className="task-group-base">
         <div className="fas fa-times fa-2x taskgroup-close-btn" onClick={this.handleTaskGroupArchive.bind(this)} ></div>
         <Element.EditableDiv
-          defaultValue={this.state.taskGroup.taskGroupTitle}
+          defaultValue={this.props.taskGroupTitle}
           handleValueDetermined={this.handleTaskGroupNameChanged.bind(this)}
         />
         {
-          this.state.taskGroup.tasks.map(task => {
-            return (
-              <Task task={task} taskStatuses={this.state.taskGroup.taskStatuses}></Task>
-            )
-          })
+          this.props.tasks
+            .filter(task => task.taskGroupId == this.props.taskGroupId)
+            .map(task => {
+              return (
+                <Element.Output value={task.taskTitle}></Element.Output>
+              )
+            })
         }
-        <TaskAddingPart 
-          isShow={this.state.isShowTaskAdding}
-          handleTaskDecision={this.handleTaskAddingDecision.bind(this)}
-        />
         <Element.Button caption="タスク追加" handleClick={this.handleAddTaskClick.bind(this)}></Element.Button>
       </div>
     )
