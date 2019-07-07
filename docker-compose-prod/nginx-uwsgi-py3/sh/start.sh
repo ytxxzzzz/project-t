@@ -7,7 +7,7 @@ export LANG=ja_JP.UTF-8
 
 # letsencryptでSSL鍵を生成(ドメインの認証をするために、一度nginxの起動が必要)
 git clone https://github.com/letsencrypt/letsencrypt.git /home/letsencrypt
-/home/letsencrypt/letsencrypt-auto certonly --non-interactive --agree-tos --webroot -w /var/www/html/app/ -d ${SSL_DOMAIN} --email ${SSL_EMAIL}
+echo yes | /home/letsencrypt/letsencrypt-auto certonly --non-interactive --agree-tos --webroot -w /var/www/html/app/ -d ${SSL_DOMAIN} --email ${SSL_EMAIL}
 
 # SSL鍵の配置
 cp /etc/letsencrypt/live/www.tatatatask.work/fullchain.pem /etc/nginx/fullchain.pem
