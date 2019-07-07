@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# エラー時中断するように、などの設定
+set -eux
+
 export LANG=ja_JP.UTF-8
 
 # nginx起動
