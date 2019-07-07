@@ -65,12 +65,22 @@ ADD ./sh/start.sh /tmp/start.sh
 # nginxの設定関係
 COPY conf/nginx.conf /etc/nginx/nginx.conf
 ADD conf/default.conf /etc/nginx/conf.d/default.conf
-ADD ssl_pem/fullchain.pem /etc/nginx/fullchain.pem
-ADD ssl_pem/privkey.pem /etc/nginx/privkey.pem
-RUN chmod 400 /etc/nginx/privkey.pem
 
 # ポートの公開
 EXPOSE 80
 EXPOSE 443
+
+# letsencryptでSSL鍵を生成＆配置(ドメインの認証をするために、一度nginxの起動が必要)
+ARG SSL_DOMAIN
+ARG SSL_EMAIL
+RUN /etc/init.d/nginx start
+RUN git clone https://github.com/letsencrypt/letsencrypt.git /home/letsencrypt
+RUN /home/letsencrypt/letsencrypt-auto --help -y
+RUN /home/letsencrypt/letsencrypt-auto certonly --non-interactive --agree-tos --webroot -w /var/www/html/app/ -d ${SSL_DOMAIN} --email ${SSL_EMAIL}
+RUN /etc/init.d/nginx stop
+# SSL鍵の配置
+RUN cp /etc/letsencrypt/live/www.tatatatask.work/fullchain.pem /etc/nginx/fullchain.pem
+RUN cp /etc/letsencrypt/live/www.tatatatask.work/privkey.pem /etc/nginx/privkey.pem
+RUN chmod 400 /etc/nginx/privkey.pem
 
 CMD /bin/bash /tmp/start.sh
