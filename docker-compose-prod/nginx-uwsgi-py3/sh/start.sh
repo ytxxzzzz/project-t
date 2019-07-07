@@ -15,6 +15,8 @@ cp /etc/letsencrypt/live/www.tatatatask.work/fullchain.pem /etc/nginx/fullchain.
 cp /etc/letsencrypt/live/www.tatatatask.work/privkey.pem /etc/nginx/privkey.pem
 chmod 400 /etc/nginx/privkey.pem
 
+/etc/init.d/nginx restart
+
 # migrationsの再構築
 cd /var/www/html/app
 rm -rf migrations
