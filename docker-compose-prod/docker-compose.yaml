@@ -6,8 +6,6 @@ services:
       context: ./nginx-uwsgi-py3
       args:
         GIT_URI: ${GIT_URI}
-        SSL_DOMAIN: ${SSL_DOMAIN}
-        SSL_EMAIL: ${SSL_EMAIL}
     ports:
       - "80:80"
       - "443:443"
@@ -23,6 +21,8 @@ services:
       DB_NAME: ${DB_NAME}
       DB_USER: ${DB_USER}
       DB_PASS: ${DB_PASS}
+      SSL_DOMAIN: ${SSL_DOMAIN}
+      SSL_EMAIL: ${SSL_EMAIL}
     depends_on:
       - mysql
   mysql:
