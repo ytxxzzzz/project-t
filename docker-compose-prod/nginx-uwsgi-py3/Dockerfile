@@ -47,6 +47,10 @@ RUN git clone ${GIT_URI} /var/www/html/app/
 # letsencryptのインストール
 RUN git clone https://github.com/letsencrypt/letsencrypt.git /home/letsencrypt
 
+# ポートの公開
+EXPOSE 80
+EXPOSE 443
+
 # letsencryptでSSL鍵を生成(ドメインの認証をするために、独自のスタンドアローンなHTTPサーバを内部的に起動する)
 ARG SSL_DOMAIN
 ARG SSL_EMAIL
@@ -78,9 +82,5 @@ ADD ./sh/start.sh /tmp/start.sh
 # nginxの設定関係
 COPY conf/nginx.conf /etc/nginx/nginx.conf
 ADD conf/default.conf /etc/nginx/conf.d/default.conf
-
-# ポートの公開
-EXPOSE 80
-EXPOSE 443
 
 CMD /bin/bash -x /tmp/start.sh > /tmp/start.sh.log
