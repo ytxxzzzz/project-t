@@ -44,6 +44,19 @@ RUN echo ${GIT_URI}
 RUN ls -R /var/www/html
 RUN git clone ${GIT_URI} /var/www/html/app/
 
+# letsencryptのインストール
+RUN git clone https://github.com/letsencrypt/letsencrypt.git /home/letsencrypt
+
+# letsencryptでSSL鍵を生成(ドメインの認証をするために、独自のスタンドアローンなHTTPサーバを内部的に起動する)
+ARG SSL_DOMAIN
+ARG SSL_EMAIL
+RUN /home/letsencrypt/letsencrypt-auto certonly --standalone --non-interactive --agree-tos -d ${SSL_DOMAIN} --email ${SSL_EMAIL}
+
+# SSL鍵の配置
+RUN cp /etc/letsencrypt/live/${SSL_DOMAIN}/fullchain.pem /etc/nginx/fullchain.pem
+RUN cp /etc/letsencrypt/live/${SSL_DOMAIN}/privkey.pem /etc/nginx/privkey.pem
+RUN chmod 400 /etc/nginx/privkey.pem
+
 # WEBアプリのデプロイ先
 WORKDIR /var/www/html/app/
 

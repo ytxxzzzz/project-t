@@ -6,6 +6,8 @@ services:
       context: ./nginx-uwsgi-py3
       args:
         GIT_URI: ${GIT_URI}
+        SSL_DOMAIN: ${SSL_DOMAIN}
+        SSL_EMAIL: ${SSL_EMAIL}
     ports:
       - "80:80"
       - "443:443"
