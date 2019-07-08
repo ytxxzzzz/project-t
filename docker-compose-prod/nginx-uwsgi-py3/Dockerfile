@@ -47,20 +47,6 @@ RUN git clone ${GIT_URI} /var/www/html/app/
 # letsencryptのインストール
 RUN git clone https://github.com/letsencrypt/letsencrypt.git /home/letsencrypt
 
-# ポートの公開
-EXPOSE 80
-EXPOSE 443
-
-# letsencryptでSSL鍵を生成(ドメインの認証をするために、独自のスタンドアローンなHTTPサーバを内部的に起動する)
-ARG SSL_DOMAIN
-ARG SSL_EMAIL
-RUN /home/letsencrypt/letsencrypt-auto certonly --standalone --non-interactive --agree-tos -d ${SSL_DOMAIN} --email ${SSL_EMAIL}
-
-# SSL鍵の配置
-RUN cp /etc/letsencrypt/live/${SSL_DOMAIN}/fullchain.pem /etc/nginx/fullchain.pem
-RUN cp /etc/letsencrypt/live/${SSL_DOMAIN}/privkey.pem /etc/nginx/privkey.pem
-RUN chmod 400 /etc/nginx/privkey.pem
-
 # WEBアプリのデプロイ先
 WORKDIR /var/www/html/app/
 
@@ -82,5 +68,9 @@ ADD ./sh/start.sh /tmp/start.sh
 # nginxの設定関係
 COPY conf/nginx.conf /etc/nginx/nginx.conf
 ADD conf/default.conf /etc/nginx/conf.d/default.conf
+
+# ポートの公開
+EXPOSE 80
+EXPOSE 443
 
 CMD /bin/bash -x /tmp/start.sh > /tmp/start.sh.log
