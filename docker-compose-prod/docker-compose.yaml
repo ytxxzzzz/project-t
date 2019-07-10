@@ -25,6 +25,8 @@ services:
       DB_PASS: ${DB_PASS}
       SSL_DOMAIN: ${SSL_DOMAIN}
       SSL_EMAIL: ${SSL_EMAIL}
+    volumes:
+      - ssl-key:/etc/nginx/ssl_key
     depends_on:
       - mysql
   mysql:
@@ -42,4 +44,9 @@ volumes:
     driver_opts:
       type: none
       device: ${PWD}/mysql_data
+      o: bind
+  ssl-key:
+    driver_opts:
+      type: none
+      device: ${PWD}/ssl_key
       o: bind

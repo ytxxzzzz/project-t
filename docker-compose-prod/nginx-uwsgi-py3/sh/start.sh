@@ -16,7 +16,7 @@ chmod 400 /etc/nginx/privkey.pem
 # nginx起動
 /etc/init.d/nginx start
 
-/etc/init.d/nginx restart
+/home/letsencrypt/letsencrypt-auto certonly --webroot -w /var/www/html/app --non-interactive --agree-tos --force-renewal -d ${SSL_DOMAIN} --email ${SSL_EMAIL}
 
 # migrationsの再構築
 cd /var/www/html/app
