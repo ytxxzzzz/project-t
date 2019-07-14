@@ -1,22 +1,28 @@
 #!/bin/sh
 
 # エラー時中断するように、などの設定
-# set -eux
+set -eux
 
 export LANG=ja_JP.UTF-8
 
-# letsencryptでSSL鍵を生成(ドメインの認証をするために、独自のスタンドアローンなHTTPサーバを内部的に起動する)
-/home/letsencrypt/letsencrypt-auto certonly --standalone --non-interactive --agree-tos -d ${SSL_DOMAIN} --email ${SSL_EMAIL}
+FULLCHAIN_DEST=/etc/nginx/fullchain.pem
+PRIVKEY_DEST=/etc/nginx/privkey.pem
 
-# SSL鍵の配置
-cp /etc/letsencrypt/live/${SSL_DOMAIN}/fullchain.pem /etc/nginx/fullchain.pem
-cp /etc/letsencrypt/live/${SSL_DOMAIN}/privkey.pem /etc/nginx/privkey.pem
-chmod 400 /etc/nginx/privkey.pem
+if [ ! -f ${FULLCHAIN_DEST} ] || [ `date +%Y%m%d -r ${FULLCHAIN_DEST}` -lt `date +%Y%m%d -d '30 day ago'` ]; then
+    # letsencryptでSSL鍵を生成(ドメインの認証をするために、独自のスタンドアローンなHTTPサーバを内部的に起動する)
+    /home/letsencrypt/letsencrypt-auto certonly --standalone --non-interactive --agree-tos -d ${SSL_DOMAIN} --email ${SSL_EMAIL}
+
+    # SSL鍵の配置
+    cp /etc/letsencrypt/live/${SSL_DOMAIN}/fullchain.pem ${FULLCHAIN_DEST}
+    cp /etc/letsencrypt/live/${SSL_DOMAIN}/privkey.pem ${PRIVKEY_DEST}
+    chmod 400 /etc/nginx/privkey.pem
+fi
 
 # nginx起動
 /etc/init.d/nginx start
 
-/home/letsencrypt/letsencrypt-auto certonly --webroot -w /var/www/html/app --non-interactive --agree-tos --force-renewal -d ${SSL_DOMAIN} --email ${SSL_EMAIL}
+# nginx起動後は80番がnginxに使われるので、Standaloneからwebrootへ変更して更新する
+/home/letsencrypt/letsencrypt-auto renew --webroot -w /var/www/html/app --non-interactive --agree-tos --force-renewal -d ${SSL_DOMAIN} --email ${SSL_EMAIL} --post-hook "cp /etc/letsencrypt/live/${SSL_DOMAIN}/fullchain.pem ${FULLCHAIN_DEST};cp /etc/letsencrypt/live/${SSL_DOMAIN}/privkey.pem ${PRIVKEY_DEST};chmod 400 /etc/nginx/privkey.pem;/etc/init.d/nginx restart"
 
 # migrationsの再構築
 cd /var/www/html/app
