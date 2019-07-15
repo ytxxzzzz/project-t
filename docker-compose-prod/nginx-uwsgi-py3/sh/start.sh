@@ -1,12 +1,12 @@
 #!/bin/sh
 
 # エラー時中断するように、などの設定
-set -eux
+#set -eux
 
 export LANG=ja_JP.UTF-8
 
-FULLCHAIN_DEST=/etc/nginx/fullchain.pem
-PRIVKEY_DEST=/etc/nginx/privkey.pem
+FULLCHAIN_DEST=/etc/nginx/ssl_key/fullchain.pem
+PRIVKEY_DEST=/etc/nginx/ssl_key/privkey.pem
 
 if [ ! -f ${FULLCHAIN_DEST} ] || [ `date +%Y%m%d -r ${FULLCHAIN_DEST}` -lt `date +%Y%m%d -d '30 day ago'` ]; then
     # letsencryptでSSL鍵を生成(ドメインの認証をするために、独自のスタンドアローンなHTTPサーバを内部的に起動する)
