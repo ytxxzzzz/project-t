@@ -22,6 +22,9 @@ module.exports = {
     publicPath: '/bundle/',
     watchContentBase: true,
     port: 8080,
+    // 外部のホストからも接続OKにする設定
+    host: '0.0.0.0',
+    disableHostCheck: true,
   },
 
   // Enable sourcemaps for debugging webpack's output.
