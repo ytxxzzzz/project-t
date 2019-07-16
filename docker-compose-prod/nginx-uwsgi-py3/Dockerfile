@@ -44,6 +44,9 @@ RUN echo ${GIT_URI}
 RUN ls -R /var/www/html
 RUN git clone ${GIT_URI} /var/www/html/app/
 
+# letsencryptのインストール
+RUN git clone https://github.com/letsencrypt/letsencrypt.git /home/letsencrypt
+
 # WEBアプリのデプロイ先
 WORKDIR /var/www/html/app/
 
@@ -65,12 +68,9 @@ ADD ./sh/start.sh /tmp/start.sh
 # nginxの設定関係
 COPY conf/nginx.conf /etc/nginx/nginx.conf
 ADD conf/default.conf /etc/nginx/conf.d/default.conf
-ADD ssl_pem/fullchain.pem /etc/nginx/fullchain.pem
-ADD ssl_pem/privkey.pem /etc/nginx/privkey.pem
-RUN chmod 400 /etc/nginx/privkey.pem
 
 # ポートの公開
 EXPOSE 80
 EXPOSE 443
 
-CMD /bin/bash /tmp/start.sh
+CMD /bin/bash -x /tmp/start.sh > /tmp/start.sh.log 2>&1
